@@ -1,0 +1,20 @@
+.V-URGENT{
+    animation:V-URGENTTEXT .5s infinite;
+}
+@keyframes V-URGENTTEXT{
+    50%{     color: indianred;    }
+
+    100%{   color: #f80606;    }
+}
+
+.V-IMPORTANT{
+    color: #ff7c25;
+}
+
+.smalltable{
+ font-size: 11px;
+}
+
+@keyframes V-IMPORTANT{
+    100%{   color: #ff7c25;    }
+}
