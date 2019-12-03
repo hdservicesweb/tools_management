@@ -16,6 +16,8 @@ echo "<br>";
         <link href="css/style.css" rel="stylesheet">
     </head>
     <body>
+        <br>
+        test
     <script language="JavaScript"> function GetLocalIPAddr(){ var oSetting = null; var ip = null; try{ oSetting = new ActiveXObject("rcbdyctl.Setting"); ip = oSetting.GetIPAddress; if (ip.length == 0){ return "Not connected Internet"; } oSetting = null; }catch(e){ return ip; } return ip; } document.write(GetLocalIPAddr()+"<br/>") </script> 
 
     </body>
