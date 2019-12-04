@@ -2,9 +2,24 @@
 require_once('tcpdf_include.php');
 include('../../conection.php');
 date_default_timezone_set('America/Los_Angeles');
+
 $link = Conectarse();
 if (isset($_REQUEST['wo'])) {
 	$wo = $_REQUEST['wo'];
+
+	//aregar contador de imrpesiones
+	$sqlcountprinted = "SELECT COUNT(id) as qtyImp from printed where id_wo = '$wo'";
+	$countqty = mysqli_query($link, $sqlcountprinted) or die("Something wrong with DB please verify.");
+	$qtyimpresed =  mysqli_fetch_array($countqty);
+	$manytimes = $qtyimpresed['qtyImp'];
+	if ($manytimes == 0) {
+		$sqlinsert = "INSERT into printed values (null,'$wo','',CURRENT_TIMESTAMP,'1')";
+		$execsqlinsert =  mysqli_query($link, $sqlinsert);
+	} else {
+		$sqlinsert = "INSERT into printed values (null,'$wo','',CURRENT_TIMESTAMP,'$manytimes')";
+		$execsqlinsert =  mysqli_query($link, $sqlinsert);
+	}
+
 	switch ($wo) {
 		case '11111':
 			$area = "CLOSE ";

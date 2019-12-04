@@ -9,7 +9,7 @@ if ((isset($_REQUEST['movefast'])) && $_REQUEST['movefast'] != ' ') {
     $currentposition = mysqli_query($link, $sqlexpedite);
 
     $position = mysqli_fetch_array($currentposition);
-    if ($position['position'] == '1') {
+    if (($position['position'] == '1')||($position['position'] == '2')) {
         $sqlfastupdate = "UPDATE wo set position = position + 1 where psc_no = '$psc_id_update'";
         $executeupdate = mysqli_query($link, $sqlfastupdate);
         echo '<div class="alert alert-success alert-dismissible fade show" role="alert" id="alertdone">
@@ -21,7 +21,13 @@ if ((isset($_REQUEST['movefast'])) && $_REQUEST['movefast'] != ' ') {
 
       //vitacora
       $executetime = date ('Y-m-d H:i:s');
-      $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$psc_id_update','$executetime','TO WAITING APPROVAL','WO MOVED FORWARD')";
+      if (($position['position'] == '1')) {
+        $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$psc_id_update','$executetime','TO WAITING APPROVAL','MOVED FORWARD')";
+      }
+      if (($position['position'] == '2')) {
+        $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$psc_id_update','$executetime','TO KITTING','MOVED FORWARD')";
+      }
+      
       $executeV = mysqli_query($link, $sqladdingtracking);  
 
     } else {

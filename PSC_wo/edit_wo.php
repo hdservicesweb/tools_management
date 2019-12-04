@@ -4,13 +4,14 @@ $link = Conectarse();
 $nowtime = date("m/d/Y");
 if (isset($_REQUEST['Execute-Time'])) {
     $executetime = $_REQUEST['Execute-Time'];
-}else{
+} else {
     $executetime = date("Y-m-d H:i:s");
 }
 if ((isset($_REQUEST['saved']))) {
     $saved = $_REQUEST['saved'] + 1;
 
     $psc_no = $_REQUEST['wo'];
+
     $picking = $_REQUEST['picking'];
     $assy_pn = $_REQUEST['assy_pn'];
     $customer = $_REQUEST['customer'];
@@ -27,7 +28,7 @@ if ((isset($_REQUEST['saved']))) {
 
     $sqlupdate = "UPDATE wo set psc_no = '$psc_no', picking = '$picking', assy_pn = '$assy_pn', customer = '$customer', printed= '$printed', po='$po', qty='$qty', due_date='$due_date', priorizetotal = '$priorizetotal', last_employee = '$last_employee' , position = '$position' where psc_no = '$psc_no'";
 
-    if (($executeV = mysqli_query($link, $sqlupdate))&&($psc_no != "")) {
+    if (($executeV = mysqli_query($link, $sqlupdate)) && ($psc_no != "")) {
         $varalert = 1;
         //  -->> VITACORA   
         $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$psc_no','$executetime','$last_employee','Update data.')";
@@ -41,9 +42,18 @@ if ((isset($_REQUEST['saved']))) {
 }
 
 if (isset($_REQUEST['wo'])) {
-    $idheader = "EDIT WO " . $_REQUEST['wo'];
+    
     $wo = $_REQUEST['wo'];
-    $sqlloadingdata = "SELECT * from wo where psc_no = '$wo' and position <= '10'";
+$idheader = "EDIT WO " . $wo;
+    //BUTTON TEMPORAL PARA PROBAR CONDICION QUE IMPIDE O ADVIERTE CUANDO SE IMPREME MAS DE UNA VEZ
+    $sqlcountprinted = "SELECT COUNT(id) as qtyImp from printed where id_wo = '$wo'";
+    $countqty = mysqli_query($link, $sqlcountprinted) or die("Something wrong with DB please verify.");
+    $qtyimpresed =  mysqli_fetch_array($countqty);
+    $manytimes = $qtyimpresed['qtyImp'];
+
+    
+    //FIN DE BOTON
+    $sqlloadingdata = "SELECT * from wo where psc_no = '$wo'";
 
     $wodata = mysqli_query($link, $sqlloadingdata) or die("Something wrong with DB please verify.");
     $row = mysqli_fetch_array($wodata);
@@ -75,13 +85,12 @@ if (isset($_REQUEST['wo'])) {
         $sqlnewcommon = "INSERT into messages (id,date,message,relation,employes,read_,info) values (null,CURRENT_TIMESTAMP,'$newcomment','$wo','$last_employee',0,'$info')";
         //  -->> VITACORA   
         //echo $sqlnewcommon;
-        $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$wo',CURRENT_TIMESTAMP,'$last_employee','New message added')";
+        $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$wo',CURRENT_TIMESTAMP,'$last_employee','MSG: " . $newcomment . " ')";
         $executeV = mysqli_query($link, $sqladdingtracking);
         //  -->> VITACORA   
 
         //echo $sqladdingtracking;
         $insertnewcpn = mysqli_query($link, $sqlnewcommon);
-        
     }
     if (isset($_REQUEST['action'])) {
         $action = $_REQUEST['action'];
@@ -112,6 +121,7 @@ if (isset($_REQUEST['wo'])) {
         $error_del = "NO RECEIVED ACTION - ERROR.";
     }
 } else {
+    $manytimes = 0;
     $idheader = "NO WO. SELECTED";
     $wo = '';
     $psc_no = '';
@@ -399,7 +409,7 @@ switch ($priorizetotal) {
                 <div class="card">
                     <div class="card-header bg-info text-white">
                         Tracking
-                        <label class="pull-right"><a href="view_tracking?wo=<?=$wo?>" class="text-white">   View All </a></label>
+                        <label class="pull-right"><a href="view_tracking?wo=<?= $wo ?>" class="text-white"> View All </a></label>
                     </div>
                     <div class="card-body">
                         <table class="table table-sm table-striped table-condensed table-light smalltable">
@@ -410,7 +420,7 @@ switch ($priorizetotal) {
                             while ($trackinfo = mysqli_fetch_array($exectrack)) {
                                 if ($trackinfo['user'] == 1) {
                                     $positioninitial = "NEW REGISTRY";
-                                }else{
+                                } else {
                                     $positioninitial = $trackinfo['user'];
                                 }
                                 echo "<tr>";
@@ -424,7 +434,7 @@ switch ($priorizetotal) {
                     </div>
                 </div>
             </div>
-        </div><input type="text" name = "Execute-Time" value="<?=$executetime?>" readonly hidden>
+        </div><input type="text" name="Execute-Time" value="<?= $executetime ?>" readonly hidden>
         <div class="col-12">
             <br><input type="text" id="saved" name="saved" value="<?= $saved ?>" hidden readonly>
             <center>
@@ -440,11 +450,12 @@ switch ($priorizetotal) {
                     </div>
                     <div class="col-3">
                         <?php
-                        if ((isset($row['position']) )&&($row['position'] <= '4')){
-                          echo "<a href='../TCPDF-master/examples/psc_wo_box.php?wo=$psc_no' target='_blank' class='btn btn-primary btn-sm'><i class='fa fa-print'></i> Print</a>";
+                        if ((isset($row['position'])) && ($row['position'] <= '4')) {
+                            echo "<a href='#' target='_blank' id='btn-print' onclick='event.preventDefault();chekprintqty()' class='btn btn-primary btn-sm'><i class='fa fa-print'></i> Print</a>";
+                            // echo "<a href='../TCPDF-master/examples/psc_wo_box.php?wo=$psc_no' target='_blank' ><i class='fa fa-print'></i> Print</a>";
                         }
                         ?>
-                        
+
                     </div>
                 </div>
 
@@ -543,7 +554,9 @@ switch ($priorizetotal) {
         }
 
         function returnea() {
+
             var pass = document.getElementById("password").value;
+
             if ((pass == "<?= $authorization ?>") || pass == "ADMINPCS159") {
                 // alert("PASS CORRECT");
                 document.getElementById('form_edit').submit();
@@ -552,6 +565,28 @@ switch ($priorizetotal) {
                 alert("WRONG PASSWORD");
 
             }
+        }
+
+        function chekprintqty() {
+            var manytimes = <?= $manytimes ?>;
+            if (manytimes >= '1') {
+                var reprint = confirm("This WO has been printed "+manytimes+" times, Would you like to re-print?");
+                var pagine = "../TCPDF-master/examples/psc_wo_box.php?wo=<?= $wo ?>";
+                if (reprint) {
+                    window.open(pagine);
+                    location = location.href;
+                } else {
+                    location = location.href;
+                    
+                }
+            } else {
+                var pagine = "../TCPDF-master/examples/psc_wo_box.php?wo=<?= $wo ?>";
+                window.open(pagine);
+            }
+
+
+
+
         }
     </script>
     <script type="text/javascript">

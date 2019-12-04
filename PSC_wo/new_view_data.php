@@ -48,12 +48,12 @@ $search = "";
                
                     break;
                 case '2':
-                    $buttonmove = "WAITING";
+                    $buttonmove = "<a href='#' id='" . $row['psc_no'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
                     $classdinamic = "";
                  
                     break;
                 case '3':
-                    $buttonmove = "KITTING";
+                    $buttonmove = "<a href='../TCPDF-master/examples/psc_wo_box.php?wo=" . $row['psc_no'] . "' target='_blank' id='" . $row['psc_no'] . "' ><i class='fa fa-print'></i></a>";
                     $classdinamic = "";
                  
                     break;

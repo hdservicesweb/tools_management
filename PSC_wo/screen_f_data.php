@@ -43,12 +43,12 @@ $sql = "SELECT wo.*,C.name_customer as NC from wo inner join customers C on wo.c
                 }
 
 
-                //ASIGNA EL ESTATUS ON HOLD O CORRIENDO
+                //ASIGNA EL ESTATUS ON HOLD O RUNNING
                 if ($row['status'] == 1) {
                     $newstatus = "RUNNING";
                     $onholdclass = "";
                     $onholdicon = "<i class='fa fa-check bg-success text-white'></i>";
-                    if (($row["last_employee"] != "PRODUCTION") && ($row["last_employee"] != "NEW")&& ($row["last_employee"] != "PROCESSING")&& (substr($row["last_employee"],0,5) != "FROM:")){
+                    if (($row["last_employee"] != "PRODUCTION") && (substr($row["last_employee"],0,3) != "NEW")&& ($row["last_employee"] != "PROCESSING")&& (substr($row["last_employee"],0,5) != "FROM:")){
                         $tempstatus = "<i class='fa fa-user'></i> : <small><b> ".strtoupper($row["last_employee"])."</b></small>";
                     }else{
                         $tempstatus = $row["last_employee"];

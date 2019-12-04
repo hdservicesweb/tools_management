@@ -82,7 +82,7 @@ if ((isset($_REQUEST['saved']))) {
                 if ($_REQUEST['autoprocess'] != '11111') {
                     $autoposition = substr($_REQUEST['autoprocess'], -1);
                 } else {
-                    $autoposition = 11;
+                    $autoposition = 10;
                     $employee = "CLOSED WO";
                 }
 
@@ -106,6 +106,7 @@ if ((isset($_REQUEST['saved']))) {
                             $sqlqueryforwared = "UPDATE wo set status = 1, position = $autoposition , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where psc_no = '$wo'";
                         }
                     } else {
+                        $actualposition =   $exeexist['position'];
                         //PROCESO PARA MARCAR LA WO CON POSICION ACTUAL Y ANTERIOR
                         switch ($actualposition) {
                             case '1':
