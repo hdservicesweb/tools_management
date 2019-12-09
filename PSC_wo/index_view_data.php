@@ -34,7 +34,7 @@ $search = "";
 
 
         if ($row['position'] == '1') {
-            $buttonmove = "<a href='#' id='" . $row['psc_no'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
+            $buttonmove = "<a href='#' id='" . $row['id'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
         } else {
             $buttonmove = "";
         }
@@ -78,7 +78,7 @@ $search = "";
 
 
         // echo $staricon;
-        printf("<tr class='$onholdclass'><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>","<a href='edit_wo?wo=".$row["psc_no"]."'>".  $row["psc_no"]."</a>",  $row["picking"], $row["printed"], $row["due_date"],  $row["qty"], $row["last_employee"], $staricon, $buttonmove. $buttonrelease);
+        printf("<tr class='$onholdclass'><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>","<a href='edit_wo?wo=".$row["id"]."'>".  $row["psc_no"]."</a>",  $row["picking"], $row["printed"], $row["due_date"],  $row["qty"], $row["last_employee"], $staricon, $buttonmove. $buttonrelease);
     };
 
     ?>

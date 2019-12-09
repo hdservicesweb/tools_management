@@ -417,7 +417,7 @@ switch ($priorizetotal) {
                         <table class="table table-sm table-striped table-condensed table-light smalltable">
 
                             <?php
-                            $sqltrack = "SELECT * from wo_process where wo = '$psc_no' order by date desc limit 10";
+                            $sqltrack = "SELECT * from wo_process where wo = '$psc_no' and id_wo = '$wo' order by date desc limit 10";
                             $exectrack = mysqli_query($link, $sqltrack);
                             while ($trackinfo = mysqli_fetch_array($exectrack)) {
                                 if ($trackinfo['user'] == 1) {

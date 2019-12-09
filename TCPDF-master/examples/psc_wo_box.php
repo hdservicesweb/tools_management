@@ -139,7 +139,7 @@ $pdf->SetFont('Helvetica', null, 9);
 
 $noteas = '<table border="0" cellspacing="0" cellpadding="0">';
 
-$SQLMSG = "SELECT * from messages where relation = '$wo' and read_ <= 10 order by date desc limit 4";
+$SQLMSG = "SELECT * from messages where relation = '".$row['psc_no']."' and read_ <= 10 order by date desc limit 4";
 $womess = mysqli_query($link, $SQLMSG) or die("Something wrong with DB please verify.");
 
 

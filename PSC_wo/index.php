@@ -315,7 +315,7 @@ if ($search == "") {
                         $staricon = "";
                         $position = $row['position'];
 
-                        $due_date_query = "SELECT DATEDIFF(now(), (select due_date from wo where psc_no = '" . $row['psc_no'] . "' limit 1)) as days";
+                        $due_date_query = "SELECT DATEDIFF(now(), (select due_date from wo where id = '" . $row['id'] . "' limit 1)) as days";
                         $datedataexe = mysqli_query($link, $due_date_query);
                         $datedata = mysqli_fetch_array($datedataexe);
 
