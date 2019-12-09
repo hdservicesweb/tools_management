@@ -449,7 +449,7 @@ if ($search == "") {
 
                         $bottonforw = "<a href='#' id='forward_wo," . $row['psc_no'] . "," . $position . "," . $row['id'] . "' data-toggle='modal' data-target='#move_wo' onclick='update_wo(this.id)' class='btn btn-success btn-sm text-white' ><i class='fa fa-arrow-right'></i></a>";
                         $bottonback = "<a href='#' id='forward_wo," . $row['psc_no'] . "," . $position . "," . $row['id'] . "' data-toggle='modal' data-target='#return_wo' onclick='return_wo(this.id)' class='btn btn-info btn-sm text-white'><i class='fa fa-arrow-left'></i></a>";
-                        printf("<tr class='$onholdclass'><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='$urgenclass'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "&nbsp;" . $onholdicon . "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href='edit_wo?wo=" . $row["id"] . "'><b>" . $row["psc_no"] . "</b></a>",  $row["picking"],  $row["assy_pn"], "<b style='color:$colorstars'>" .  $row["qty"] . "<b>",  $row["printed"], $row["due_date"] . "  |  " . $dayslate, $NEWPOSITION, $row["last_movement"], $row["last_employee"], $staricon, $bottonback . "&nbsp" . $bottonforw);
+                        printf("<tr class='$onholdclass'><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='$urgenclass'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "&nbsp;" . $onholdicon . "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href='edit_wo?wo=" . $row["psc_no"] . "'><b>" . $row["psc_no"] . "</b></a>",  $row["picking"],  $row["assy_pn"], "<b style='color:$colorstars'>" .  $row["qty"] . "<b>",  $row["printed"], $row["due_date"] . "  |  " . $dayslate, $NEWPOSITION, $row["last_movement"], $row["last_employee"], $staricon, $bottonback . "&nbsp" . $bottonforw);
                     }
 
                     ?>
@@ -472,7 +472,7 @@ if ($search == "") {
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="movewo.php" method="get" target="_self" id="move_wo_form" onsubmit="event.preventDefault(); localvalidations();">
+                <form action="movewo2.php" method="get" target="_self" id="move_wo_form" onsubmit="event.preventDefault(); localvalidations();">
                     <div class="modal-body">
 
                         <h2>WO No.:</h2> <input type="text" name="wo" id="wo_f" class="form-control input-sm" value="" autocomplete="off" required>
@@ -512,7 +512,7 @@ if ($search == "") {
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="movewo.php" method="get" target="_self" id="return_wo_form" onsubmit="event.preventDefault(); localvalidations_r();">
+                <form action="movewo2.php" method="get" target="_self" id="return_wo_form" onsubmit="event.preventDefault(); localvalidations_r();">
                     <div class="modal-body">
 
                         <h2>WO No.:</h2> <input type="text" name="wo" id="wo_r" class="form-control input-sm" value="" autocomplete="off" required>

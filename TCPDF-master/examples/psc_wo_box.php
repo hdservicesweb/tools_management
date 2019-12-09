@@ -8,7 +8,7 @@ if (isset($_REQUEST['wo'])) {
 	$wo = $_REQUEST['wo'];
 
 	//aregar contador de imrpesiones
-	$sqlcountprinted = "SELECT COUNT(id) as qtyImp from printed where id_wo = '$wo'";
+	$sqlcountprinted = "SELECT COUNT(id) as qtyImp from printed where id = '$wo'";
 	$countqty = mysqli_query($link, $sqlcountprinted) or die("Something wrong with DB please verify.");
 	$qtyimpresed =  mysqli_fetch_array($countqty);
 	$manytimes = $qtyimpresed['qtyImp'];
@@ -41,14 +41,16 @@ if (isset($_REQUEST['wo'])) {
 			$area = $wo;
 			$messagelabel = "Notes: ";
 			break;
+			$picking = "";
 	}
 } else {
 	$wo = "ERROR";
 }
-$SQLDATA = "SELECT * from wo where psc_no = '$wo' order by printed	 desc limit 1";
+$SQLDATA = "SELECT * from wo where id = '$wo' order by printed	 desc limit 1";
 $wodata = mysqli_query($link, $SQLDATA) or die("Something wrong with DB please verify.");
 $row = mysqli_fetch_array($wodata);
-
+$area = $row['psc_no'];
+$picking = $row['picking'];
 if (isset($row['qty'])) {
 	$qty = $row['qty'];
 } else {
@@ -99,23 +101,26 @@ $caracteresenname = strlen($employee_name);
 
 $pdf->StartTransform();
 $pdf->Rotate(90);
-$pdf->write1DBarcode($wo, 'C39', '-61', '5', 59, 15, 1, $style, 'N');
+$pdf->write1DBarcode($row['psc_no'], 'C39', '-61', '5', 59, 15, 1, $style, 'N');
 $pdf->StopTransform();
 
-$pdf->SetFont('HelveticaB', '0', 45);
-$pdf->Text(27, 0, $area, false, false, true, 0, 1, 'L');
-$pdf->SetFont('HelveticaB', '0', 16);
-$pdf->Text(28, 18, "QTY ");
-$pdf->Text(28, 24, $qty);
-$pdf->Text(83, 18, "DATE ");
+$pdf->SetFont('HelveticaB', '0', 40);
+$pdf->Text(35, 0, $area, false, false, true, 0, 1, 'L');
+$pdf->SetFont('Helvetica', '0', 8);
+$pdf->Text(50, 15, $picking, false, false, true, 0, 1, 'L');
+$pdf->SetFont('HelveticaB', '0', 14);
+
+$pdf->Text(28, 20, "QTY ");
+$pdf->Text(28, 26, $qty);
+$pdf->Text(83, 20, "DATE ");
 $primerastrella = 45;
 $sumando = 7;
 for ($i = 0; $i < $starts; $i++) {
-	$pdf->Image('images/star.jpg', ($primerastrella + ($sumando * $i)), 18, 6, 6, 'JPG', '', '', true, 150, '', false, false, 0, false, false, false);
+	$pdf->Image('images/star.jpg', ($primerastrella + ($sumando * $i)), 20, 6, 6, 'JPG', '', '', true, 150, '', false, false, 0, false, false, false);
 }
 
 
-$pdf->Text(70, 24, $date_p);
+$pdf->Text(70, 26, $date_p);
 $pdf->Line(25, 1, 25, 60, $style);
 
 
@@ -127,7 +132,7 @@ $pdf->Line(25, 1, 25, 60, $style);
 
 
 
-$pdf->write1DBarcode($wo, 'C39', '29', '30', 70, 13, 1, $style2, 'N');
+$pdf->write1DBarcode($row['psc_no'], 'C39', '29', '30', 70, 13, 1, $style2, 'N');
 $pdf->SetFont('Helvetica', null, 10);
 $pdf->Text(28, 47, $messagelabel);
 $pdf->SetFont('Helvetica', null, 9);

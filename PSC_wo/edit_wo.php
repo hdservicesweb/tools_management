@@ -11,7 +11,7 @@ if ((isset($_REQUEST['saved']))) {
     $saved = $_REQUEST['saved'] + 1;
 
     $psc_no = $_REQUEST['wo'];
-
+    $woid= $_REQUEST['wo_number'];
     $picking = $_REQUEST['picking'];
     $assy_pn = $_REQUEST['assy_pn'];
     $customer = $_REQUEST['customer'];
@@ -26,12 +26,12 @@ if ((isset($_REQUEST['saved']))) {
     // $last_movement = $_REQUEST['last_movement'];
     $position = $_REQUEST['position'];
 
-    $sqlupdate = "UPDATE wo set psc_no = '$psc_no', picking = '$picking', assy_pn = '$assy_pn', customer = '$customer', printed= '$printed', po='$po', qty='$qty', due_date='$due_date', priorizetotal = '$priorizetotal', last_employee = '$last_employee' , position = '$position' where psc_no = '$psc_no'";
+    $sqlupdate = "UPDATE wo set picking = '$picking', assy_pn = '$assy_pn', customer = '$customer', printed= '$printed', po='$po', qty='$qty', due_date='$due_date', priorizetotal = '$priorizetotal', last_employee = '$last_employee' , position = '$position' where id = '$psc_no'";
 
     if (($executeV = mysqli_query($link, $sqlupdate)) && ($psc_no != "")) {
         $varalert = 1;
         //  -->> VITACORA   
-        $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$psc_no','$executetime','$last_employee','Update data.')";
+        $sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$psc_no','$woid','$executetime','$last_employee','Update data.')";
         $executeV = mysqli_query($link, $sqladdingtracking);
         //  -->> VITACORA 
     } else {
@@ -42,21 +42,22 @@ if ((isset($_REQUEST['saved']))) {
 }
 
 if (isset($_REQUEST['wo'])) {
-    
     $wo = $_REQUEST['wo'];
-$idheader = "EDIT WO " . $wo;
+
     //BUTTON TEMPORAL PARA PROBAR CONDICION QUE IMPIDE O ADVIERTE CUANDO SE IMPREME MAS DE UNA VEZ
     $sqlcountprinted = "SELECT COUNT(id) as qtyImp from printed where id_wo = '$wo'";
     $countqty = mysqli_query($link, $sqlcountprinted) or die("Something wrong with DB please verify.");
     $qtyimpresed =  mysqli_fetch_array($countqty);
     $manytimes = $qtyimpresed['qtyImp'];
 
-    
+
     //FIN DE BOTON
-    $sqlloadingdata = "SELECT * from wo where psc_no = '$wo'";
+    $sqlloadingdata = "SELECT * from wo where id = '$wo'";
 
     $wodata = mysqli_query($link, $sqlloadingdata) or die("Something wrong with DB please verify.");
     $row = mysqli_fetch_array($wodata);
+    
+    $idheader = "EDIT WO " . $row['psc_no'];
     $psc_no = $row['psc_no'];
     $picking = $row['picking'];
     $assy_pn = $row['assy_pn'];
@@ -79,13 +80,13 @@ $idheader = "EDIT WO " . $wo;
 
         $info = substr($_REQUEST['newcomment'], 0, 10);
         $newcomment = $_REQUEST['newcomment'];
-
+        $wo_num = $_REQUEST['wo_num'];
 
         $trimmednewcomment = str_replace("-", "", $newcomment);
-        $sqlnewcommon = "INSERT into messages (id,date,message,relation,employes,read_,info) values (null,CURRENT_TIMESTAMP,'$newcomment','$wo','$last_employee',0,'$info')";
+        $sqlnewcommon = "INSERT into messages (id,date,message,relation,employes,read_,info) values (null,CURRENT_TIMESTAMP,'$newcomment','$wo_num','$last_employee',0,'$info')";
         //  -->> VITACORA   
         //echo $sqlnewcommon;
-        $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$wo',CURRENT_TIMESTAMP,'$last_employee','MSG: " . $newcomment . " ')";
+        $sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$wo','$wo_num',CURRENT_TIMESTAMP,'$last_employee','MSG: " . $newcomment . " ')";
         $executeV = mysqli_query($link, $sqladdingtracking);
         //  -->> VITACORA   
 
@@ -100,7 +101,7 @@ $idheader = "EDIT WO " . $wo;
                 $id_comment = $_REQUEST['id_comment'];
                 if (isset($_REQUEST['wo'])) {
                     $fromwo = $_REQUEST['wo'];
-                    $sql_delete_dtl = "UPDATE messages set read_ = '11', info = CURRENT_TIMESTAMP where id = '$id_comment' and relation = '$fromwo'";
+                    $sql_delete_dtl = "UPDATE messages set read_ = '11', info = CURRENT_TIMESTAMP where id = '$id_comment' ";
                     $delete_MSG = mysqli_query($link, $sql_delete_dtl);
                     if ($delete_MSG) {
                         $error_del = "NO";
@@ -242,9 +243,10 @@ switch ($priorizetotal) {
 
                                     <label for="validationServer03">Description No.:</label>
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control " name="wo" id="psc_no" placeholder="PSC WO." autocomplete="off" value="<?= $psc_no ?>" required readonly style="font-weight:bold">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text"><a onclick="activepscid()"><i class="fa fa-pencil"></i></a></span>
+                                        <input type="text" class="form-control form-control-sm col-3" name="wo" id="woid" placeholder="PSC WO." autocomplete="off" value="<?= $wo ?>" required readonly style="font-weight:bold">
+                                        <input type="text" class="form-control form-control-sm" name="wo_number" id="psc_no" placeholder="PSC WO." autocomplete="off" value="<?= $psc_no ?>" required readonly style="font-weight:bold">
+                                        <div class="input-group-append input-small">
+                                            <span class="input-group-text input-small"><i class="fa fa-pencil" onclick="activepscid()"></i></span>
                                         </div>
                                         <div class="invalid-feedback">
                                             Please provide correct Description No.
@@ -385,7 +387,7 @@ switch ($priorizetotal) {
                 <div class="card">
                     <div class="card-header bg-info text-white">
                         Messages
-                        <a href="#" class="btn btn-dark btn-sm pull-right" id="<?= $psc_no ?>" onclick="addcommon(this.id)"><i class="fa fa-plus"></i></a>
+                        <a href="#" class="btn btn-dark btn-sm pull-right" id="<?= $wo ?>" onclick="addcommon(this.id)"><i class="fa fa-plus"></i></a>
                     </div>
                     <div class="card-body">
 
@@ -541,12 +543,12 @@ switch ($priorizetotal) {
 
         function addcommon(id) {
             var id = id;
-            // var model = document.getElementById("modeltool").value;
+            var wo_num = document.getElementById("psc_no").value;
 
             if (id != '') {
                 var newcomment = prompt("Enter the note or message. ");
                 if ((newcomment != null) && (newcomment != "")) {
-                    window.location.href = "edit_wo.php?wo=" + id + "&newcomment=" + newcomment;
+                    window.location.href = "edit_wo.php?wo=" + id + "&newcomment=" + newcomment+"&wo_num="+wo_num;
                 }
             } else {
                 alert("NO WO SELECTED.");
@@ -570,14 +572,14 @@ switch ($priorizetotal) {
         function chekprintqty() {
             var manytimes = <?= $manytimes ?>;
             if (manytimes >= '1') {
-                var reprint = confirm("This WO has been printed "+manytimes+" times, Would you like to re-print?");
+                var reprint = confirm("This WO has been printed " + manytimes + " times, Would you like to re-print?");
                 var pagine = "../TCPDF-master/examples/psc_wo_box.php?wo=<?= $wo ?>";
                 if (reprint) {
                     window.open(pagine);
                     location = location.href;
                 } else {
                     location = location.href;
-                    
+
                 }
             } else {
                 var pagine = "../TCPDF-master/examples/psc_wo_box.php?wo=<?= $wo ?>";

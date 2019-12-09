@@ -4,20 +4,16 @@ $link = Conectarse();
 $executetime = date("Y-m-d H:i:s");
 $timetosee = 1500;
 $pagina_reg = "index";
-if ((isset($_REQUEST['realid']))) {
-    $realid = $_REQUEST['realid'];
-}
 // Si la entrada es para guardar un cambio
 if ((isset($_REQUEST['saved']))) {
     //SI EL PROCESO ES 1, ES DECIR AVANZAR LA WO
 
     if ($_REQUEST['saved'] == 1) {
         echo "PROCESS: Moving Forward...<br>";
-        if (isset($_REQUEST['realid'])) {
+        if (isset($_REQUEST['wo'])) {
             $wo = $_REQUEST['wo'];
-            $woid = $_REQUEST['realid'];
             //execute query to know if the string is an existent WO.
-            $sqlexist = "SELECT COUNT(id) as located , `status`,`position` from wo where id = '$realid'";
+            $sqlexist = "SELECT COUNT(id) as located , `status`,`position` from wo where psc_no = '$wo'";
             $readexist = mysqli_query($link, $sqlexist);
             $exeexist = mysqli_fetch_array($readexist);
 
@@ -90,7 +86,7 @@ if ((isset($_REQUEST['saved']))) {
                     $employee = "CLOSED WO";
                 }
 
-                $quitahold = "UPDATE wo set status = 1 where id = '$woid'";
+                $quitahold = "UPDATE wo set status = 1 where psc_no = '$wo'";
                 mysqli_query($link, $quitahold);
                 $pagina_reg .= "?srch=" . $_REQUEST['autoprocess'];
             }
@@ -105,9 +101,9 @@ if ((isset($_REQUEST['saved']))) {
                     if (isset($autoposition)) {
                         $flag = " (A: " . $autoposition . ")";
                         if ($autoposition == '11') {
-                            $sqlqueryforwared = "UPDATE wo set status = 0, position = $autoposition , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where id = '$woid'";
+                            $sqlqueryforwared = "UPDATE wo set status = 0, position = $autoposition , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where psc_no = '$wo'";
                         } else {
-                            $sqlqueryforwared = "UPDATE wo set status = 1, position = $autoposition , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where id = '$woid'";
+                            $sqlqueryforwared = "UPDATE wo set status = 1, position = $autoposition , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where psc_no = '$wo'";
                         }
                     } else {
                         $actualposition =   $exeexist['position'];
@@ -149,7 +145,7 @@ if ((isset($_REQUEST['saved']))) {
                         }
 
 
-                        $sqlqueryforwared = "UPDATE wo set status = 1, position = position + 1 , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where id = '$woid'";
+                        $sqlqueryforwared = "UPDATE wo set status = 1, position = position + 1 , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where psc_no = '$wo'";
                     }
 
                     //echo "<br>". $sqlqueryforwared;
@@ -157,7 +153,7 @@ if ((isset($_REQUEST['saved']))) {
                     if (mysqli_query($link, $sqlqueryforwared)) {
                         echo "DONE!";
                         $timetosee = 3000;
-                        $varunique = "<CENTER><img src='images/next.jpg'  height='100%'><h1>WO: " . $woid . " MOVED FORWARD CORRECTLY.</h1><br>
+                        $varunique = "<CENTER><img src='images/next.jpg'  height='100%'><h1>WO: " . $wo . " MOVED FORWARD CORRECTLY.</h1><br>
                         You'll be redirected in:<div id='tiemporestante'></div><br>
                         <h2>Go to this WO: <a href='index?srch=" . $wo . "'>" . $wo . "</a></h2>
                         </CENTER>";
@@ -185,7 +181,7 @@ if ((isset($_REQUEST['saved']))) {
                         }
 
                         //  -->> VITACORA   
-                        $sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$woid','$wo','$executetime','$employee','$labelforvitacora')";
+                        $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$wo','$executetime','$employee','$labelforvitacora')";
                         $executeV = mysqli_query($link, $sqladdingtracking);
                         //  -->> VITACORA 
                     }
@@ -196,22 +192,22 @@ if ((isset($_REQUEST['saved']))) {
 
                     // SI LA ORDEN ESTA CERRADA ON HOLD, Y POSITION 11
                     if ($exeexist['position'] == '11') {
-                        $varunique = "<CENTER><img src='images/stop.jpeg'  width='150px'><h1>WO: " . $woid . " IS 'CLOSED' <br> PLEASE VERIFY.</h1>
+                        $varunique = "<CENTER><img src='images/stop.jpeg'  width='150px'><h1>WO: " . $wo . " IS 'CLOSED' <br> PLEASE VERIFY.</h1>
                     <br>
                     You'll be redirected in:<div id='tiemporestante'></div>
                     <br>";
                     } else {
-                        $varunique = "<CENTER><img src='images/warning.png'  width='150px'><h1>WO: " . $woid . " IS 'ON HOLD' <br> PLEASE VERIFY AND TRY AGAIN.</h1>
+                        $varunique = "<CENTER><img src='images/warning.png'  width='150px'><h1>WO: " . $wo . " IS 'ON HOLD' <br> PLEASE VERIFY AND TRY AGAIN.</h1>
                     <br>
                     You'll be redirected in:<div id='tiemporestante'></div>
-                    <br> <h1>VIEW WO DATA: <a href='edit_wo?wo=" . $woid . "'><i class='fa fa-arrow-right'></i></a></h1></CENTER>";
+                    <br> <h1>VIEW WO DATA: <a href='edit_wo?wo=" . $wo . "'><i class='fa fa-arrow-right'></i></a></h1></CENTER>";
                     }
                 }
             }
             //IF WO DOESN'T EXIST
             else {
                 $timetosee = 5000;
-                $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>WARNING - WO : " . $woid . " NO LOCATED.<br>
+                $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>WARNING - WO : " . $wo . " NO LOCATED.<br>
                 You'll be redirected in:<div id='tiemporestante'></div><BR>PLEASE VERIFY ENTERED WO NUMBER.</h1></CENTER>";
             }
         } else {
@@ -222,9 +218,9 @@ if ((isset($_REQUEST['saved']))) {
     } //SI EL PROCESO ES DIFERENTE de 1 ES DECIR RETROCEDER WO
     elseif ($_REQUEST['saved'] == 0) {
         echo "RETURNING WO... <br>";
-        if (isset($_REQUEST['realid'])) {
-            $woid = $_REQUEST['realid'];
+        if (isset($_REQUEST['wo'])) {
             $wo = $_REQUEST['wo'];
+
             if (isset($_REQUEST['employee'])) {
                 $employee = $_REQUEST['employee'];
             } else {
@@ -232,20 +228,19 @@ if ((isset($_REQUEST['saved']))) {
             }
 
             //execute query to know if the string is an existent WO.
-            $sqlexist = "SELECT COUNT(id) as located, `status`,`position` from wo where id = '$woid'";
+            $sqlexist = "SELECT COUNT(id) as located, `status`,`position` from wo where psc_no = '$wo'";
             $readexist = mysqli_query($link, $sqlexist);
             $exeexist = mysqli_fetch_array($readexist);
             //IF WO EXIST
             if ($exeexist['located'] == 1) {
                 if ($exeexist['status'] != '0') {
 
-                    $sqlqueryforwared = "UPDATE wo set status = 0, position = position - 1 , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where id = '$woid'";
+                    $sqlqueryforwared = "UPDATE wo set status = 0, position = position - 1 , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where psc_no = '$wo'";
                     //echo "<br>". $sqlqueryforwared;
                     //IF QUERY HAS BEEN EXECUTED CORRECTLY WE SEND NOTIFICATION THAN IS SAVED
                     if (mysqli_query($link, $sqlqueryforwared)) {
                         echo "DONE!";
-                        $buttonback = "<a href='index?srch=" . $wo . "' class='btn btn-success btn-sm'>" . $wo . "</a>";
-                        $varunique = "<CENTER><img src='images/back.jpg'  height='100%'><h1>WO: " . $woid . " MOVED BACK CORRECTLY.</h1>
+                        $varunique = "<CENTER><img src='images/back.jpg'  height='100%'><h1>WO: " . $wo . " MOVED BACK CORRECTLY.</h1>
                         You'll be redirected in:<div id='tiemporestante'></div><br>
                         <h2>Go to this WO: <a href='index?srch=" . $wo . "'>" . $wo . "</a></h2></CENTER>";
                         $timetosee = 3000;
@@ -286,16 +281,16 @@ if ((isset($_REQUEST['saved']))) {
                                 $employee = "PROCESSING";
                                 break;
                         }
-                        $sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$woid','$wo','$executetime','$employee','WO MOVED BACK')";
+                        $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$wo','$executetime','$employee','WO MOVED BACK')";
                         $executeV = mysqli_query($link, $sqladdingtracking);
-                        $sqladdingtracking2 = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$woid','$wo','$executetime','WO CHANGED STATUS ON HOLD','DUE LAST MOVEMENT')";
+                        $sqladdingtracking2 = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$wo','$executetime','WO CHANGED STATUS ON HOLD','DUE LAST MOVEMENT')";
                         $executeV2 = mysqli_query($link, $sqladdingtracking2);
                         //  -->> VITACORA 
                         $pagina_reg .= "?srch=" . $wo;
                     }
                 } else {
                     echo "PROBLEM DETECTED!";
-                    $varunique = "<CENTER><img src='images/warning.png'  width='150px'><h1>WO: " . $woid . " IS 'ON HOLD' <br> PLEASE VERIFY AND TRY AGAIN.</h1><br>
+                    $varunique = "<CENTER><img src='images/warning.png'  width='150px'><h1>WO: " . $wo . " IS 'ON HOLD' <br> PLEASE VERIFY AND TRY AGAIN.</h1><br>
                     You'll be redirected in:<div id='tiemporestante'></div></CENTER>";
                     $timetosee = 5000;
                 }
@@ -303,7 +298,7 @@ if ((isset($_REQUEST['saved']))) {
             //IF WO DOESN'T EXIST
             else {
                 $timetosee = 5000;
-                $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>WARNING - WO : " . $woid . " NO LOCATED.<BR>PLEASE VERIFY ENTERED WO NUMBER.</h1><br>
+                $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>WARNING - WO : " . $wo . " NO LOCATED.<BR>PLEASE VERIFY ENTERED WO NUMBER.</h1><br>
                 You'll be redirected in:<div id='tiemporestante'></div></CENTER>";
             }
         } else {

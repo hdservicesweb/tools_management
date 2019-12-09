@@ -12,7 +12,7 @@ $search = "";
     $sqlquery = "SELECT wo.* from wo where position <= '4' order by wo.psc_no desc";
     $wodata = mysqli_query($link, $sqlquery) or die("Something wrong with DB please verify.");
     if ($row = mysqli_num_rows($wodata) > 0) {
-        printf("<tr><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th></tr>", "<i class='fa fa-clock-o' ></i>","<i class='fa fa-hashtag' ></i>", "<i class='fa fa-flag'></i>", "<i class='fa fa-circle'></i>", "<i class='fa fa-print'></i>", "<i class='fa fa-calendar'></i>", "Qty", "<i class='fa fa-user'></i>", "<i class='fa fa-star'></i>", "");
+        printf("<tr><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th></tr>", "<i class='fa fa-clock-o' ></i>","<i class='fa fa-hashtag' ></i>", "<i class='fa fa-flag'></i>", "<i class='fa fa-circle'></i>", "<i class='fa fa-print'></i>", "<i class='fa fa-calendar'></i>", "Qty", "<i class='fa fa-user'></i>", "<i class='fa fa-star'></i>","<i class='fa fa-inbox'></i>", "<i class='fa fa-dot-circle-o'></i>");
     };
     while ($row = mysqli_fetch_array($wodata)) {
         $starqty = substr($row["priorizetotal"], -1);
@@ -21,21 +21,22 @@ $search = "";
 
         if ($row['status'] == 1) {
          
-            $onholdclass = "";
-            $onholdicon = "<i class='fa fa-check bg-success text-white'></i>";
+            $onholdclass = "bg-success text-white";
+            
+            $onholdicon = "<a href='#'  onclick='changestatus(".$row['id'].")' id='changestatus1'><i class='fa fa-check bg-success text-white'></i></a>";
             $buttonrelease = "";
         } else {
          
             $onholdclass = " bg-warning text-white";
-            $onholdicon = "<a href='#'  onclick='changestatus(".$row['psc_no'].")' id='changestatus0'><i class='fa fa-clock-o text-white'></i></a>";
+            $onholdicon = "<a href='#'  onclick='changestatus(".$row['id'].")' id='changestatus0'><i class='fa fa-clock-o text-white'></i></a>";
             $buttonrelease = "";
         }
 
         $sqlfortimeminutes = "SELECT TIMESTAMPDIFF(MINUTE,(select printed from wo where psc_no='".$row['psc_no']."' order by printed desc limit 1),now()) as minut";
         $timeminutes = mysqli_query($link, $sqlfortimeminutes) or die("Something wrong with DB please verify.");
         $minutesdata = mysqli_fetch_array($timeminutes);
-        if ($minutesdata['minut'] <= '1'){
-            $recently = "bg-info  text-warning";
+        if ($minutesdata['minut'] <= '5'){
+            $recently = "text-primary";
         }else{
             $recently = ""; 
         }
@@ -43,17 +44,17 @@ $search = "";
 
             switch ($row['position']) {
                 case '1':
-                    $buttonmove = "<a href='#' id='" . $row['psc_no'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
-                    $classdinamic = "";
+                    $buttonmove = "<a href='#' id='" . $row['id'] . "' onclick='movefast(this.id)' ><i class='fa fa-arrow-right'></i></a>";
+                    $classdinamic = "bg-light text-white";
                
                     break;
                 case '2':
-                    $buttonmove = "<a href='#' id='" . $row['psc_no'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
+                    $buttonmove = "<a href='#' id='" . $row['id'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
                     $classdinamic = "";
                  
                     break;
                 case '3':
-                    $buttonmove = "<a href='../TCPDF-master/examples/psc_wo_box.php?wo=" . $row['psc_no'] . "' target='_blank' id='" . $row['psc_no'] . "' ><i class='fa fa-print'></i></a>";
+                    $buttonmove = "<a href='../TCPDF-master/examples/psc_wo_box.php?wo=" . $row['id'] . "' target='_blank' id='" . $row['psc_no'] . "' ><i class='fa fa-print'></i></a>";
                     $classdinamic = "";
                  
                     break;
@@ -108,7 +109,7 @@ $search = "";
 
 
         // echo $staricon;
-        printf("<tr class='$recently'><td class='$onholdclass'>&nbsp;%s</td><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='".$classdinamic."'>&nbsp;%s&nbsp;</td></tr>", $onholdicon, "<a href='edit_wo?wo=" . $row["psc_no"] . "'>" . $row["psc_no"] . "</a>",  $row["picking"],  $row["assy_pn"],  $row["printed"], $row["due_date"],  $row["qty"], $row["last_employee"], $staricon, $buttonmove);
+        printf("<tr class='$recently'><td class='$onholdclass'>&nbsp;%s</td><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='".$classdinamic."'>&nbsp;%s&nbsp;</td></tr>", $onholdicon, "<a href='edit_wo?wo=" . $row["id"] . "'>" . $row["psc_no"] . "</a>",  $row["picking"],  $row["assy_pn"],  $row["printed"], $row["due_date"],  $row["qty"], $row["last_employee"], $staricon, $row['position'],$buttonmove);
     };
 
     ?>

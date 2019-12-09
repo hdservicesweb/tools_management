@@ -335,11 +335,11 @@ if ($search == "") {
                         if ($row['status'] == 1) {
                             $newstatus = "RUNNING";
                             $onholdclass = "";
-                            $onholdicon = "<a class='btn btn-success btn-sm' href='index?srch=" . $row['psc_no'] . "' onclick='changestatus(" . $row['id'] . ")' id='changestatus1'><i class='fa fa-circle-o bg-success text-white'></i></a>";
+                            $onholdicon = "<a href='#' class='btn btn-success btn-sm'><i class='fa fa-circle bg-success text-white'></i></a>";
                         } else {
                             $newstatus = "ON HOLD";
                             $onholdclass = "text-muted";
-                            $onholdicon = "<a class='btn btn-sm btn-warning' href='index?srch=" . $row['psc_no'] . "' onclick='changestatus(" . $row['id'] . ")' id='changestatus0'><i class='fa fa-clock-o bg-warning text-white'></i></a>";
+                            $onholdicon = "<a class='btn btn-sm btn-warning' href='index?srch=" . $row['psc_no'] . "' onclick='changestatus(" . $row['psc_no'] . ")' id='changestatus0'><i class='fa fa-clock-o bg-warning text-white'></i></a>";
                         }
 
 
@@ -447,9 +447,9 @@ if ($search == "") {
                                 break;
                         }
 
-                        $bottonforw = "<a href='#' id='forward_wo," . $row['psc_no'] . "," . $position . "," . $row['id'] . "' data-toggle='modal' data-target='#move_wo' onclick='update_wo(this.id)' class='btn btn-success btn-sm text-white' ><i class='fa fa-arrow-right'></i></a>";
-                        $bottonback = "<a href='#' id='forward_wo," . $row['psc_no'] . "," . $position . "," . $row['id'] . "' data-toggle='modal' data-target='#return_wo' onclick='return_wo(this.id)' class='btn btn-info btn-sm text-white'><i class='fa fa-arrow-left'></i></a>";
-                        printf("<tr class='$onholdclass'><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='$urgenclass'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "&nbsp;" . $onholdicon . "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href='edit_wo?wo=" . $row["id"] . "'><b>" . $row["psc_no"] . "</b></a>",  $row["picking"],  $row["assy_pn"], "<b style='color:$colorstars'>" .  $row["qty"] . "<b>",  $row["printed"], $row["due_date"] . "  |  " . $dayslate, $NEWPOSITION, $row["last_movement"], $row["last_employee"], $staricon, $bottonback . "&nbsp" . $bottonforw);
+                        $bottonforw = "<a href='#' id='forward_wo," . $row['psc_no'] . "," . $position . "' data-toggle='modal' data-target='#move_wo' onclick='update_wo(this.id)' class='btn btn-success btn-sm text-white' ><i class='fa fa-arrow-right'></i></a>";
+                        $bottonback = "<a href='#' id='forward_wo," . $row['psc_no'] . "," . $position . "' data-toggle='modal' data-target='#return_wo' onclick='return_wo(this.id)' class='btn btn-info btn-sm text-white'><i class='fa fa-arrow-left'></i></a>";
+                        printf("<tr class='$onholdclass'><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='$urgenclass'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "&nbsp;" . $onholdicon . "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href='edit_wo?wo=" . $row["psc_no"] . "'><b>" . $row["psc_no"] . "</b></a>",  $row["picking"],  $row["assy_pn"], "<b style='color:$colorstars'>" .  $row["qty"] . "<b>",  $row["printed"], $row["due_date"] . "  |  " . $dayslate, $NEWPOSITION, $row["last_movement"], $row["last_employee"], $staricon, $bottonback . "&nbsp" . $bottonforw);
                     }
 
                     ?>
@@ -461,6 +461,40 @@ if ($search == "") {
         mysqli_close($link);
     }
     ?>
+
+    <!-- Modal for back WO -->
+    <div class="modal fade" id="return_wo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6>Moving Back WO.</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="movewo.php" method="get" target="_self" id="return_wo_form" onsubmit="event.preventDefault(); localvalidations_r();">
+                    <div class="modal-body">
+
+                        <h2>WO No.:</h2> <input type="text" name="wo" id="wo_r" class="form-control input-sm" value="" autocomplete="off" required>
+                        <br>
+                        <h5>
+                            <p id="leyenda_r"></p>
+                        </h5>
+
+                        <div class="invalid-feedback">
+                            Please provide correct Description No (WO).
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="text" id="saved_r" name="saved" hidden readonly>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" id="submitthis" class="btn btn-info"><i class="fa fa-arrow-left"></i> Return</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal for forward tool -->
     <div class="modal fade" id="move_wo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -491,8 +525,6 @@ if ($search == "") {
 
                     </div>
                     <div class="modal-footer">
-                        <!-- //agregar campo realid para dar seguimiento con el ID del registro en la base de datos. -->
-                    <input type="text" id="realid" name="realid"  hidden readonly>
                         <input type="text" id="saved" name="saved" hidden readonly>
 
                         <a type="button" class="btn btn-secondary" href="index">Close</a>
@@ -502,42 +534,6 @@ if ($search == "") {
             </div>
         </div>
     </div>
-    <!-- Modal for back WO -->
-    <div class="modal fade" id="return_wo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6>Moving Back WO.</h6>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="movewo.php" method="get" target="_self" id="return_wo_form" onsubmit="event.preventDefault(); localvalidations_r();">
-                    <div class="modal-body">
-
-                        <h2>WO No.:</h2> <input type="text" name="wo" id="wo_r" class="form-control input-sm" value="" autocomplete="off" required>
-                        <br>
-                        <h5>
-                            <p id="leyenda_r"></p>
-                        </h5>
-
-                        <div class="invalid-feedback">
-                            Please provide correct Description No (WO).
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                            <!-- //agregar campo realid para dar seguimiento con el ID del registro en la base de datos. -->
-                    <input type="text" id="realid_r" name="realid" hidden readonly>
-                        <input type="text" id="saved_r" name="saved" hidden readonly>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" id="submitthis" class="btn btn-info"><i class="fa fa-arrow-left"></i> Return</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
 
     <script>
         function update_wo(id) {
@@ -545,7 +541,6 @@ if ($search == "") {
             var res = process.split(",");
             if (typeof res[1] != 'undefined') {
                 document.getElementById("wo_f").value = res[1];
-                document.getElementById("realid").value = res[3];
                 var nextstep = Number(res[2]) + 1;
                 document.getElementById("leyenda").innerHTML = "WO will move to : " + nextstep;
             } else {
@@ -562,7 +557,6 @@ if ($search == "") {
             var res = process.split(",");
             if (typeof res[1] !== 'undefined') {
                 document.getElementById("wo_r").value = res[1];
-                document.getElementById("realid_r").value = res[3];
                 var nextstep = Number(res[2]) - 1;
                 document.getElementById("leyenda_r").innerHTML = "WO will move to : " + nextstep;
             } else {
@@ -577,7 +571,6 @@ if ($search == "") {
         function localvalidations() {
             var aprobado = 0;
             var wo = document.getElementById("wo_f").value;
-            var woid = document.getElementById("realid").value;
             if (wo == "" || wo == " " || wo.length <= 5 || isNaN(wo)) {
                 document.getElementById("wo_f").classList.add("is-invalid");
                 aprobado = 0;
@@ -585,7 +578,7 @@ if ($search == "") {
             } else {
 
                 document.getElementById("wo_f").classList.remove("is-invalid");
-                var worder = woid;
+                var worder = document.getElementById("wo_f").value;
                 $.ajax({
                         method: "POST",
                         url: 'viewinfo.php?worder=' + worder,
@@ -649,7 +642,7 @@ if ($search == "") {
                         url: 'updatestatus.php?worder=' + worder,
                     })
                     .done(function(msg) {
-                        alert("STATUS CHANGED");
+                        alert("STATUS CHANGED: " + worder);
                         if (msg == 1) {
                             document.getElementById("changestatus1").removeAttribute("hidden");
                             document.getElementById("changestatus0").setAttribute("hidden", "yes");

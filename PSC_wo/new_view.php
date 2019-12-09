@@ -5,12 +5,12 @@ $link = Conectarse();
 $nowtime = date("m/d/Y");
 if ((isset($_REQUEST['movefast'])) && $_REQUEST['movefast'] != ' ') {
     $psc_id_update = $_REQUEST['movefast'];
-    $sqlexpedite = "SELECT position from wo where psc_no = '$psc_id_update'";
+    $sqlexpedite = "SELECT position from wo where id = '$psc_id_update'";
     $currentposition = mysqli_query($link, $sqlexpedite);
 
     $position = mysqli_fetch_array($currentposition);
     if (($position['position'] == '1')||($position['position'] == '2')) {
-        $sqlfastupdate = "UPDATE wo set position = position + 1 where psc_no = '$psc_id_update'";
+        $sqlfastupdate = "UPDATE wo set position = position + 1 where id = '$psc_id_update'";
         $executeupdate = mysqli_query($link, $sqlfastupdate);
         echo '<div class="alert alert-success alert-dismissible fade show" role="alert" id="alertdone">
         <strong>Success!</strong> ACTION HAS BEEN EXECUTED.
@@ -41,6 +41,7 @@ if ((isset($_REQUEST['movefast'])) && $_REQUEST['movefast'] != ' ') {
 } else {
     $psc_id_update = "";
 }
+
 if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
     if (isset($_REQUEST['psc_no'])) {
         $psc_no = $_REQUEST['psc_no'];
@@ -130,7 +131,7 @@ if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
 </script>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-5">
+        <div class="col-4">
             <div class="card">
                 <form action="new_view.php" id="form-newWO" onsubmit="event.preventDefault(); prevalidation();" method="post">
                     <div class="card-header bg-secondary text-white">New WO for Tracking</div>
@@ -221,9 +222,10 @@ if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
                             <div class="col-5">
                                 <br><input type="text" id="saved" name="saved" value="0" readonly hidden>
                                 <center>
-                                    <button type="submit" class="btn btn-info "><i class="fa fa-save" aria-hidden="true"></i> Save</button>
+                                    <button type="submit" class="btn btn-info form-control"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
                                     &nbsp;
-                                    <button type="button" onclick="location.href='index';" class="btn btn-dark"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
+                                    <br>
+                                    <button type="button" onclick="location.href='index';" class="btn btn-dark form-control"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
                                 </center>
 
                             </div>
@@ -233,7 +235,7 @@ if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
                 </form>
             </div>
         </div>
-        <div class="col-7">
+        <div class="col-8">
             <div class="card">
                 <div class="card-header bg-info text-white">OPEN WO - Tracking</div>
                 <div id="contenido">
@@ -354,7 +356,7 @@ if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
                     url: 'updatestatus.php?worder=' + worder,
                 })
                 .done(function(msg) {
-                    alert("STATUS CHANGED: " + worder);
+                    alert("STATUS CHANGED");
                     if (msg == 1) {
                         document.getElementById("changestatus1").removeAttribute("hidden");
                         document.getElementById("changestatus0").setAttribute("hidden", "yes");

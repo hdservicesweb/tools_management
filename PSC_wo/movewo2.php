@@ -3,7 +3,7 @@ include("../header.php");
 $link = Conectarse();
 $executetime = date("Y-m-d H:i:s");
 $timetosee = 1500;
-$pagina_reg = "index";
+$pagina_reg = "index2";
 if ((isset($_REQUEST['realid']))) {
     $realid = $_REQUEST['realid'];
 }
@@ -159,7 +159,7 @@ if ((isset($_REQUEST['saved']))) {
                         $timetosee = 3000;
                         $varunique = "<CENTER><img src='images/next.jpg'  height='100%'><h1>WO: " . $woid . " MOVED FORWARD CORRECTLY.</h1><br>
                         You'll be redirected in:<div id='tiemporestante'></div><br>
-                        <h2>Go to this WO: <a href='index?srch=" . $wo . "'>" . $wo . "</a></h2>
+                        <h2>Go to this WO: <a href='index2?srch=" . $wo . "'>" . $wo . "</a></h2>
                         </CENTER>";
                         //CUANDO GUARDA SE DECIDE A DONDE REGRESAR, SI VIENE DE UN PROCESO AUTOMATICO O HACIA LA BUSQUEDA DE LA WO
                         if (isset($autoposition)) {
@@ -178,7 +178,7 @@ if ((isset($_REQUEST['saved']))) {
                                     $labelforvitacora = "WO MOVED FORWARD" . $flag;
                                     break;
                             }
-                            $pagina_reg = "index?srch=" . $_REQUEST['autoprocess'];
+                            $pagina_reg = "index2?srch=" . $_REQUEST['autoprocess'];
                         } else {
                             $labelforvitacora = "FORWARDED" . $flag;
                             $pagina_reg .= "?srch=" . $wo;
@@ -244,10 +244,10 @@ if ((isset($_REQUEST['saved']))) {
                     //IF QUERY HAS BEEN EXECUTED CORRECTLY WE SEND NOTIFICATION THAN IS SAVED
                     if (mysqli_query($link, $sqlqueryforwared)) {
                         echo "DONE!";
-                        $buttonback = "<a href='index?srch=" . $wo . "' class='btn btn-success btn-sm'>" . $wo . "</a>";
+                        $buttonback = "<a href='index2?srch=" . $wo . "' class='btn btn-success btn-sm'>" . $wo . "</a>";
                         $varunique = "<CENTER><img src='images/back.jpg'  height='100%'><h1>WO: " . $woid . " MOVED BACK CORRECTLY.</h1>
                         You'll be redirected in:<div id='tiemporestante'></div><br>
-                        <h2>Go to this WO: <a href='index?srch=" . $wo . "'>" . $wo . "</a></h2></CENTER>";
+                        <h2>Go to this WO: <a href='index2?srch=" . $wo . "'>" . $wo . "</a></h2></CENTER>";
                         $timetosee = 3000;
                         //  -->> VITACORA 
                         $actualposition =   $exeexist['position'];
