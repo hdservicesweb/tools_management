@@ -10,7 +10,7 @@ $result = $mysqli->query($sql);
 
 $json = [];
 while($row = $result->fetch_assoc()){
-     $json[] = ['id'=>$row['id'], 'text'=>$row['psc_no']];
+     $json[] = ['id'=>$row['id'], 'text'=>$row['psc_no']." ( ".$row['picking']. " )"];
 }
 
 

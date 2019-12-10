@@ -25,7 +25,7 @@ $search = "";
             $newstatus = "ON HOLD";
             $onholdclass = " bg-warning text-white";
             $onholdicon = "<i class='fa fa-clock-o bg-warning text-white'></i>";
-            $buttonrelease = "<a href='#'  onclick='changestatus(".$row['psc_no'].")' id='changestatus0'><i class='fa fa-clock-o'></i></a>";
+            $buttonrelease = "<a href='#".$row['psc_no']."'  onclick='changestatus(".$row['id'].")' id='changestatus0'><i class='fa fa-clock-o'></i></a>";
         }
 
         $starqty = substr($row["priorizetotal"], -1);
@@ -34,7 +34,7 @@ $search = "";
 
 
         if ($row['position'] == '1') {
-            $buttonmove = "<a href='#' id='" . $row['id'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
+            $buttonmove = "<a href='#".$row['psc_no']."' id='" . $row['id'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
         } else {
             $buttonmove = "";
         }

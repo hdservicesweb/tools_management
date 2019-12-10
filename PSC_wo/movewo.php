@@ -4,16 +4,35 @@ $link = Conectarse();
 $executetime = date("Y-m-d H:i:s");
 $timetosee = 1500;
 $pagina_reg = "index";
+$allcorrect = false;
+//SI EXISTE VARIABLE REALID
 if ((isset($_REQUEST['realid']))) {
     $realid = $_REQUEST['realid'];
+    if (isset($_REQUEST['backtome'])) {
+        if ($_REQUEST['backtome'] == "edit_wo") {
+            $pagina_reg = $_REQUEST['backtome'] . "?wo=" . $realid;
+            $timetosee = 1000;
+        }
+    } else {
+        $pagina_reg = "index";
+    }
 } else {
+    //SI NO EXISTE VARIABLE REAL ID
     if (isset($_REQUEST['wo'])) {
         $wo = $_REQUEST['wo'];
         $sqlexist2 = "SELECT COUNT(id) as located , `status`,`position`,id from wo where psc_no = '$wo'";
 
         $readexist2 = mysqli_query($link, $sqlexist2);
         $exeexist2 = mysqli_fetch_array($readexist2);
-        if ($exeexist2['located'] >= 2) { } else {
+        if ($exeexist2['located'] >= 2) {
+            $timetosee = 1000;
+            $pagina_reg = "index?srch=" . $wo;
+            $varunique = "<CENTER><img src='images/warning.png'  height='100%'><h1>WARNING - MORE THAN 1 REGISTRY LOCATED WO : " . $wo . "<br>
+            You'll be redirected in:<div id='tiemporestante'></div><BR>PLEASE VERIFY AND FORWARD IT MANUALLY.</h1></CENTER>";
+
+            $allcorrect = false;
+        } elseif ($exeexist2['located'] != 0) {
+            $allcorrect = true;
             if (isset($_REQUEST['employee'])) {
 
                 $tempemployeenum = trim($_REQUEST['employee']);
@@ -86,7 +105,12 @@ if ((isset($_REQUEST['realid']))) {
 
                 $quitahold = "UPDATE wo set status = 1 where psc_no = '$wo'";
                 mysqli_query($link, $quitahold);
-                $pagina_reg .= "?srch=" . $_REQUEST['autoprocess'];
+                if (!isset($_REQUEST['backtome'])) {
+                    $pagina_reg .= "?srch=" . $_REQUEST['autoprocess'];
+                    // $pagina_reg .= "?srch=" . $wo;
+                }
+
+
 
                 if (isset($autoposition)) {
                     $flag = " (A: " . $autoposition . ")";
@@ -124,7 +148,9 @@ if ((isset($_REQUEST['realid']))) {
                         $pagina_reg = "index?srch=" . $_REQUEST['autoprocess'];
                     } else {
                         $labelforvitacora = "FORWARDED" . $flag;
-                        $pagina_reg .= "?srch=" . $wo;
+                        if (isset($_REQUEST['backtome'])) {
+                            $pagina_reg .= "?srch=" . $wo;
+                        }
                     }
 
                     //  -->> VITACORA   
@@ -137,6 +163,7 @@ if ((isset($_REQUEST['realid']))) {
         }
     }
 }
+
 // Si la entrada es para guardar un cambio
 if ((isset($_REQUEST['saved']))) {
     //SI EL PROCESO ES 1, ES DECIR AVANZAR LA WO
@@ -146,8 +173,15 @@ if ((isset($_REQUEST['saved']))) {
         if (isset($_REQUEST['realid'])) {
             $wo = $_REQUEST['wo'];
             $woid = $_REQUEST['realid'];
+            if ($woid == "") {
+
+                $sqlexist = "SELECT COUNT(id) as located ,`id`, `status`,`position` from wo where psc_no = '" . $_REQUEST['wo'] . "'";
+            } else {
+                $sqlexist = "SELECT COUNT(id) as located ,`id`, `status`,`position` from wo where id = '$realid'";
+            }
+
             //execute query to know if the string is an existent WO.
-            $sqlexist = "SELECT COUNT(id) as located , `status`,`position` from wo where id = '$realid'";
+
             $readexist = mysqli_query($link, $sqlexist);
             $exeexist = mysqli_fetch_array($readexist);
 
@@ -214,8 +248,10 @@ if ((isset($_REQUEST['saved']))) {
 
 
 
-            //IF WO EXIST
+            //IF WO EXIST solamente una vez
             if ($exeexist['located'] == 1) {
+                //SELECCIONAMOS EL ID DEL REGISTRO ENCONTRADO
+                $selectidnum = $exeexist['id'];
                 //IF WO NO SE ENCUENTRA EN ESTADO ON HOLD
                 if ($exeexist['status'] != '0') {
 
@@ -257,15 +293,23 @@ if ((isset($_REQUEST['saved']))) {
                             break;
                     }
 
+                    //RESUELVE ADELANTAR LA WO 
+                    if ($woid == "") {
+                        $sqlqueryforwared = "UPDATE wo set status = 1, position = position + 1 , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where id = '$selectidnum'";
+                    } else {
+                        $sqlqueryforwared = "UPDATE wo set status = 1, position = position + 1 , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where id = '$woid'";
+                    }
 
-                    $sqlqueryforwared = "UPDATE wo set status = 1, position = position + 1 , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where id = '$woid'";
 
 
                     //echo "<br>". $sqlqueryforwared;
                     //IF QUERY HAS BEEN EXECUTED CORRECTLY WE SEND NOTIFICATION THAN IS SAVED
                     if (mysqli_query($link, $sqlqueryforwared)) {
+
                         echo "DONE!";
-                        $timetosee = 3000;
+                        if ($timetosee != 1000) {
+                            $timetosee = 5000;
+                        }
                         $varunique = "<CENTER><img src='images/next.jpg'  height='100%'><h1>WO: " . $woid . " MOVED FORWARD CORRECTLY.</h1><br>
                         You'll be redirected in:<div id='tiemporestante'></div><br>
                         <h2>Go to this WO: <a href='index?srch=" . $wo . "'>" . $wo . "</a></h2>
@@ -290,17 +334,31 @@ if ((isset($_REQUEST['saved']))) {
                             $pagina_reg = "index?srch=" . $_REQUEST['autoprocess'];
                         } else {
                             $labelforvitacora = "FORWARDED" . $flag;
-                            $pagina_reg .= "?srch=" . $wo;
+                            if (!isset($_REQUEST['backtome'])) {
+                                $pagina_reg .= "?srch=" . $wo;
+                            }
                         }
 
                         //  -->> VITACORA   
-                        $sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$woid','$wo','$executetime','$employee','$labelforvitacora')";
+                        if ($woid == "") {
+
+                            $sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$selectidnum','$wo','$executetime','$employee','$labelforvitacora')";
+                            //echo $sqladdingtracking;
+                        } else {
+                            $sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$woid','$wo','$executetime','$employee','$labelforvitacora')";
+                           // echo $sqladdingtracking;
+                        }
+
+
                         $executeV = mysqli_query($link, $sqladdingtracking);
                         //  -->> VITACORA 
                     }
                 } else {
                     echo "PROBLEM DETECTED!";
-                    $timetosee = 5000;
+                    if ($timetosee != 1000) {
+                        $timetosee = 5000;
+                    }
+
 
 
                     // SI LA ORDEN ESTA CERRADA ON HOLD, Y POSITION 11
@@ -310,6 +368,7 @@ if ((isset($_REQUEST['saved']))) {
                     You'll be redirected in:<div id='tiemporestante'></div>
                     <br>";
                     } else {
+
                         $varunique = "<CENTER><img src='images/warning.png'  width='150px'><h1>WO: " . $woid . " IS 'ON HOLD' <br> PLEASE VERIFY AND TRY AGAIN.</h1>
                     <br>
                     You'll be redirected in:<div id='tiemporestante'></div>
@@ -317,18 +376,31 @@ if ((isset($_REQUEST['saved']))) {
                     }
                 }
             }
-            //IF WO DOESN'T EXIST
+            //IF WO DOESN'T EXIST OR eXIST MORE THAN 1
+            //SI existes mas de 2 registros o no existen.
             else {
-                $timetosee = 5000;
-                $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>WARNING - WO : " . $woid . " NO LOCATED.<br>
+                if ($exeexist['located'] >= 2) {
+                    $timetosee = 5000;
+                    if (!isset($_REQUEST['backtome'])) {
+                        $pagina_reg .= "?srch=" . $wo;
+                    }
+                    $varunique = "<CENTER><img src='images/warning.png'  height='100%'><h1>WARNING - MORE THAN 1 REGISTRY LOCATED WO : " . $woid . " .<br>
+                    You'll be redirected in:<div id='tiemporestante'></div><BR>PLEASE VERIFY AND FORWARD IT MANUALLY.</h1></CENTER>";
+                } else {
+                    $timetosee = 5000;
+                    $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>WARNING - WO : " . $woid . " NO LOCATED.<br>
                 You'll be redirected in:<div id='tiemporestante'></div><BR>PLEASE VERIFY ENTERED WO NUMBER.</h1></CENTER>";
+                }
             }
         } else {
             //AQUI VA EL CODIGO PARA GUARDAR POR ASIGNACION DIRECTA
             $timetosee = 5000;
             if ($allcorrect) { } else {
-                $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>ERROR - VARIABLE WO No. <BR>WAS NOT DETECTED.</h1><br>
+                if (empty($varunique)) {
+                    $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>ERROR - VARIABLE WO No. <BR>WAS NOT DETECTED.</h1><br>
             You'll be redirected in:<div id='tiemporestante'></div></CENTER>";
+                }
+               
             }
         }
     } //SI EL PROCESO ES DIFERENTE de 1 ES DECIR RETROCEDER WO
@@ -403,7 +475,9 @@ if ((isset($_REQUEST['saved']))) {
                         $sqladdingtracking2 = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$woid','$wo','$executetime','WO CHANGED STATUS ON HOLD','DUE LAST MOVEMENT')";
                         $executeV2 = mysqli_query($link, $sqladdingtracking2);
                         //  -->> VITACORA 
-                        $pagina_reg .= "?srch=" . $wo;
+                        if (!isset($_REQUEST['backtome'])) {
+                            $pagina_reg .= "?srch=" . $wo;
+                        }
                     }
                 } else {
                     echo "PROBLEM DETECTED!";
@@ -441,12 +515,14 @@ else {
                             <?php
                             if (isset($varunique)) {
                                 echo $varunique;
-                            } else { }
+                            } else {
+                               
+                            }
                             ?>
                         </div>
                         <script LANGUAGE="JavaScript">
                             var pagina = "<?php echo $pagina_reg; ?>";
-                            var segundos = (<?php echo $timetosee / 1000 ?>);
+                            var segundos = "(<?php echo $timetosee / 1000 ?>)";
 
                             function redireccionar() {
                                 location.href = pagina

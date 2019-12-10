@@ -5,10 +5,12 @@ $link = Conectarse();
 $nowtime = date("m/d/Y");
 if ((isset($_REQUEST['movefast'])) && $_REQUEST['movefast'] != ' ') {
     $psc_id_update = $_REQUEST['movefast'];
-    $sqlexpedite = "SELECT position from wo where id = '$psc_id_update'";
+    $sqlexpedite = "SELECT position,psc_no from wo where id = '$psc_id_update'";
     $currentposition = mysqli_query($link, $sqlexpedite);
 
     $position = mysqli_fetch_array($currentposition);
+    //wonumber captura el numero de la WO diferente del ID
+    $wonumber = $position['psc_no'];
     if (($position['position'] == '1')||($position['position'] == '2')) {
         $sqlfastupdate = "UPDATE wo set position = position + 1 where id = '$psc_id_update'";
         $executeupdate = mysqli_query($link, $sqlfastupdate);
@@ -22,10 +24,10 @@ if ((isset($_REQUEST['movefast'])) && $_REQUEST['movefast'] != ' ') {
       //vitacora
       $executetime = date ('Y-m-d H:i:s');
       if (($position['position'] == '1')) {
-        $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$psc_id_update','$executetime','TO WAITING APPROVAL','MOVED FORWARD')";
+        $sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$psc_id_update','$wonumber','$executetime','TO WAITING APPROVAL','MOVED FORWARD')";
       }
       if (($position['position'] == '2')) {
-        $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$psc_id_update','$executetime','TO KITTING','MOVED FORWARD')";
+        $sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$psc_id_update','$wonumber','$executetime','TO KITTING','MOVED FORWARD')";
       }
       
       $executeV = mysqli_query($link, $sqladdingtracking);  
@@ -96,22 +98,29 @@ if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
     $SQLinsert = "INSERT INTO `wo` (`id`, `psc_no`, `picking`, `assy_pn`, `customer`, `po`, `qty`, `printed`, `due_date`, `priorizetotal`, `last_employee`, `status`, `position`, `note`, `fieldextra1`, `fieldextra2`, `last_movement`) VALUES (NULL, '$psc_no', '$picking', '$assy_pn', '1', '0', '$qty', CURRENT_TIMESTAMP, '$due_date', '$priorizetotal', '$namestation', '0', '$starting', NULL, NULL, NULL, CURRENT_TIMESTAMP);";
 //echo $SQLinsert;
     if (mysqli_query($link, $SQLinsert)) {
+       $lasredg = mysqli_insert_id($link);
+       echo '<div class="alert alert-success alert-dismissible fade show" role="alert" id="alertdone">
+       <strong>Success!</strong> WO have added to proccess.<a href="../TCPDF-master/examples/psc_wo_box.php?wo=' . $lasredg . '" target="_blank" class="alert-link"> <i class="fa fa-print"></i> PRINT </a>
+       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+       </button>
+     </div>';
 
-        echo "<div class='alert alert-success' id='success-alert'>
-        <button type='button' class='close' data-dismiss='alert'>x</button>
-        <strong>Success! </strong> WO have added to proccess.
-      </div>";
         //  -->> VITACORA   
 
-        $sqladdingtracking = "INSERT into wo_process (id,wo,date,user,process) values (NULL,'$psc_no',CURRENT_TIMESTAMP,'$namestation','WO CREATED')";
+        $sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$lasredg','$psc_no',CURRENT_TIMESTAMP,'$namestation','WO CREATED')";
 
         $executeV = mysqli_query($link, $sqladdingtracking);
         //  -->> VITACORA 
     } else {
-        echo "<div class='alert alert-warning' id='success-alert'>
-        <button type='button' class='close' data-dismiss='alert'>x</button>
-        <strong>NO SAVED! </strong> Please verify information.
-      </div>";
+
+        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert" id="alertdone">
+        <strong>ERROR!</strong> Please verify information. (DUPLICATED VALUE)<a href="new_view" class="alert-link"> Dismiss. </a>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>';
+
     }
 }
 ?>
@@ -373,6 +382,8 @@ if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
 <script>
     $(document).ready(function() {
         $('#alertdone').toast('hide')
+        
+        
     });
 </script>
 <?php

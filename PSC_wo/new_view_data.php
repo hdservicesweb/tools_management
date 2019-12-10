@@ -23,12 +23,12 @@ $search = "";
          
             $onholdclass = "bg-success text-white";
             
-            $onholdicon = "<a href='#'  onclick='changestatus(".$row['id'].")' id='changestatus1'><i class='fa fa-check bg-success text-white'></i></a>";
+            $onholdicon = "<a href='#".$row['id']."'  onclick='changestatus(".$row['id'].")' id='changestatus1'><i class='fa fa-check bg-success text-white'></i></a>";
             $buttonrelease = "";
         } else {
          
             $onholdclass = " bg-warning text-white";
-            $onholdicon = "<a href='#'  onclick='changestatus(".$row['id'].")' id='changestatus0'><i class='fa fa-clock-o text-white'></i></a>";
+            $onholdicon = "<a href='#".$row['id']."'  onclick='changestatus(".$row['id'].")' id='changestatus0'><i class='fa fa-clock-o text-white'></i></a>";
             $buttonrelease = "";
         }
 
@@ -44,12 +44,12 @@ $search = "";
 
             switch ($row['position']) {
                 case '1':
-                    $buttonmove = "<a href='#' id='" . $row['id'] . "' onclick='movefast(this.id)' ><i class='fa fa-arrow-right'></i></a>";
+                    $buttonmove = "<a href='#".$row['id']."' id='" . $row['id'] . "' onclick='movefast(this.id)' ><i class='fa fa-arrow-right'></i></a>";
                     $classdinamic = "bg-light text-white";
                
                     break;
                 case '2':
-                    $buttonmove = "<a href='#' id='" . $row['id'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
+                    $buttonmove = "<a href='#".$row['id']."' id='" . $row['id'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
                     $classdinamic = "";
                  
                     break;
@@ -109,7 +109,7 @@ $search = "";
 
 
         // echo $staricon;
-        printf("<tr class='$recently'><td class='$onholdclass'>&nbsp;%s</td><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='".$classdinamic."'>&nbsp;%s&nbsp;</td></tr>", $onholdicon, "<a href='edit_wo?wo=" . $row["id"] . "'>" . $row["psc_no"] . "</a>",  $row["picking"],  $row["assy_pn"],  $row["printed"], $row["due_date"],  $row["qty"], $row["last_employee"], $staricon, $row['position'],$buttonmove);
+        printf("<tr class='$recently'><td class='$onholdclass'>&nbsp;%s</td><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='".$classdinamic."'>&nbsp;%s&nbsp;</td></tr>", $onholdicon, "<a href='edit_wo?wo=" . $row["id"] . "'>" . $row["psc_no"] . "</a>",  $row["picking"],  $row["assy_pn"],  $row["printed"], $row["due_date"],  $row["qty"], $row["last_employee"], $staricon, $row['position'],$buttonmove );
     };
 
     ?>

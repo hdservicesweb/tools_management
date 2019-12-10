@@ -11,7 +11,7 @@ if ((isset($_REQUEST['saved']))) {
     $saved = $_REQUEST['saved'] + 1;
 
     $psc_no = $_REQUEST['wo'];
-    $woid= $_REQUEST['wo_number'];
+    $woid = $_REQUEST['wo_number'];
     $picking = $_REQUEST['picking'];
     $assy_pn = $_REQUEST['assy_pn'];
     $customer = $_REQUEST['customer'];
@@ -56,7 +56,7 @@ if (isset($_REQUEST['wo'])) {
 
     $wodata = mysqli_query($link, $sqlloadingdata) or die("Something wrong with DB please verify.");
     $row = mysqli_fetch_array($wodata);
-    
+
     $idheader = "EDIT WO " . $row['psc_no'];
     $psc_no = $row['psc_no'];
     $picking = $row['picking'];
@@ -359,15 +359,15 @@ switch ($priorizetotal) {
                                 <label for=''>Current Position:</label><br>
                                 <select name="position" id="starting" class="form-control form-control-sm">
                                     <option value="<?= $position ?>" selected><?= $position ?></option>
-                                    <option value="1" disabled>1 - Work Order Registration</option>
-                                    <option value="2" disabled>2 - Prior approval</option>
-                                    <option value="3" disabled>3 - Kitting</option>
-                                    <option value="4" disabled>4 - Ready for assign</option>
-                                    <option value="5" disabled>5 - In Process</option>
-                                    <option value="6" disabled>6 - Done</option>
-                                    <option value="7" disabled>7 - Quality Control</option>
-                                    <option value="8" disabled>8 - Packing</option>
-                                    <option value="9" disabled>9 - Shipped</option>
+                                    <option value="1">1 - Work Order Registration</option>
+                                    <option value="2">2 - Prior approval</option>
+                                    <option value="3">3 - Kitting</option>
+                                    <option value="4">4 - Ready for assign</option>
+                                    <option value="5">5 - In Process</option>
+                                    <option value="6">6 - Done</option>
+                                    <option value="7">7 - Quality Control</option>
+                                    <option value="8">8 - Packing</option>
+                                    <option value="9">9 - Shipped</option>
                                 </select>
                             </div>
                             <div class="col-4">
@@ -377,6 +377,28 @@ switch ($priorizetotal) {
 
                         </div>
 
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-6">
+                                <?php
+                                if ((isset($row['psc_no'])) && ($position <= '3')) {
+                                    if ($position >= 2) {
+                                        ?>
+                                        <a href='#' id='forward_wo,<?= $row['psc_no'] ?>,<?= $position ?>,<?= $row['id'] ?>' data-toggle='modal' data-target='#return_wo' onclick='return_wo(this.id)' class='btn btn-info btn-sm text-white form-control'><i class='fa fa-arrow-left'></i></a>
+                                    <?php
+                                        }
+                                        ?>
+
+                            </div>
+                            <div class="col-6">
+                                <a href='#' id='forward_wo,<?= $row['psc_no'] ?>,<?= $position ?>,<?= $row['id'] ?>' data-toggle='modal' data-target='#move_wo' onclick='update_wo(this.id)' class='btn btn-success btn-sm text-white form-control'><i class='fa fa-arrow-right'></i></a>
+                            <?php
+                            } ?>
+
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -469,8 +491,120 @@ switch ($priorizetotal) {
     </div>
     <hr>
 
+    <!-- Modal for forward tool -->
+    <div class="modal fade" id="move_wo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6>Moving forward WO.</h6>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="movewo.php" method="get" target="_self" id="move_wo_form">
+                    <div class="modal-body">
+
+                        <h2>WO No.:</h2> <input type="text" name="wo" id="wo_f" class="form-control input-sm" value="" autocomplete="off" required readonly>
+                        <br>
+                        <h5>
+                            <p id="leyenda"></p>
+                        </h5>
+                        <div class="invalid-feedback">
+                            Please provide correct Description No (WO).
+                        </div>
+                        <div id="employee" hidden>
+                            <!-- <div id="employee" hidden> -->
+                            <h2>Employee:</h2>
+                            <input type="text" id="employee_text" name="employee" class="form-control" value="PRODUCTION" required>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <!-- //agregar campo realid para dar seguimiento con el ID del registro en la base de datos. -->
+                        <input type="text" id="realid" name="realid" hidden readonly>
+                        <input type="text" id="realid" name="backtome" value="edit_wo" hidden readonly>
+                        <input type="text" id="saved" name="saved" value="1" hidden readonly>
+
+                        <a type="button" class="btn btn-secondary" href="index">Close</a>
+                        <button type="submit" id="submitthis" class="btn btn-success"> Forward <i class="fa fa-arrow-right"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal for back WO -->
+    <div class="modal fade" id="return_wo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6>Moving Back WO.</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="movewo.php" method="get" target="_self" id="return_wo_form">
+                    <div class="modal-body">
+
+                        <h2>WO No.:</h2> <input type="text" name="wo" id="wo_r" class="form-control input-sm" value="" autocomplete="off" required readonly>
+                        <br>
+                        <h5>
+                            <p id="leyenda_r"></p>
+                        </h5>
+
+                        <div class="invalid-feedback">
+                            Please provide correct Description No (WO).
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- //agregar campo realid para dar seguimiento con el ID del registro en la base de datos. -->
+                        <input type="text" id="realid_r" name="realid" hidden readonly>
+                        <input type="text" id="realid" name="backtome" value="edit_wo" hidden readonly>
+                        <input type="text" id="saved_r" name="saved" value="0" hidden readonly>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" id="submitthis" class="btn btn-info"><i class="fa fa-arrow-left"></i> Return</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <script>
+        function update_wo(id) {
+            process = id;
+            var res = process.split(",");
+            if (typeof res[1] != 'undefined') {
+                document.getElementById("wo_f").value = res[1];
+                document.getElementById("realid").value = res[3];
+                var nextstep = Number(res[2]) + 1;
+                document.getElementById("leyenda").innerHTML = "WO will move to : " + nextstep;
+            } else {
+                document.getElementById("wo_f").value = "";
+            }
+            console.log(res[1]);
+            setTimeout(function() {
+                $('#wo_f').focus();
+            }, 500);
+        }
+
+        function return_wo(id) {
+            process = id;
+            var res = process.split(",");
+            if (typeof res[1] !== 'undefined') {
+                document.getElementById("wo_r").value = res[1];
+                document.getElementById("realid_r").value = res[3];
+                var nextstep = Number(res[2]) - 1;
+                document.getElementById("leyenda_r").innerHTML = "WO will move to : " + nextstep;
+            } else {
+                document.getElementById("wo_r").value = "";
+            }
+
+            setTimeout(function() {
+                $('#wo_r').focus();
+            }, 500);
+        }
+
         function delete_message(id) {
             id = id;
             opcion = confirm("Are you sure you want to DELETE this record.?");
@@ -515,7 +649,7 @@ switch ($priorizetotal) {
         function changestatus() {
             var newstatus = window.confirm("Do you want to change the current status of this WO?");
             if (newstatus == true) {
-                var worder = document.getElementById("psc_no").value;
+                var worder = document.getElementById("woid").value;
                 $.ajax({
                         method: "POST",
                         url: 'updatestatus.php?worder=' + worder,
@@ -548,7 +682,7 @@ switch ($priorizetotal) {
             if (id != '') {
                 var newcomment = prompt("Enter the note or message. ");
                 if ((newcomment != null) && (newcomment != "")) {
-                    window.location.href = "edit_wo.php?wo=" + id + "&newcomment=" + newcomment+"&wo_num="+wo_num;
+                    window.location.href = "edit_wo.php?wo=" + id + "&newcomment=" + newcomment + "&wo_num=" + wo_num;
                 }
             } else {
                 alert("NO WO SELECTED.");
@@ -570,7 +704,7 @@ switch ($priorizetotal) {
         }
 
         function chekprintqty() {
-            var manytimes = <?= $manytimes ?>;
+            var manytimes = "<?= $manytimes ?>";
             if (manytimes >= '1') {
                 var reprint = confirm("This WO has been printed " + manytimes + " times, Would you like to re-print?");
                 var pagine = "../TCPDF-master/examples/psc_wo_box.php?wo=<?= $wo ?>";

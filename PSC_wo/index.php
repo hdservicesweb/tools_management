@@ -492,7 +492,7 @@ if ($search == "") {
                     </div>
                     <div class="modal-footer">
                         <!-- //agregar campo realid para dar seguimiento con el ID del registro en la base de datos. -->
-                    <input type="text" id="realid" name="realid"  hidden readonly>
+                        <input type="text" id="realid" name="realid" hidden readonly>
                         <input type="text" id="saved" name="saved" hidden readonly>
 
                         <a type="button" class="btn btn-secondary" href="index">Close</a>
@@ -526,8 +526,8 @@ if ($search == "") {
                         </div>
                     </div>
                     <div class="modal-footer">
-                            <!-- //agregar campo realid para dar seguimiento con el ID del registro en la base de datos. -->
-                    <input type="text" id="realid_r" name="realid" hidden readonly>
+                        <!-- //agregar campo realid para dar seguimiento con el ID del registro en la base de datos. -->
+                        <input type="text" id="realid_r" name="realid" hidden readonly>
                         <input type="text" id="saved_r" name="saved" hidden readonly>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" id="submitthis" class="btn btn-info"><i class="fa fa-arrow-left"></i> Return</button>
@@ -585,7 +585,12 @@ if ($search == "") {
             } else {
 
                 document.getElementById("wo_f").classList.remove("is-invalid");
-                var worder = woid;
+                if (woid == "") {
+                    var worder = wo;
+                } else {
+                    var worder = woid;
+                }
+
                 $.ajax({
                         method: "POST",
                         url: 'viewinfo.php?worder=' + worder,
@@ -607,6 +612,9 @@ if ($search == "") {
                             }
 
 
+                        } else if (msg == 'X') {
+                            alert("WO DOESNT EXIST");
+                            return;
                         } else {
                             document.getElementById("saved").value = "1";
                             document.getElementById("move_wo_form").submit();
@@ -649,7 +657,7 @@ if ($search == "") {
                         url: 'updatestatus.php?worder=' + worder,
                     })
                     .done(function(msg) {
-                        alert("STATUS CHANGED");
+
                         if (msg == 1) {
                             document.getElementById("changestatus1").removeAttribute("hidden");
                             document.getElementById("changestatus0").setAttribute("hidden", "yes");
