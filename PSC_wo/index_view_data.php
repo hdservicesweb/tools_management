@@ -6,7 +6,7 @@ $search = "";
 
 ?>
 
-<table class="table table-striped table-bordered table-hover" width="100%" style='font-size:12px;text-align:center'>
+<table class="table table-striped table-bordered table-hover table-condensed" width="100%" style='font-size:12px;text-align:center'>
     <?php
     $sqlquery = "SELECT * from wo where wo.position = '4' order by wo.priorizetotal desc, wo.due_date asc ";
     $wodata = mysqli_query($link, $sqlquery) or die("Something wrong with DB please verify.");
@@ -25,7 +25,7 @@ $search = "";
             $newstatus = "ON HOLD";
             $onholdclass = " bg-warning text-white";
             $onholdicon = "<i class='fa fa-clock-o bg-warning text-white'></i>";
-            $buttonrelease = "<a href='#".$row['psc_no']."'  onclick='changestatus(".$row['id'].")' id='changestatus0'><i class='fa fa-clock-o'></i></a>";
+            $buttonrelease = "<a href='#'  onclick='changestatus(".$row['id'].")' id='changestatus0'><i class='fa fa-clock-o'></i></a>";
         }
 
         $starqty = substr($row["priorizetotal"], -1);
@@ -34,7 +34,7 @@ $search = "";
 
 
         if ($row['position'] == '1') {
-            $buttonmove = "<a href='#".$row['psc_no']."' id='" . $row['id'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
+            $buttonmove = "<a href='#' id='" . $row['id'] . "' onclick='movefast(this.id)'><i class='fa fa-arrow-right'></i></a>";
         } else {
             $buttonmove = "";
         }

@@ -73,7 +73,7 @@ if ($search == "") {
         </div>
         <hr>
         <div class="row">
-            <div class="col-6">
+            <div class="col-7">
                 <div class="card">
                     <div class="card-header">READY FOR ASSIGN.</div>
                     <div class="card-body">
@@ -85,7 +85,7 @@ if ($search == "") {
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-5">
                 <div class="card">
                     <div class="card-header">General Instructions.</div>
                     <div class="card-body">

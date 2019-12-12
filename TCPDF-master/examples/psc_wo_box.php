@@ -2,23 +2,17 @@
 require_once('tcpdf_include.php');
 include('../../conection.php');
 date_default_timezone_set('America/Los_Angeles');
-
+$executetime = date("Y-m-d H:i:s");
 $link = Conectarse();
 if (isset($_REQUEST['wo'])) {
 	$wo = $_REQUEST['wo'];
 
 	//aregar contador de imrpesiones
-	$sqlcountprinted = "SELECT COUNT(id) as qtyImp from printed where id = '$wo'";
+	$sqlcountprinted = "SELECT COUNT(id) as qtyImp from printed where id_wo = '$wo'";
 	$countqty = mysqli_query($link, $sqlcountprinted) or die("Something wrong with DB please verify.");
 	$qtyimpresed =  mysqli_fetch_array($countqty);
 	$manytimes = $qtyimpresed['qtyImp'];
-	if ($manytimes == 0) {
-		$sqlinsert = "INSERT into printed values (null,'$wo','',CURRENT_TIMESTAMP,'1')";
-		$execsqlinsert =  mysqli_query($link, $sqlinsert);
-	} else {
-		$sqlinsert = "INSERT into printed values (null,'$wo','',CURRENT_TIMESTAMP,'$manytimes')";
-		$execsqlinsert =  mysqli_query($link, $sqlinsert);
-	}
+
 
 	switch ($wo) {
 		case '11111':
@@ -51,6 +45,19 @@ $wodata = mysqli_query($link, $SQLDATA) or die("Something wrong with DB please v
 $row = mysqli_fetch_array($wodata);
 $area = $row['psc_no'];
 $picking = $row['picking'];
+if ($manytimes == 0) {
+	$sqlinsert = "INSERT into printed values (null,'$wo','$area',CURRENT_TIMESTAMP,'1')";
+	$execsqlinsert =  mysqli_query($link, $sqlinsert);
+	//VITACORA
+	$sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$wo','$area','$executetime','BOX LABEL PRINTED','FIRST TIME')";
+	$executeV = mysqli_query($link, $sqladdingtracking);
+} else {
+	$sqlinsert = "INSERT into printed values (null,'$wo','$area',CURRENT_TIMESTAMP,'$manytimes')";
+	$execsqlinsert =  mysqli_query($link, $sqlinsert);
+	$sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$wo','$area','$executetime','BOX LABEL RE-PRINTED','$manytimes TIMEs')";
+	$executeV = mysqli_query($link, $sqladdingtracking);
+}
+
 if (isset($row['qty'])) {
 	$qty = $row['qty'];
 } else {
@@ -139,7 +146,7 @@ $pdf->SetFont('Helvetica', null, 9);
 
 $noteas = '<table border="0" cellspacing="0" cellpadding="0">';
 
-$SQLMSG = "SELECT * from messages where relation = '".$row['psc_no']."' and read_ <= 10 order by date desc limit 4";
+$SQLMSG = "SELECT * from messages where relation = '" . $row['psc_no'] . "' and read_ <= 10 order by date desc limit 4";
 $womess = mysqli_query($link, $SQLMSG) or die("Something wrong with DB please verify.");
 
 

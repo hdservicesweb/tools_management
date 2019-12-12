@@ -333,7 +333,7 @@ else {
                 </div>
                 <script LANGUAGE="JavaScript">
                     var pagina = "<?php echo $pagina_reg; ?>";
-                    var segundos = (<?php echo $timetosee / 1000 ?>);
+                    var segundos = "(<?php echo $timetosee / 1000 ?>)";
 
                     function redireccionar() {
                         location.href = pagina

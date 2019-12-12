@@ -19,7 +19,7 @@ $sql = "SELECT wo.*,C.name_customer as NC from wo inner join customers C on wo.c
 </script>
 <div class="container-fluid" id="contenido">
     <div name="timediv" id="timediv">
-        
+
     </div>
 </div>
 <div class="container-fluid">

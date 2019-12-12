@@ -20,7 +20,7 @@ if ((isset($_REQUEST['realid']))) {
     //SI NO EXISTE VARIABLE REAL ID
     if (isset($_REQUEST['wo'])) {
         $wo = $_REQUEST['wo'];
-        $sqlexist2 = "SELECT COUNT(id) as located , `status`,`position`,id from wo where psc_no = '$wo'";
+        $sqlexist2 = "SELECT COUNT(id) as located , `status`,`position`,`id` from wo where psc_no = '$wo'";
 
         $readexist2 = mysqli_query($link, $sqlexist2);
         $exeexist2 = mysqli_fetch_array($readexist2);
@@ -33,6 +33,7 @@ if ((isset($_REQUEST['realid']))) {
             $allcorrect = false;
         } elseif ($exeexist2['located'] != 0) {
             $allcorrect = true;
+            // $woid = $exeexist2['id'];
             if (isset($_REQUEST['employee'])) {
 
                 $tempemployeenum = trim($_REQUEST['employee']);
@@ -92,6 +93,7 @@ if ((isset($_REQUEST['realid']))) {
                     }
                 }
             } else {
+                $woid = $exeexist2['id'];
                 $employee = "EDITED";
             }
             // http://127.0.0.1/PSC_wo/movewo.php?wo=123456&emp_a=+30077+&saved=1&autoprocess=55555
@@ -346,7 +348,7 @@ if ((isset($_REQUEST['saved']))) {
                             //echo $sqladdingtracking;
                         } else {
                             $sqladdingtracking = "INSERT into wo_process (id,id_wo,wo,date,user,process) values (NULL,'$woid','$wo','$executetime','$employee','$labelforvitacora')";
-                           // echo $sqladdingtracking;
+                            // echo $sqladdingtracking;
                         }
 
 
@@ -400,7 +402,6 @@ if ((isset($_REQUEST['saved']))) {
                     $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>ERROR - VARIABLE WO No. <BR>WAS NOT DETECTED.</h1><br>
             You'll be redirected in:<div id='tiemporestante'></div></CENTER>";
                 }
-               
             }
         }
     } //SI EL PROCESO ES DIFERENTE de 1 ES DECIR RETROCEDER WO
@@ -515,9 +516,7 @@ else {
                             <?php
                             if (isset($varunique)) {
                                 echo $varunique;
-                            } else {
-                               
-                            }
+                            } else { }
                             ?>
                         </div>
                         <script LANGUAGE="JavaScript">
