@@ -15,6 +15,34 @@
  font-size: 11px;
 }
 
+.card-icon {
+    width: 80px;
+    font-size:40px;
+    border-radius: 5px;
+    position: relative;
+    float:-10;
+    top:-20px;
+    left:15px;
+    color:#fff;
+    padding: -5px;
+    
+}
+.card-category{
+    float:-10;
+    padding: 15px;
+    top:-50px;
+    position: relative;
+}
+
+.card-details{
+    padding: 20px;
+    float:-10;
+    top:-10px;
+    position: relative;
+
+}
+
+
 @keyframes V-IMPORTANT{
     100%{   color: #ff7c25;    }
 }

@@ -287,7 +287,19 @@ if ($search == "") {
                 }, 500); </script>";
                     break;
                 default:
-                    $records = "No matches.";
+                    $records = "No IN-PROCESS WOs Found.<br>";
+                    $records .= "<hr>";
+                    $records .= "SEARCH ON COMPLETED ORDERS (Press Enter.)";
+                    $records .= "<input type='text' class='form-control form-control-sm col-3' name='wo' id='search' value='$search' required><br>";
+                    $records .= "<div class='col-md-12 col-md-offset-3' id='result'>
+</div>";
+                    ?>
+                
+
+
+                <script type="text/javascript" src="js/index.js"></script>
+
+        <?php
                     break;
             }
         }

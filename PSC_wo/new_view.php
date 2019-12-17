@@ -150,7 +150,7 @@ if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
 
 
                                 <label for="validationServer03">Description No.:</label>
-                                <input type="text" class="form-control " name="psc_no" id="psc_no" placeholder="PSC No." onblur="agregarclase()" autocomplete="off" required>
+                                <input type="text" class="form-control" name="psc_no" id="psc_no" placeholder="PSC No." onblur="agregarclase()" autocomplete="off" required>
                                 <div class="invalid-feedback">
                                     Please provide correct Description No.
                                 </div>

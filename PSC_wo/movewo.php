@@ -310,7 +310,7 @@ if ((isset($_REQUEST['saved']))) {
 
                         echo "DONE!";
                         if ($timetosee != 1000) {
-                            $timetosee = 5000;
+                            $timetosee = 2000;
                         }
                         $varunique = "<CENTER><img src='images/next.jpg'  height='100%'><h1>WO: " . $woid . " MOVED FORWARD CORRECTLY.</h1><br>
                         You'll be redirected in:<div id='tiemporestante'></div><br>
@@ -358,7 +358,7 @@ if ((isset($_REQUEST['saved']))) {
                 } else {
                     echo "PROBLEM DETECTED!";
                     if ($timetosee != 1000) {
-                        $timetosee = 5000;
+                        $timetosee = 2000;
                     }
 
 
@@ -396,7 +396,7 @@ if ((isset($_REQUEST['saved']))) {
             }
         } else {
             //AQUI VA EL CODIGO PARA GUARDAR POR ASIGNACION DIRECTA
-            $timetosee = 5000;
+            $timetosee = 1000;
             if ($allcorrect) { } else {
                 if (empty($varunique)) {
                     $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>ERROR - VARIABLE WO No. <BR>WAS NOT DETECTED.</h1><br>
@@ -521,7 +521,7 @@ else {
                         </div>
                         <script LANGUAGE="JavaScript">
                             var pagina = "<?php echo $pagina_reg; ?>";
-                            var segundos = "(<?php echo $timetosee / 1000 ?>)";
+                            var segundos = "(<?php echo $timetosee / 1000; ?>)";
 
                             function redireccionar() {
                                 location.href = pagina

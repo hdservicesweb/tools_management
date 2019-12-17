@@ -108,8 +108,9 @@ if ((isset($_REQUEST['selector'])) && ($_REQUEST['selector'] != 0)) {
                     </div>
                     <div class="card-body">
                         <?php
+                        $onerrorprint = "onerror=this.onerror=null;this.src='tools_imgs/no_image.png';";
                         if ($selector >= 1) {
-                            echo  "<table class='table table-sm table-default'>";
+                            echo  "<table class='table table-sm table-default table-bordered'>";
                             $x = 0;
                             while ($row = mysqli_fetch_array($result1)) {
                                 $noprint = '0';
@@ -128,7 +129,7 @@ if ((isset($_REQUEST['selector'])) && ($_REQUEST['selector'] != 0)) {
                                 $x++;
                                 if ($row['available'] == '1') {
                                     $stock_user = $row["stock"];
-                                    $setstatus = "<img src='components/available.png' width='10px' alt='AVAILABLE'/>";
+                                    $setstatus = "<img src='components/available.png' width='50px' alt='AVAILABLE'/>";
                                     $button_get = "<a href='tool_details.php?id=" . $row['psc_id'] . "' class='btn btn-link'> <i class='fa fa-list-ul' style='font-size:15px'></i> </a> <a href='#' id='" . $row['psc_id'] . "' class='btn btn-success btn-sm' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
                                 } elseif ($row['available'] == '-1') {
                                     $stock_user = "DAMAGED";
@@ -136,11 +137,18 @@ if ((isset($_REQUEST['selector'])) && ($_REQUEST['selector'] != 0)) {
                                     $button_get = "<a href='tool_details.php?id=" . $row['psc_id'] . "' class='btn btn-link'> <i class='fa fa-list-ul' style='font-size:15px'></i> </a> <a href='#' id='" . $row['psc_id'] . "' class='btn btn-success btn-sm' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
                                 } else {
                                     $stock_user = "[" . $row["stock"] . "] - " . $row["user_know"];
-                                    $setstatus = "<img src='components/notavailable.png' width='10px' alt='NOT AVAILABLE'/>";
+                                    $setstatus = "<img src='components/notavailable.png' width='50px' alt='NOT AVAILABLE'/>";
                                     $button_get = "<a href='tool_details.php?id=" . $row['psc_id'] . "' class='btn btn-link'> <i class='fa fa-list-ul' style='font-size:15px'></i> </a> <a href='#' id='" . $row['psc_id'] . "' class='btn btn-danger btn-sm' data-toggle='modal' data-target='#return_tool' onclick='return_modal(this.id)'><i class='fa fa-arrow-right' style='font-size:15px'></i></a>";
                                 }
                                 if ($noprint == '0') {
-                                    printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<h6>" . $x . "</h6>", "<h6>" . $row["psc_id"] . "</h6>", "<h6>" . $row["manufacturer"] . "</h6>", "<h6>" . $row["model"] . "</h6>", "<h6>" . $row["last_use"] . "</h6>", "<small><h6>" . $stock_user . "</h6></small>", "<h6>" . $setstatus . "</h6>", "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "'><img src='tools_imgs/" . $row["img"] . "' width='70px'/></a>", $button_get);
+                                    //printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "' class='btn btn-link'>" . $row["psc_id"] . "</a>", $row["manufacturer"], "<a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["model"] . "</a> <a href='' class='float-right' id='" . $row['psc_id'] . "' onclick='addcommon(this.id)'>+</a>", $row["description"], $row["last_use"], "<small>" . $stock_user . "</small>", $setstatus, "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' class='img-thumbnail' width='50px' $onerrorprint /></a>", $button_get);
+                                    printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", 
+                                     $x, 
+                                     $row["psc_id"], 
+                                     $row["manufacturer"], 
+                                     $row["model"], 
+                                     $row["last_use"], "<small>" . $stock_user . "</small>", 
+                                     $setstatus, "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "'><img src='tools_imgs/" . $row["img"] . "' class='img-thumbnail' width='50px' $onerrorprint/></a>", $button_get);
                                 }
                             }
                             echo "</table>";
