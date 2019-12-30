@@ -1,6 +1,8 @@
 <?php
 include('../header.php');
 $link = Conectarse();
+$csv_filename = 'import_file/db_export_' . date('Y-m-d') . '.csv';
+$nameoffile = 'db_export_' . date('Y-m-d') . '.csv';
 if ($search == "") {
 
     $sqlcount = "SELECT COUNT(id_tool) as usingtools from tools_main_db tm where available = '0'";
@@ -14,10 +16,44 @@ if ($search == "") {
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-md-3">
+            <div class="col-md-4">
+                <div class="card card-dark bg-light">
+                    <div class="card-header bg-success text-white">
+                        <strong>
+                            <i class="fa fa-upload"></i>
+                            <label> | Latest assigned tools.</label>
+                        </strong>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered table-condensed table-sm">
+                            <thead>
+                                <tr class="text-center">
+                                    <th><small>PSC ID</small></th>
+                                    <th><small>MODEL</small></th>
+                                    <th><small>DATE</small></th>
+                                    <th><small>USER</small></th>
+                                </tr>
+                                <tr>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sqllasttools = "SELECT psc_id,model,user_know, last_use from tools_main_db order by last_use desc limit 5";
+                                $wodata = mysqli_query($link, $sqllasttools) or die("Something wrong with DB please verify.");
 
+                                while ($row = mysqli_fetch_array($wodata)) {
+                                    printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "'><small>" . $row['psc_id'] . "</small></a>", "<a href='index.php?srch=" . $row['model'] . "' class='text-muted'><small>" . $row['model'] . "</small></a>", "<small>" . $row['last_use'] . "</small>", "<a href='show_me.php?selector=3&textfield=" . $row['user_know'] . "'><small>" . $row['user_know'] . "</small></a>");
+                                }
+
+                                ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+            <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6">
+                <br><br>
                 <div class="card card-stats">
                     <div class="card-header-s card-header-warning card-header-icon">
                         <a href='#' id='getting' class='text-white' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'>
@@ -25,65 +61,295 @@ if ($search == "") {
                                 <i class="fa fa-arrow-left" style="font-size:40px"></i>
                             </div>
                         </a>
-                        <div class="card-category pull-right text-muted">Last used.</p>
+                        <div class="card-category pull-right text-muted"><small>Last used.</small>
                         </div>
-                        <div class="card-details text-right ">
-                            <h1 class="text-muted"><a href="tool_details.php?id=<?= $infoexecute['psc_id']?>" class="text-success text-muted nav-link"><?= $infoexecute['psc_id']?></a></h1>
-                          </div>
-                            <small class="text-center">
-                                    <div class="row">
-                                        <div class="col-6">Model: <?= $infoexecute['model']?></div>
-                                        <div class="col-6">User: <?= $infoexecute['user_know']?></div>
-                                    </div>
-                                </small>
-                            
-                        
+                        <div class="card-details text-right  ">
+                            <h5 class="text-muted">
+                                <a href="tool_details.php?id=<?= $infoexecute['psc_id'] ?>" class="text-success text-muted nav-link">
+                                    <?= $infoexecute['psc_id'] ?></a></h5>
+                        </div>
+                        <small class="text-center">
+                            <div class="row">
+                                <div class="col-6"><small>Model: <?= $infoexecute['model'] ?></small></div>
+                                <div class="col-6"><small>User: <?= $infoexecute['user_know'] ?></small></div>
+                            </div>
+                        </small>
+
+
                         <div class="card-footer">
-                            <div class="stats"><small> <a href="show_me.php?selector=3&textfield=<?= $infoexecute['user_know']?>" class=" text-warning nav-link">
-                                    <i class="fa fa-warning text-warning"></i>
-                                   View More about this user...</a> </small>
+                            <div class="stats"><small>
+                                    <a href="show_me.php?selector=3&textfield=<?= $infoexecute['user_know'] ?>" class=" text-warning ">
+                                        <small><i class="fa fa-warning text-warning"></i></small>
+                                        &nbsp;View this user...</a> </small>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-1">
-            </div>
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+
+            <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6">
+                <br><br>
                 <div class="card card-stats">
                     <div class="card-header-s card-header-warning card-header-icon">
-                    <a href='#' id='returning' class='text-white' data-toggle='modal' data-target='#return_tool' onclick='return_modal(this.id)'>
-                        
+                        <a href='#' id='returning' class='text-white' data-toggle='modal' data-target='#return_tool' onclick='return_modal(this.id)'>
+
                             <div class="card-icon bg-danger text-center text-white">
-                            <i class="fa fa-arrow-right" style="font-size:40px"></i>
-                                
+                                <i class="fa fa-arrow-right" style="font-size:40px"></i>
+
                             </div>
                         </a>
-                        <div class="card-category pull-right text-muted">Using tools</p>
+                        <div class="card-category pull-right text-muted"><small>Using tools</small></p>
                         </div>
-                        <div class="card-details text-right"><a href="http://127.0.0.1/PSC_tools/show_me.php?selector=1&textfield=" class="nav-link">
-                            <h1 class="text-muted"><?= $quickcount['usingtools']?> 
-                                <small>tools</small>
-                            </h1></a>
+                        <div class="card-details text-center"><a href="http://127.0.0.1/PSC_tools/show_me.php?selector=1&textfield=" class="text-right nav-link">
+                                <?php
+                                //start
+                                if ($quickcount['usingtools'] >= '50') {
+                                    echo "<h5 class='text-danger'>" . $quickcount['usingtools'] . " <small>tools</small></h5>";
+                                } else if (($quickcount['usingtools'] >= '30') && ($quickcount['usingtools'] <= '49')) {
+                                    echo "<h5 class='text-warning   '>" . $quickcount['usingtools'] . " <small>tools</small></h5>";
+                                } else {
+                                    echo "<h5 class='text-dark   '>" . $quickcount['usingtools'] . " <small>tools</small></h5>";
+                                }
+
+                                ?>
+
+
+                            </a>
                             <small>
-                                    <div class="row">
-                                        <div class="col-6"></div>
-                                        <div class="col-6">&nbsp;</div>
-                                    </div>
-                                </small>
+                                <div class="row">
+                                    <div class="col-6"></div>
+                                    <div class="col-6">&nbsp;</div>
+                                </div>
+                            </small>
                         </div>
                         <div class="card-footer">
-                            <div class="stats"><small> <a href="#" class="text-danger  nav-link" data-toggle='modal' data-target='#returning_m'>
-                                    <i class="fa fa-chevron-right text-danger"></i>
-                                    Massive Return</a> </small>
+                            <div class="row">
+                                <div class="col-6">
+                                    <small>
+                                        <a href="#" class="text-danger " data-toggle='modal' data-target='#returning_m'>
+                                            <i class="fa fa-chevron-right text-danger"></i>
+                                            <small> Massive &nbsp;<i class="fa fa-chevron-right text-danger"></i></small>
+                                        </a>
+
+                                    </small>
+                                </div>
+                                <div class="col-6">
+                                    <small>
+                                        <a href="#" class="text-danger " data-toggle='modal' data-target='#verification'>
+                                            <i class="fa fa-search-plus text-danger"></i>
+                                            <small>In-Use</small>
+                                        </a>
+
+                                    </small>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-4">
+                <div class="card card-dark bg-light">
+                    <div class="card-header bg-danger text-white">
+                        <strong>
+                            <i class="fa fa-download"></i>
+                            <label> | Latest returned tools.</label>
+                        </strong>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered table-condensed table-sm">
+                            <thead>
+                                <tr class="text-center">
+                                    <th><small>PSC ID</small></th>
+
+                                    <th><small>DATE</small></th>
+                                    <th><small>USER</small></th>
+                                </tr>
+                                <tr>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sqllasttools = "SELECT psc_id,name, date from tools_process where process = '1' order by date desc limit 5";
+                                $wodata = mysqli_query($link, $sqllasttools) or die("Something wrong with DB please verify.");
+
+                                while ($row = mysqli_fetch_array($wodata)) {
+                                    printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "'><small>" . $row['psc_id'] . "</small></a>", "<small>" . $row['date'] . "</small>", "<a href='show_me.php?selector=3&textfield=" . $row['name'] . "'><small>" . $row['name'] . "</small></a>");
+                                }
+
+                                ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-4">
+                <div class="card card-dark bg-light">
+                    <div class="card-header bg-primary text-white">
+                        <strong>
+                            <i class="fa fa-area-chart"></i>
+                            <label> | Monthly records.</label>
+                        </strong>
+                    </div>
+                    <div class="card-body">
+                        <?php
+
+                        $yearchart = date("Y");
+                        $month = date("m");
+                        $day_today = date("d");
 
 
+                        $arreglodata = "var data = google.visualization.arrayToDataTable([";
+                        $arreglodata .= "['Date', 'Deliveries', 'Returns'],";
+                        for ($i = 1; $i <= $day_today; $i++) {
+                            $returns = 0;
+                            $deliveries = 0;
+                            $daychart = str_pad($i, 2, "0", STR_PAD_LEFT);;
+                            $sqlchartvalues = "SELECT COUNT(id) as transactions, process from tools_process where `date` like '%$yearchart-$month-$daychart%' GROUP by process";
+                            $executecharvalues = mysqli_query($link, $sqlchartvalues) or die("Something wrong with DB please verify.");
+                            while ($chardata = mysqli_fetch_array($executecharvalues)) {
+
+                                if ($chardata['process'] == 1) {
+                                    $returns = $chardata['transactions'];
+                                } else if ($chardata['process'] == 0) {
+                                    $deliveries = $chardata['transactions'];
+                                } else {
+                                    $returns = $returns + $chardata['transactions'];
+                                    $deliveries = $deliveries + $chardata['transactions'];
+                                }
+                            }
+
+
+
+                            $arreglodata .= "['" . $yearchart . "-" . $month . "-" . $i . "', $deliveries, $returns],";
+                        }
+                        $arreglodata .= "]);";
+                        //echo $sqlchartvalues;
+                        ?>
+                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                        <script type="text/javascript">
+                            google.charts.load('current', {
+                                'packages': ['corechart']
+                            });
+                            google.charts.setOnLoadCallback(drawChart);
+
+                            function drawChart() {
+                                var data = new google.visualization.DataTable();
+
+                                <?= $arreglodata ?>
+
+                                var options = {
+                                    title: 'Tools usage',
+                                    curveType: 'function',
+                                    legend: {
+                                        position: 'bottom'
+                                    }
+                                };
+
+                                var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+                                chart.draw(data, options);
+                            }
+                        </script>
+                        <div id="curve_chart" style="width: 100%; "></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-4">
+                <div class="card card-dark bg-light">
+                    <div class="card-header bg-primary text-white">
+                        <strong>
+                            <i class="fa fa-hdd-o"></i>
+                            <label> | Actions.</label>
+                        </strong>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-condensed table-striped table-responsive">
+                            <tr>
+                                <form action="importdates.php" id="importdates" method="post" enctype="multipart/form-data">
+                                    <td><small>Import Dates</small></td>
+                                    <td><small><input type="file" class="file" name="importfile" required></small></td>
+                                    <td><button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-upload"></i>
+                                        </button>
+                                    </td>
+                                </form>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><small>Download format for Import</small>
+                                    <small class="float-right"><small>format.csv</small></small></td>
+                                <td>
+                                    <a href="import_file/format.csv" class="btn btn-dark btn-sm"><i class="fa fa-download"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><small>Download tools DB</small>
+                                    <small class="float-right"><small><?php echo 'db_export_' . date('Y-m-d') . '.csv'?></small></small></td>
+                                <td>
+                                    <a href="generatecsv.php" class="btn btn-warning btn-sm text-white" onclick="generatecsv()" target="_blank"><i class="fa fa-refresh"></i></a>
+                                    <a href="import_file/<?php echo 'db_export_' . date('Y-m-d') . '.csv'?>" class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card card-dark bg-light">
+                    <div class="card-header bg-primary text-white">
+                        <strong>
+                            <i class="fa fa-clock-o"></i>
+                            <label> | Calibrations Due Dates.</label>
+                        </strong>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered table-condensed table-sm">
+                            <thead>
+                                <tr class="text-center">
+                                    <th><small>PSC ID</small></th>
+                                    <th><small>BRAND</small></th>
+                                    <th><small>MODEL</small></th>
+                                    <th><small>CALIB. DATE</small></th>
+                                    <th><small>NEXT CALIB.</small></th>
+                                </tr>
+                                <tr>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+
+                                $sqllasttools = "SELECT * from tools_main_db ORDER BY `reg_date` ASC limit 5";
+                                $wodata = mysqli_query($link, $sqllasttools) or die("Something wrong with DB please verify.");
+
+
+
+
+                                while ($row = mysqli_fetch_array($wodata)) {
+                                    $nextcaldate = date("Y-m-d", strtotime($row['reg_date'] . "+ " . $row['common'] . " month"));
+                                    $datetoday =  date("Y-m-d");
+                                    $daysleftsql = "SELECT TIMESTAMPDIFF(DAY, '$datetoday', '$nextcaldate') AS daysleft";
+                                    $execdaysleft = mysqli_query($link, $daysleftsql);
+                                    $daysleft = mysqli_fetch_array($execdaysleft);
+                                    if ($daysleft['daysleft'] <= 30) {
+                                        $nextcalibration = "<small><small>" . $nextcaldate . " | <label class='V-URGENT'>" . $daysleft['daysleft'] . " Days</label></small></small>";
+                                    } else {
+                                        $nextcalibration =  "<small><small>" . $nextcaldate . " | " . $daysleft['daysleft'] . " Days </small></small>";
+                                    }
+                                    printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "'><small><small>" . $row['psc_id'] . "</small></small></a>", "<small><small>" . $row['manufacturer'] . "</small></small>", "<small><small>" . $row['model'] . "</small></small>", "<small><small>" . date("Y-m-d", strtotime($row['reg_date'])) . "</small></small>", "$nextcalibration");
+                                }
+
+                                ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -100,8 +366,7 @@ if ($search == "") {
     // OR CTB.component_pn like '%" . $search . "%'
     // OR CTB.trimmed like '%" . $search . "%'
     // ORDER BY TM.id_tool";
-    $sqlextend = "SELECT * from common_tb where component_pn like '%" . $search . "%'
-         OR trimmed like '%" . $search . "%'";
+    $sqlextend = "SELECT * from common_tb where component_pn like '%" . $search . "%' OR trimmed like '%" . $search . "%'";
     //echo $sql;
     // }
     // // UNA BUSQUEDA NORMAL
@@ -154,34 +419,50 @@ if ($search == "") {
             <a href="new_tool.php" id="new" class="btn btn-sm btn-success float-right"><i class="fa fa-plus"></i> ADD TOOL</a>
         </p>
 
-        <div class="container">
+        <div class="container-fluid">
             <table class="table table-sm table-default table-bordered">
                 <?php
-                                                                    if ($row = mysqli_num_rows($result) > 0) {
-                                                                        printf("<tr  class='text-center' style='font-size:12px'><th>&nbsp;%s</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th></tr>", "PSC ID", "BRAND", "MODEL", "DESCRIPTION", "LAST USED DATE", "STORAGE / USER", "STATUS", "IMG", "USE / RETURN");
-                                                                    }
-                                                                    while ($row = mysqli_fetch_array($result)) {
-                                                                        $onerrorprint = "onerror=this.onerror=null;this.src='tools_imgs/no_image.png';";
-                                                                        if ($row['available'] == '1') {
-                                                                            $stock_user = $row["stock"];
-                                                                            $classavailable = "bg-success";
-                                                                            $setstatus = "<img src='components/available.png' width='50px' title='" . $row["stock"] . "'/>";
-                                                                            $button_get = "<a href='#' id='" . $row['psc_id'] . "' class='btn btn-success btn-sm' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
-                                                                        } elseif ($row['available'] == '-1') {
-                                                                            $stock_user = "DAMAGED";
-                                                                            $classavailable = "bg-warning";
-                                                                            $setstatus = "<img src='components/damaged.png' width='10px' alt='DAMAGED'/>";
-                                                                            $button_get = "<a href='#' id='" . $row['psc_id'] . "' class='btn btn-success btn-sm' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
-                                                                        } else {
-                                                                            $classavailable = "bg-danger";
-                                                                            $stock_user = "[" . $row["stock"] . "] - " . $row["user_know"];
-                                                                            $setstatus = "<img src='components/notavailable.png' width='50px' title='" . $row["user_know"] . "'/>";
-                                                                            $button_get = "<a href='#' id='" . $row['psc_id'] . "' class='btn btn-success btn-sm' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
-                                                                            $button_get .= "&nbsp;<a href='#' id='" . $row['psc_id'] . "' class='btn btn-danger btn-sm float-right' data-toggle='modal' data-target='#return_tool' onclick='return_modal(this.id)'><i class='fa fa-arrow-right' style='font-size:15px'></i></a>";
-                                                                        }
-                                                                        //printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<h6>" . $row["psc_id"] . "</h6>", "<p>" . $row["manufacturer"] . "</p>", "<p><a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["model"] . "</a></p>", "<h6>" . $row["description"] . "</h6>", "<h6>" . $row["last_use"] . "</h6>", "<small><h6>" . $stock_user . "</h6></small>", "<h6>" . $setstatus . "</h6>", "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' width='50px' $onerrorprint /></a>", $button_get);
-                                                                        printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "' class='btn btn-link'>" . $row["psc_id"] . "</a>", $row["manufacturer"], "<a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["model"] . "</a> <a href='' class='float-right' id='" . $row['psc_id'] . "' onclick='addcommon(this.id)'>+</a>", $row["description"], $row["last_use"], "<small>" . $stock_user . "</small>", $setstatus, "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' class='img-thumbnail' width='50px' $onerrorprint /></a>", $button_get);
-                                                                    }
+                if ($row = mysqli_num_rows($result) > 0) {
+                    printf("<tr  class='text-center' style='font-size:12px'><th>&nbsp;%s</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th></tr>", "PSC ID", "BRAND", "MODEL", "DESCRIPTION", "NEXT CALIBRATION", "LAST USED DATE", "STORAGE / USER", "STATUS", "IMG", "USE / RETURN");
+                }
+                while ($row = mysqli_fetch_array($result)) {
+                    $onerrorprint = "onerror=this.onerror=null;this.src='tools_imgs/no_image.png';";
+                    if ($row['available'] == '1') {
+                        $stock_user = $row["stock"];
+                        $classavailable = "bg-success";
+                        $setstatus = "<img src='components/available.png' width='50px' title='" . $row["stock"] . "'/>";
+                        $button_get = "<a href='#' id='" . $row['psc_id'] . "' class='btn btn-success btn-sm' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
+                    } elseif ($row['available'] == '-1') {
+                        $stock_user = "DAMAGED";
+                        $classavailable = "bg-warning";
+                        $setstatus = "<img src='components/damaged.png' width='10px' alt='DAMAGED'/>";
+                        $button_get = "<a href='#' id='" . $row['psc_id'] . "' class='btn btn-success btn-sm' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
+                    } else {
+                        $classavailable = "bg-danger";
+                        $stock_user = "[" . $row["stock"] . "] - " . $row["user_know"];
+                        $setstatus = "<img src='components/notavailable.png' width='50px' title='" . $row["user_know"] . "'/>";
+                        $button_get = "<a href='#' id='" . $row['psc_id'] . "' class='btn btn-success btn-sm' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
+                        $button_get .= "&nbsp;<a href='#' id='" . $row['psc_id'] . "' class='btn btn-danger btn-sm float-right' data-toggle='modal' data-target='#return_tool' onclick='return_modal(this.id)'><i class='fa fa-arrow-right' style='font-size:15px'></i></a>";
+                    }
+                    $nextcaldate = date("Y-m-d", strtotime($row['reg_date'] . "+ " . $row['common'] . " month"));
+                    $datetoday =  date("Y-m-d");
+                    $daysleftsql = "SELECT TIMESTAMPDIFF(DAY, '$datetoday', '$nextcaldate') AS daysleft";
+                    $execdaysleft = mysqli_query($link, $daysleftsql);
+                    $daysleft = mysqli_fetch_array($execdaysleft);
+                    if ($daysleft['daysleft'] <= 30) {
+                        if ($daysleft['daysleft'] <= 0) {
+                            $calibrationnow = $nextcaldate . " | <label class='bg-light text-dark V-URGENT'>" . $daysleft['daysleft'] . " Days <i class='fa fa-close text-danger'></i></label>";
+                        } else {
+                            $calibrationnow = $nextcaldate . " | <label class='bg-light text-dark V-URGENT'>" . $daysleft['daysleft'] . " Days <i class='fa fa-warning text-warning'></i></label>";
+                        }
+                    } else {
+                        $calibrationnow = $nextcaldate . " | " . $daysleft['daysleft'] . " Days <i class='fa fa-check text-success'></i>";
+                    }
+                    // $calibrationnow = "<small>".$nextcaldate."</small>";
+
+                    //printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<h6>" . $row["psc_id"] . "</h6>", "<p>" . $row["manufacturer"] . "</p>", "<p><a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["model"] . "</a></p>", "<h6>" . $row["description"] . "</h6>", "<h6>" . $row["last_use"] . "</h6>", "<small><h6>" . $stock_user . "</h6></small>", "<h6>" . $setstatus . "</h6>", "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' width='50px' $onerrorprint /></a>", $button_get);
+                    printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "' class='btn btn-link'>" . $row["psc_id"] . "</a>", $row["manufacturer"], "<a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["model"] . "</a> <a href='' class='float-right' id='" . $row['psc_id'] . "' onclick='addcommon(this.id)'>+</a>", $row["description"], $calibrationnow, $row["last_use"], "<small>" . $stock_user . "</small>", $setstatus, "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' class='img-thumbnail' width='50px' $onerrorprint /></a>", $button_get);
+                }
 
                 ?>
             </table>
@@ -189,21 +470,21 @@ if ($search == "") {
 
         <div class="">
             <?php
-                                                                    $result2 = mysqli_query($link, $sqlextend) or die("Something wrong with DB please verify.");
-                                                                    if (mysqli_num_rows($result2) > 0) {
-                                                                        // Se recoge el número de resultados
-                                                                        echo  'Found: ' . mysqli_num_rows($result2) . ' more Records on commonly used partnumber. <br>';
-                                                                        while ($rowcommon = mysqli_fetch_array($result2)) {
-                                                                            echo "<a href='main_tools.php?srch=" . $rowcommon['tool_pn'] . "'>" . $rowcommon['component_pn'] . "</a>  |  ";
-                                                                        }
-                                                                    }
+            $result2 = mysqli_query($link, $sqlextend) or die("Something wrong with DB please verify.");
+            if (mysqli_num_rows($result2) > 0) {
+                // Se recoge el número de resultados
+                echo  'Found: ' . mysqli_num_rows($result2) . ' more Records on commonly used partnumber. <br>';
+                while ($rowcommon = mysqli_fetch_array($result2)) {
+                    echo "<a href='main_tools.php?srch=" . $rowcommon['tool_pn'] . "'>" . $rowcommon['component_pn'] . "</a>  |  ";
+                }
+            }
             ?>
         </div>
     </div>
 <?php
-                                                                    mysqli_free_result($result);
-                                                                    mysqli_close($link);
-                                                                }
+    mysqli_free_result($result);
+    mysqli_close($link);
+}
 ?>
 
 <!-- Modal for get tool -->
@@ -287,6 +568,63 @@ if ($search == "") {
         </div>
     </div>
 </div>
+<!-- Modal for verification in-use tool -->
+<div class="modal fade" id="verification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6>verification</h6>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="verificationQ.php" method="get" target="_self" id="modelmasive">
+                            <textarea rows="5" cols="1" width="100%" name="toosl_m" class="form-control" required></textarea>
+                            <input type="text" name="quickver" value="vefificationfast" readonly hidden>
+                            <br>
+                            <center><input type="submit" value="Return" class=" btn btn-sm btn-danger"></center>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL FOR DOWNLOAD GENERATED FILE  -->
+<div class="modal fade" id="verification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6>verification</h6>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="card">
+                                <div class="card-header">
+                                    <?= $nameoffile ?>
+                                </div>
+                                <div class="card-body">
+                                    <a href="<?= $csv_filename ?>" class="btn btn-sm btn-success"><i class="fa fa-download"></i> | Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function addcommon(id) {
         id = id;
@@ -375,9 +713,11 @@ if ($search == "") {
             document.getElementById('modelforreturn').submit();
         }
     }
+
+
 </script>
 <?php
-                                                                echo "<hr>";
+echo "<hr>";
 
-                                                                include('../footer.php');
+include('../footer.php');
 ?>

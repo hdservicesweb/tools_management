@@ -149,62 +149,103 @@ if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
                             <div class="col-6">
 
 
-                                <label for="validationServer03">Description No.:</label>
-                                <input type="text" class="form-control" name="psc_no" id="psc_no" placeholder="PSC No." onblur="agregarclase()" autocomplete="off" required>
-                                <div class="invalid-feedback">
-                                    Please provide correct Description No.
+                                <label class="small" for="validationServer03">Description No.:</label>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">WO Num.</span>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="psc_no" id="psc_no" placeholder="PSC No." onblur="agregarclase()" autocomplete="off" required>
+
+
+                                    <div class="invalid-feedback">
+                                        Please provide correct Description No.
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-6">
-                                <label for="">Assembly Picking T:</label>
-                                <input type="text" name="picking" class="form-control">
+
+                                <label class="small" for="">Assembly Picking T:</label>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Picking:</span>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="picking" autocomplete="off">
+                                </div>
+
                             </div>
                         </div><br>
                         <div class="row">
 
                             <div class="col-12">
-                                <label for="">TOP Assembly Part No.:</label>
-                                <input type="text" name="assy_pn" class="form-control">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-4">
-                                <label for="">Customer:</label>
-                                <!-- <select name="customer" id="customer"></select> -->
-                                <select name="customer" id="customer" data-placeholder="Customer" class="select form-control" tabindex="1">
-                                    <option value="1">PSC</option>
-                                </select>
-
-                            </div>
-                            <div class="col-4">
-                                <label for="">PO:</label>
-                                <input type="text" name="po" class="form-control">
-                            </div>
-                            <div class="col-4">
-                                <label for="">Qty:</label>
-                                <input type="text" name="qty" id="qty" onblur="resaltarqty()" autocomplete="off" class="form-control" required>
-                                <div class="invalid-feedback">
-                                    Qty must be > or = 1.
+                                <label class="small" for="">TOP Assembly Part No.:</label>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ASSY PN:</span>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="assy_pn">
                                 </div>
+
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="small" for="">Customer:</label>
+                                <!-- <select name="customer" id="customer"></select> -->
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa fa-users"></i></span>
+                                    </div>
+                                    <select name="customer" id="customer" data-placeholder="Customer" class="select form-control form-control-sm" tabindex="1" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                        <option value="1">PSC</option>
+                                    </select>
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-4">
+                                <label class="small" for="">PO:</label>
+                                <input type="text" name="po" class="form-control form-control-sm" disabled>
+                            </div>
+                            <div class="col-4">
+                                <label class="small" for="">Qty:</label>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa fa-cubes"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="qty" id="qty" onblur="resaltarqty()" autocomplete="off" required>
+                                    <div class="invalid-feedback">
+                                        Qty must be > or = 1.
+                                    </div>
+                                </div>
+
+
+
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-6">
-                                <label for="">Date Printed:</label>
-                                <input type="text" name="printed" class="form-control" value="<?= $nowtime ?>" readonly>
+                                <label class="small" for="">Date Printed:</label>
+                                <input type="text" name="printed" class="form-control form-control-sm" value="<?= $nowtime ?>" readonly>
 
                             </div>
                             <div class="col-6">
-                                <label for="">Date Due:</label>
-                                <input type="date" name="due_date" class="form-control" min='2019-01-01' required>
+                                <label class="small" for="">Due Date:</label>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    <input type="date" name="due_date" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" min='2019-01-01' required>
+                                </div>
+
                             </div>
 
                         </div><br>
                         <div class="row">
-                            <div class="col-3">
-                                <label for="">Prioritize:</label><br>
+                            <div class="col-6">
+                                <label class="small" for="">Prioritize:</label><br>
                                 <center>
                                     <a href="#" id="P1" onclick="priorize(this.id)"><i class="fa fa-star" aria-hidden="true" style="color:green"></i></a>
                                     <a href="#" id="P2" onclick="priorize(this.id)"><i class="fa fa-star-o" aria-hidden="true"></i></a>
@@ -214,9 +255,28 @@ if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
                                 </center>
                                 <input type="text" value="P1" name="priorizetotal" id="priorizetotal" readonly hidden>
                             </div>
-                            <div class="col-4">
-                                <br>
-                                <select name="starting" id="starting" class="form-control">
+
+                            <div class="col-6">
+                                <br><input type="text" id="saved" name="saved" value="0" readonly hidden>
+                                <center>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button type="submit" class="btn btn-info form-control form-control-sm"><i class="fa fa-save" aria-hidden="true"></i></button>
+
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="button" onclick="location.href='new_view';" class="btn btn-dark form-control form-control-sm"><i class="fa fa-times" aria-hidden="true"></i> </button>
+
+                                        </div>
+                                    </div>
+                                  
+                                </center>
+
+                            </div>
+                            <div class="col-12">
+                                <br><center> <small>STARTING IN </small></center>
+                               
+                                <select name="starting" id="starting" class="form-control form-control-sm">
                                     <option value="1">Work Order Registration</option>
                                     <option value="2">Prior approval</option>
                                     <option value="3">Kitting</option>
@@ -228,17 +288,6 @@ if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
                                     <option value="9">Shipped</option>
                                 </select>
                             </div>
-                            <div class="col-5">
-                                <br><input type="text" id="saved" name="saved" value="0" readonly hidden>
-                                <center>
-                                    <button type="submit" class="btn btn-info form-control"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
-                                    &nbsp;
-                                    <br>
-                                    <button type="button" onclick="location.href='index';" class="btn btn-dark form-control"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
-                                </center>
-
-                            </div>
-
                         </div>
                     </div>
                 </form>
@@ -387,5 +436,5 @@ if ((isset($_REQUEST['saved'])) && $_REQUEST['saved'] == '1') {
     });
 </script>
 <?php
-include('../footer.php');
+                                                                                                                include('../footer.php');
 ?>

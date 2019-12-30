@@ -7,7 +7,7 @@ if ((isset($_REQUEST['finish'])) && ($_REQUEST['finish'] == "Save")) {
     $name = $_FILES['IMAGEN']['name'];
 
     $sqlsave = "INSERT into tools_main_db (`id_tool`, `psc_id`, `manufacturer`, `model`, `certif_num`, `qty`, `reg_date`, `description`, `notes`, `last_use`, `stock`, `available`, `common`, `img`, `trimmed`, `used_qty`, `user_know`)
-    values (NULL,'" . $_REQUEST['PSC_ID'] . "','" . $_REQUEST['MANUF'] . "','" . $_REQUEST['MODEL'] . "', '" . $_REQUEST['CERTIF'] . "', '1', CURRENT_TIMESTAMP, '" . $_REQUEST['DESCR'] . "', '" . $_REQUEST['NOTES'] . "', CURRENT_TIMESTAMP, 'X', '1', '1', '" . $name . "', '" . $_REQUEST['MODEL'] . "', '0', 'NO_USER')";
+    values (NULL,'" . $_REQUEST['PSC_ID'] . "','" . $_REQUEST['MANUF'] . "','" . $_REQUEST['MODEL'] . "', '" . $_REQUEST['CERTIF'] . "', '1', CURRENT_TIMESTAMP, '" . $_REQUEST['DESCR'] . "', '" . $_REQUEST['NOTES'] . "', CURRENT_TIMESTAMP, 'X', '1', '" . $_REQUEST['common'] . "', '" . $name . "', '" . $_REQUEST['MODEL'] . "', '0', 'NO_USER')";
     //echo $sqlsave;
     if (mysqli_query($link, $sqlsave)) {
         $upload_image = $_FILES['IMAGEN']['tmp_name'];
@@ -46,9 +46,18 @@ if ((isset($_REQUEST['finish'])) && ($_REQUEST['finish'] == "Save")) {
                 </div>
                 <br>
                 <div class="form-row">
-                    <div class="col">
-                        <label for="PSC_ID">CERTIFICATE NUMBER: </label>
-                        <input type="text" class="form-control" name="CERTIF" required>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-7">
+                                <label for="PSC_ID">CERTIFICATE NUMBER: </label>
+                                <input type="text" class="form-control" name="CERTIF" required>
+                            </div>
+                            <div class="col-5">
+                                <label for="PSC_ID">CALIBRATION PERIOD: </label>
+                                <input type="text" class="form-control" name="common" required>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="col">
                         <label for="PSC_ID">DESCRIPTION: </label>
@@ -68,13 +77,15 @@ if ((isset($_REQUEST['finish'])) && ($_REQUEST['finish'] == "Save")) {
                         <br>
                         <div class="form-row">
                             <div class="col">
-                                <label for="PSC_ID"><h6>AUTHORIZATION: </h6></label>
+                                <label for="PSC_ID">
+                                    <h6>AUTHORIZATION: </h6>
+                                </label>
                                 <input type="password" id="password" name="password" class="form-control" required>
 
                             </div>
                             <div class="col">
-                            <label for="PSC_ID"><br> </label><br>
-                                <button type="submit" class="btn btn-success" > Save </button>
+                                <label for="PSC_ID"><br> </label><br>
+                                <button type="submit" class="btn btn-success"> Save </button>
                                 <a class="btn btn-secondary" href="new_tool.php"> Cancel </a>
                             </div>
                         </div>
@@ -88,19 +99,18 @@ if ((isset($_REQUEST['finish'])) && ($_REQUEST['finish'] == "Save")) {
 
 </div>
 <script>
-
-    function returnea (){
+    function returnea() {
         var pass = document.getElementById("password").value;
-        if  ( (pass == "<?=$authorization?>")|| pass == "ADMINPCS159"){
+        if ((pass == "<?= $authorization ?>") || pass == "ADMINPCS159") {
             // alert("PASS CORRECT");
             document.getElementById('form_new').submit();
-            
-        }else{
+
+        } else {
             alert("WRONG PASSWORD");
-         
+
         }
     }
 </script>
 <?php
-include('../footer.php');
+                        include('../footer.php');
 ?>

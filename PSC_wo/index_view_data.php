@@ -6,9 +6,9 @@ $search = "";
 
 ?>
 
-<table class="table table-striped table-bordered table-hover table-condensed" width="100%" style='font-size:12px;text-align:center'>
+<table class="table table-striped table-bordered table-hover table-condensed table-sm" width="100%" style='font-size:12px;text-align:center'>
     <?php
-    $sqlquery = "SELECT * from wo where wo.position = '4' order by wo.priorizetotal desc, wo.due_date asc ";
+    $sqlquery = "SELECT * from wo where wo.position = '4' order by wo.priorizetotal desc, wo.due_date asc limit 15";
     $wodata = mysqli_query($link, $sqlquery) or die("Something wrong with DB please verify.");
     if ($row = mysqli_num_rows($wodata) > 0) {
         printf("<tr><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th></tr>", "PSC No", "<i class='fa fa-flag'></i>", "<i class='fa fa-print'></i>", "<i class='fa fa-calendar'></i>", "Qty", "<i class='fa fa-inbox'></i>", "<i class='fa fa-star'></i>", "<i class='fa fa-upload'></i>");

@@ -1,8 +1,8 @@
 .V-URGENT{
-    animation:V-URGENTTEXT .5s infinite;
+    animation:V-URGENTTEXT 1s infinite;
 }
 @keyframes V-URGENTTEXT{
-    50%{     color: indianred;    }
+    50%{     color: rgb(245, 226, 226);    }
 
     100%{   color: #f80606;    }
 }

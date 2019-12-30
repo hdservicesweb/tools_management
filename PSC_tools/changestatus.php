@@ -3,18 +3,31 @@ include('../header.php');
 $link = Conectarse();
 if (isset($_REQUEST['massive'])) {
     $text = trim($_REQUEST['toosl_m']);
+  
+
     $text2 = explode("\n", $text);
     foreach ($text2 as $line) {
         $eachline = trim($line);
-        $sqlquery = "INSERT into tools_process (id,psc_id,date,name,process) values (NULL,'$eachline',CURRENT_TIMESTAMP,'RETURN','1')";
+
+        $sqlinfo = "SELECT psc_id,user_know,available from tools_main_db where psc_id = '$eachline'";
         
-        $sql = "UPDATE tools_main_db set available = '1', used_qty = used_qty + 1 where psc_id = '$eachline'";
-        $exect = mysqli_query($link, $sqlquery);
-        $exec = mysqli_query($link, $sql);
+        $execinfo = mysqli_query($link, $sqlinfo);
+        $row = mysqli_fetch_array($execinfo);
+        if((isset($row['psc_id']))&&($row['available'] == '0')){
+            $employee =  $row['user_know'];
+
+        
+            $sqlquery = "INSERT into tools_process (id,psc_id,date,name,process) values (NULL,'$eachline',CURRENT_TIMESTAMP,'$employee','1')";
+            
+            $sql = "UPDATE tools_main_db set available = '1', used_qty = used_qty + 1 where psc_id = '$eachline'";
+            $exect = mysqli_query($link, $sqlquery);
+            $exec = mysqli_query($link, $sql);
+        }
+        
     }
 }
 
-$datenow = date('Y-m-d h:i:s');
+$datenow = date('Y-m-d H:i:s');
 if (isset($_REQUEST['psc_id'])) {
     $psc_id = strtoupper($_REQUEST['psc_id']);
     $tool = strtoupper($psc_id);
@@ -40,6 +53,7 @@ if (isset($_REQUEST['psc_id'])) {
     }
     
 }
+
 if (isset($_REQUEST['employee'])) {
     $receibedemployee = trim($_REQUEST['employee']);
     if (is_numeric($receibedemployee)) {
@@ -55,11 +69,16 @@ if (isset($_REQUEST['employee'])) {
             }
         }
     } else {
+
         $employee = $_REQUEST['employee'];
+        if ($employee == "RETURN"){
+            $employee =  $row['user_know'];
+        }
     }
 } else {
     $employee = "Employee";
 }
+
 if (isset($_REQUEST['process'])) {
     $process = $_REQUEST['process'];
 } else {
@@ -67,23 +86,27 @@ if (isset($_REQUEST['process'])) {
 }
 
 if ($process == '0') {
+    if($currentstatus=='0'){
+        $process = 2;
+    }
     $sqlquery = "INSERT into tools_process (id,psc_id,date,name,process) values (NULL,'$psc_id',CURRENT_TIMESTAMP,'$employee','$process')    ";
     $sql = "UPDATE tools_main_db set available = '0', used_qty = used_qty + 1,user_know = '$employee',last_use = '$datenow' where psc_id = '$psc_id'";
-    if (mysqli_query($link, $sqlquery)) {
-        $exec = mysqli_query($link, $sql);
+    if (mysqli_query($link, $sql)) {
+        $exec = mysqli_query($link, $sqlquery);
     }
 }
+
 if ($process == '1') {
     $sqlquery = "INSERT into tools_process (id,psc_id,date,name,process) values (NULL,'$psc_id',CURRENT_TIMESTAMP,'$employee','$process')    ";
     if (($stock == "BROKEN") || ($stock == "DAMAGED")) {
-        $sql = "UPDATE tools_main_db set available = '-1', user_know = 'BROKEN' where psc_id = '$psc_id'";
+        $sql = "UPDATE tools_main_db set available = '-1', user_know = 'BROKEN' where psc_id = '$psc_id' and available = '0'";
     } else {
-        $sql = "UPDATE tools_main_db set available = '1' where psc_id = '$psc_id'";
+        $sql = "UPDATE tools_main_db set available = '1' where psc_id = '$psc_id' and available = '0'";
     }
 
 
-    if (mysqli_query($link, $sqlquery)) {
-        $exec = mysqli_query($link, $sql);
+    if (mysqli_query($link, $sql)) {
+        $exec = mysqli_query($link, $sqlquery);
     }
 }
 ?>
@@ -179,7 +202,7 @@ if ($process == '1') {
 
 </div>
 <script LANGUAGE="JavaScript">
-    var pagina = "main_tools.php"
+    var pagina = "index"
 
     function redireccionar() {
         location.href = pagina

@@ -1,0 +1,60 @@
+[33mcommit 6f941135fce04701a1526904ac517dc4a9c2b649[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Miguel Matus <mmatus585@gmail.com>
+Date:   Tue Dec 17 13:29:37 2019 -0800
+
+    NEW DESIGN OF TOOLS MODULE
+
+[33mcommit f251441194551bc83cb3a106444459446aaedfaa[m
+Author: Miguel Matus <mmatus585@gmail.com>
+Date:   Thu Dec 12 12:42:45 2019 -0800
+
+    RUNNING CORRECTLY
+
+[33mcommit 0c1986208669c7d05df3bde08325590ff5cecd52[m
+Author: Miguel Matus <mmatus585@gmail.com>
+Date:   Tue Dec 10 11:56:31 2019 -0800
+
+    Corregido valores duplicados
+
+[33mcommit 6e18224c20d773bc54c15ec7bc1804eebb4326f4[m
+Author: Miguel Matus <mmatus585@gmail.com>
+Date:   Mon Dec 9 09:44:41 2019 -0800
+
+    Actualizacion de asignacion directa
+
+[33mcommit 95908132fdb2b41e148f166f99ad1ef669e1ee6c[m
+Author: Miguel Matus <mmatus585@gmail.com>
+Date:   Mon Dec 9 06:24:27 2019 -0800
+
+    Primer correccion de error dando seguimiento a ID
+
+[33mcommit e382072dc2c99753e2e340ed8eece087b86b73f9[m
+Author: Miguel Matus <mmatus585@gmail.com>
+Date:   Wed Dec 4 14:27:16 2019 -0800
+
+    fixed temporali problem whit duplicated WO
+    movving duplicated orders to seconday table for record
+
+[33mcommit cefa148eb3fe3183c9c74f4c7f40854906992c03[m
+Author: Miguel Matus <mmatus585@gmail.com>
+Date:   Tue Dec 3 14:25:32 2019 -0800
+
+    STARTING USING GIT FROM THIS DATE
+
+[33mcommit a8ea48a2537ee4c9ca44f6c6cce6662ee3e8d106[m
+Author: Miguel Matus <mmatus585@gmail.com>
+Date:   Tue Dec 3 12:53:32 2019 -0800
+
+    added GITIGNORE
+
+[33mcommit 4152e6e1d37f99facb5e4043b0ba1a5663a10853[m
+Author: Miguel Matus <mmatus585@gmail.com>
+Date:   Tue Dec 3 12:43:45 2019 -0800
+
+    commit dos para prueba
+
+[33mcommit e11bb6b15d315dd8ea1a47cdcd2b3a512e2351fe[m
+Author: Miguel Matus <mmatus585@gmail.com>
+Date:   Tue Dec 3 12:36:58 2019 -0800
+
+    Starting proyect

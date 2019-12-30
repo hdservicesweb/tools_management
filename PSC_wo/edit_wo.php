@@ -436,7 +436,7 @@ switch ($priorizetotal) {
                         <label class="pull-right"><a href="view_tracking?wo=<?= $wo ?>" class="text-white"> View All </a></label>
                     </div>
                     <div class="card-body">
-                        <table class="table table-sm table-striped table-condensed table-light smalltable">
+                        <table class="table table-sm table-bordered table-striped table-condensed smalltable">
 
                             <?php
                             $sqltrack = "SELECT * from wo_process where wo = '$psc_no' and id_wo = '$wo' order by date desc limit 10";

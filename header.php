@@ -112,7 +112,7 @@ $mysqli->close();
             <i class="fa fa-wrench"></i> Tools
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="../PSC_tools/main_tools">Start</a>
+            <a class="dropdown-item" href="../PSC_tools/index">Start</a>
             <a class="dropdown-item" href="../PSC_tools/new_tool">New</a>
             <a class="dropdown-item" href="../PSC_tools/show_me">Show</a>
             <a class="dropdown-item" href="../PSC_tools/tools">Catalog</a>

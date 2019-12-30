@@ -3,13 +3,6 @@ include('../header.php');
 $link = Conectarse();
 if (isset($_REQUEST['id'])) {
     $tool = $_REQUEST['id'];
-    $sql = "SELECT * from tools_main_db where psc_id = '$tool'";
-    $sqltracking = "SELECT * from tools_process where psc_id = '$tool' order by date desc limit 10";
-    $exec = mysqli_query($link, $sql);
-    $row = mysqli_fetch_array($exec);
-    $model = trim($row['model'], " ");
-    $status = $row['available'];
-    // SQL QUERY FOR UPDATE STOCK LOCATION
 
     if ((isset($_REQUEST['newstock'])) && ($_REQUEST['newstock'] != 'null')) {
         $newstock = $_REQUEST['newstock'];
@@ -21,6 +14,31 @@ if (isset($_REQUEST['id'])) {
             $updatestatus = mysqli_query($link, $sqlupdatestatus);
         }
     }
+
+    if ((isset($_REQUEST['newperiod'])) && ($_REQUEST['newperiod'] != 'null')) {
+        $newperiod = $_REQUEST['newperiod'];
+        $sqlnewnewperiod = "UPDATE tools_main_db set common = '$newperiod' where psc_id = '$tool'";
+        //echo $sqlnewstock;
+        $updatenewperiod = mysqli_query($link, $sqlnewnewperiod);
+    }
+
+    if ((isset($_REQUEST['newcertif'])) && ($_REQUEST['newcertif'] != 'null')) {
+        $newcertif = $_REQUEST['newcertif'];
+        $sqlnewnewcertif = "UPDATE tools_main_db set certif_num = '$newcertif' where psc_id = '$tool'";
+        //echo $sqlnewstock;
+        $updatenewcertif = mysqli_query($link, $sqlnewnewcertif);
+    }
+
+    
+    $sql = "SELECT * from tools_main_db where psc_id = '$tool'";
+    $sqltracking = "SELECT * from tools_process where psc_id = '$tool' order by date desc limit 15";
+    $exec = mysqli_query($link, $sql);
+    $row = mysqli_fetch_array($exec);
+    $model = trim($row['model'], " ");
+    $status = $row['available'];
+    // SQL QUERY FOR UPDATE STOCK LOCATION
+
+
     //CODE FOR DELETE DETAILS OF COMMON PARTNUMBERS IF EXIST ACTION
     $error_del = "";
     if (isset($_REQUEST['action'])) {
@@ -67,7 +85,7 @@ if (isset($_REQUEST['id'])) {
 <div class="container-fluid">
     <?php
     if (($error_del != "ERROR") && ($error_del === "NO")) {
-        ?>
+    ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             <strong>DELETE</strong> Record correctly removed.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -85,7 +103,7 @@ if (isset($_REQUEST['id'])) {
         &nbsp;&nbsp;&nbsp;<br>
         <div class="card" style="width: 25rem;">
 
-            <img src="tools_imgs/<?= $row['img'] ?>" class="card-img-top" alt="..." onerror=this.onerror=null;this.src='tools_imgs/no_image.png';>
+            <img src="tools_imgs/<?= $row['img'] ?>" class="card-img-top" alt="..." onerror=this.onerror=null;this.src='tools_imgs/no_image.png' ;>
             <div class="card-header">
                 <input type="text" value="<?= $tool ?>" class="form-control" name="real_psc_id" id="real_psc_id" style="border:none;background:none; text-align:center;  font-weight: bold;
 ;" readonly>
@@ -144,20 +162,51 @@ if (isset($_REQUEST['id'])) {
                 ?>
 
                 <br>
-                <table class="table table-light table-striped">
+                <table class="table table-striped table-sm table-condensed table-bordered text-center">
                     <tr>
-                        <td>Registered:</td>
-                        <td><?= $row['reg_date'] ?></td>
+                        <td>Used:</td>
+                        <td><?= $row['used_qty'] ?> Times</td>
                     </tr>
                     <tr>
                         <td>Last usage:</td>
                         <td><?= $row['last_use'] ?></td>
                     </tr>
+
                 </table>
-                <table class="table table-light table-striped">
+                <hr>
+                <table class="table table-secondary table-striped table-sm table-condensed text-center">
+                    <th colspan="3" class="text-center">CALIBRATION INFO</th> 
                     <tr>
-                        <td>Used:</td>
-                        <td><?= $row['used_qty'] ?> Times</td>
+                        <td><small><b>CERTIFICATE:</small></td>
+                        <td><small><a href='#' class='nav-link'><?= $row['certif_num'] ?></a> </small></td>
+                        <td><small><a href='#' class='nav-link' id="<?= $row['psc_id'] ?>" onclick="altercertificate(this.id)"> <i class="fa fa-pencil"></i></a></small></td>
+                    </tr>
+                    <tr>
+                        <td><small><b>CALIBRATED:</small></td>
+                        <td colspan="2"><small><?= date("Y-m-d",strtotime($row['reg_date'])) ?></small></td>
+                    </tr>
+                    <tr>
+                        <td><small><b>CALIB. PERIOD:</small></td>
+                        <td><small><?= $row['common'] ?> months </small></td>
+                        <td><small><a href='#' class='nav-link' id="<?= $row['psc_id'] ?>" onclick="altercerperiod(this.id)"> <i class="fa fa-pencil"></i></a></small></td>
+                    </tr>
+                    <tr>
+                        <td><small><b>NEXT CALIB. </small></td>
+                        <td colspan="2"><small><?php
+                                    //                        date('d/m/y H:i:s',$t);
+
+                                    $nextcaldate = date("Y-m-d", strtotime($row['reg_date'] . "+ ".$row['common']." month"));
+                                    $datetoday =  date("Y-m-d");
+                                    $daysleftsql = "SELECT TIMESTAMPDIFF(DAY, '$datetoday', '$nextcaldate') AS daysleft";
+                                    $execdaysleft = mysqli_query($link, $daysleftsql);
+                                    $daysleft = mysqli_fetch_array($execdaysleft);
+                                    if ($daysleft['daysleft'] <= 30) {
+                                        echo "<div class='bg-danger text-white V-URGENT'>" . $nextcaldate . " | " . $daysleft['daysleft'] . " Days</div>";
+                                    } else {
+                                        echo $nextcaldate . " | " . $daysleft['daysleft'] . " Days";
+                                    }
+
+                                    ?> </td>
                     </tr>
                 </table>
 
@@ -170,7 +219,7 @@ if (isset($_REQUEST['id'])) {
                     <h5 class="card-title">Tracking</h5>
                 </center>
                 <center>
-                    <p class="card-subtitle mb-2 text-muted">If exist, last 10 movements.</p>
+                    <p class="card-subtitle mb-2 text-muted">If exist, last 15 movements.</p>
                 </center>
 
                 <br>
@@ -181,18 +230,24 @@ if (isset($_REQUEST['id'])) {
                     while ($track = mysqli_fetch_array($execsql)) {
                         $x++;
                         if ($track['process'] == '0') {
-                            $icon = "<center><i class='fa fa-upload' aria-hidden='true' style='color:red'></i></i></center>";
+                            $icon = "<center><i class='fa fa-upload' aria-hidden='true' style='color:green'></i></i></center>";
+                            $label = "<td class='bg-success text-white'>DELIVERED</td>";
+                        } else if ($track['process'] == '1') {
+                            $icon = "<center><i class='fa fa-download' aria-hidden='true' style='color:red'></i></center>";
+                            $label = "<td class='bg-danger text-white'>RETURNED</td>";
                         } else {
-                            $icon = "<center><i class='fa fa-download' aria-hidden='true' style='color:green'></i></center>";
+                            $icon = "<center><i class='fa fa-upload' aria-hidden='true' style='color:green'></i></i></center>";
+                            $label = "<td class='bg-success text-white'><small>TRANSFERRED</small></td>";
                         }
 
-                        ?>
+                    ?>
                         <tr>
                             <td>
                                 <?= $icon ?>
                             </td>
                             <td><?= $track['name'] ?></td>
                             <td><?= $track['date'] ?></td>
+                            <?= $label ?>
                         </tr>
                     <?php }
                     if ($x == 0) {
@@ -221,7 +276,8 @@ if (isset($_REQUEST['id'])) {
                             echo "<h6> RETURN <br><br>";
                             echo "<a href='#' id='$tool' class='btn btn-danger' data-toggle='modal' data-target='#return_tool' onclick='return_modal(this.id)'><i class='fa fa-arrow-right' style='font-size:15px'></i></a>";
                             echo "</h6>";
-                        } else { }
+                        } else {
+                        }
                         ?>
                         <!-- <a href='#' id='<?= $tool ?>' class='btn btn-success ' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a> -->
                     </div>
@@ -324,7 +380,22 @@ if (isset($_REQUEST['id'])) {
             window.location.href = "tool_details.php?id=" + id + "&newstock=" + stock;
         }
     }
+    function altercertificate(id) {
+        id = id;
+        certif = prompt(" New CALIBRATION CERTIFICATE for " + id + " .");
+        if ((certif != null) && (certif != "")) {
+            window.location.href = "tool_details.php?id=" + id + "&newcertif=" + certif;
+        }
+    }
 
+    function altercerperiod(id) {
+        id = id;
+        certif = prompt(" New CALIBRATION PERIOD for " + id + " (NUMBER 1 - 12).");
+        if ((certif != null) && (certif != "")) {
+            window.location.href = "tool_details.php?id=" + id + "&newperiod=" + certif;
+        }
+    }
+    
     function update_modal(id) {
         pcs_id = id;
         if (pcs_id == "getting") {
