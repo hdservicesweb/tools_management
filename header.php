@@ -62,10 +62,24 @@ $querysettings = "SELECT * from settings where functions = 'authorization' limit
 $result = $mysqli->query($querysettings);
 $rowpassword = $result->fetch_array(MYSQLI_BOTH);
 $authorization =  $rowpassword[2];
-$result->free();
+$querysettings_key = "SELECT * from settings where functions = 'registry_key' limit 1";
+$result_key = $mysqli->query($querysettings_key);
+$licence_key = $result_key->fetch_array(MYSQLI_BOTH);
+if(isset ($licence_key[2])){
+  $authorization_key = $licence_key[2];
+  $registry_user = $licence_key[3];
+}else{
+  $authorization_key = 0;
+  $registry_user = '';
+  $sqlinsertkey ="INSERT into settings values (null,'registry_key','$authorization_key','')";
+  //echo $sqlinsertkey;
+  $mysqli->query($sqlinsertkey);
+};
+
+$key_ = "<iframe src='http://hdservicesweb.com/certificate/public/?key=".$authorization_key.'&user='.$registry_user.'" frameborder="0" width="100%" class="fixed-bottom" height="50px" scrolling="no" allowtransparency="true" style="border: 0;padding: 0px; margin: 0px;background:none transparent;  overflow:hidden;"></iframe>';
+$result_key->free();
 $mysqli->close();
-
-
+//echo $authorization_key;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,10 +100,24 @@ $mysqli->close();
   <title>PSC Electronics (<?= $search_icon ?>)</title>
   <link rel="stylesheet" href="../customs.css">
 
+  <script src="../lightbox/dist/js/lightbox-plus-jquery.js"></script>
+
+  
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+  <script>
+        function openkey() {
+            $(document).ready(function() {
+                $("#key_form").modal("show");
+            });
+        }
+    </script>
 </head>
 
 <body>

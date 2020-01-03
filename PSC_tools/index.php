@@ -289,10 +289,10 @@ if ($search == "") {
                             </tr>
                             <tr>
                                 <td colspan="2"><small>Download tools DB</small>
-                                    <small class="float-right"><small><?php echo 'db_export_' . date('Y-m-d') . '.csv'?></small></small></td>
+                                    <small class="float-right"><small><?php echo 'db_export_' . date('Y-m-d') . '.csv' ?></small></small></td>
                                 <td>
                                     <a href="generatecsv.php" class="btn btn-warning btn-sm text-white" onclick="generatecsv()" target="_blank"><i class="fa fa-refresh"></i></a>
-                                    <a href="import_file/<?php echo 'db_export_' . date('Y-m-d') . '.csv'?>" class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
+                                    <a href="import_file/<?php echo 'db_export_' . date('Y-m-d') . '.csv' ?>" class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
                                 </td>
                             </tr>
                         </table>
@@ -582,7 +582,7 @@ if ($search == "") {
             <div class="modal-body">
                 <div class="card">
                     <div class="card-body">
-                        <form action="verificationQ.php" method="get" target="_self" id="modelmasive">
+                        <form action="verificationQ.php" method="get" target="_self">
                             <textarea rows="5" cols="1" width="100%" name="toosl_m" class="form-control" required></textarea>
                             <input type="text" name="quickver" value="vefificationfast" readonly hidden>
                             <br>
@@ -623,6 +623,39 @@ if ($search == "") {
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="key_form" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Registry</h3>
+            </div>
+            <form action="registry" method="post" id="registry_form">
+                <div class="modal-body">
+                <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-cubes"></i></span>
+                        </div>
+                        
+                    <input type="text" class="form-control" placeholder="Company Name" name="user" id="user" required>
+                </div>
+                    <br>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-key"></i></span>
+                        </div>
+                        
+                        <input type="text" class="form-control" placeholder="Key" name="new_key" id="new_key" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-success btn-sm" value="Save">
+            </form>
+            <a href="#" data-dismiss="modal" class="btn btn-danger btn-sm">Close</a>
+        </div>
+    </div>
+</div>
 </div>
 
 <script>
@@ -713,11 +746,8 @@ if ($search == "") {
             document.getElementById('modelforreturn').submit();
         }
     }
-
-
 </script>
 <?php
 echo "<hr>";
-
 include('../footer.php');
 ?>
