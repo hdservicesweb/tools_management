@@ -300,11 +300,28 @@ if ($search == "") {
                 </div>
             </div>
             <div class="col-4">
+                <?php
+                $sqllasttools = "SELECT *, ADDDATE(reg_date,INTERVAL 365 DAY) as nextdate, 
+                TIMESTAMPDIFF(DAY, curdate(), ADDDATE(reg_date,INTERVAL 365 DAY)) AS daysleft 
+            FROM `tools_main_db` 
+            -- where ADDDATE(reg_date,INTERVAL 365 DAY) <= curdate()  
+            ORDER BY `tools_main_db`.`reg_date` ASC";
+                $wodata = mysqli_query($link, $sqllasttools) or die("Something wrong with DB please verify.");
+
+                $sqllasttoolsforcount = "SELECT *, ADDDATE(reg_date,INTERVAL 365 DAY) as nextdate, 
+TIMESTAMPDIFF(DAY, curdate(), ADDDATE(reg_date,INTERVAL 365 DAY)) AS daysleft 
+FROM `tools_main_db` 
+where ADDDATE(reg_date,INTERVAL 365 DAY) <= curdate()  
+ORDER BY `tools_main_db`.`reg_date` ASC";
+                $wodata2 = mysqli_query($link, $sqllasttoolsforcount) or die("Something wrong with DB please verify.");
+                $duesdates_qty = mysqli_num_rows($wodata2);
+                ?>
                 <div class="card card-dark bg-light">
                     <div class="card-header bg-primary text-white">
                         <strong>
                             <i class="fa fa-clock-o"></i>
                             <label> | Calibrations Due Dates.</label>
+                            <label class='pull-right'><?= $duesdates_qty ?> | Dues</label>
                         </strong>
                     </div>
                     <div class="card-body">
@@ -322,14 +339,8 @@ if ($search == "") {
                             </thead>
                             <tbody>
                                 <?php
-
-                                $sqllasttools = "SELECT * from tools_main_db ORDER BY `reg_date` ASC limit 5";
-                                $wodata = mysqli_query($link, $sqllasttools) or die("Something wrong with DB please verify.");
-
-
-
-
-                                while ($row = mysqli_fetch_array($wodata)) {
+                                $x = 0;
+                                while (($row = mysqli_fetch_array($wodata)) && ($x <= '4')) {
                                     $nextcaldate = date("Y-m-d", strtotime($row['reg_date'] . "+ " . $row['common'] . " month"));
                                     $datetoday =  date("Y-m-d");
                                     $daysleftsql = "SELECT TIMESTAMPDIFF(DAY, '$datetoday', '$nextcaldate') AS daysleft";
@@ -341,6 +352,8 @@ if ($search == "") {
                                         $nextcalibration =  "<small><small>" . $nextcaldate . " | " . $daysleft['daysleft'] . " Days </small></small>";
                                     }
                                     printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "'><small><small>" . $row['psc_id'] . "</small></small></a>", "<small><small>" . $row['manufacturer'] . "</small></small>", "<small><small>" . $row['model'] . "</small></small>", "<small><small>" . date("Y-m-d", strtotime($row['reg_date'])) . "</small></small>", "$nextcalibration");
+
+                                    $x++;
                                 }
 
                                 ?>
@@ -461,7 +474,7 @@ if ($search == "") {
                     // $calibrationnow = "<small>".$nextcaldate."</small>";
 
                     //printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<h6>" . $row["psc_id"] . "</h6>", "<p>" . $row["manufacturer"] . "</p>", "<p><a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["model"] . "</a></p>", "<h6>" . $row["description"] . "</h6>", "<h6>" . $row["last_use"] . "</h6>", "<small><h6>" . $stock_user . "</h6></small>", "<h6>" . $setstatus . "</h6>", "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' width='50px' $onerrorprint /></a>", $button_get);
-                    printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "' class='btn btn-link'>" . $row["psc_id"] . "</a>", $row["manufacturer"], "<a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["model"] . "</a> <a href='' class='float-right' id='" . $row['psc_id'] . "' onclick='addcommon(this.id)'>+</a>", $row["description"], $calibrationnow, $row["last_use"], "<small>" . $stock_user . "</small>", $setstatus, "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' class='img-thumbnail' width='50px' $onerrorprint /></a>", $button_get);
+                    printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "' >" . $row["psc_id"] . "</a>", "<a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" .$row["manufacturer"] . "  <i class='fa fa-cog float-right'></i> </a>  ", "<a href='index?srch=". $row["model"] ."' target='_self'>". $row["model"] ." </a><a href='#' class='float-right' id='" . $row['psc_id'] . "' onclick='addcommon(this.id)'><small><i class='fa fa-plus'></i></small></a> | &nbsp;<a href='http://192.0.0.125/TOOLS/".$row['manufacturer']."/".substr($row['manufacturer'], 0, 3)." ".$row['model'].".pdf' target='_blank' class='float-center' id='" . $row['psc_id'] . "' ><small><i class='fa fa-file-text-o'></i></small></a> ", $row["description"], $calibrationnow, $row["last_use"], "<small>" . $stock_user . "</small>", $setstatus, "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' class='img-thumbnail' width='50px' $onerrorprint /></a>", $button_get);
                 }
 
                 ?>
@@ -633,19 +646,19 @@ if ($search == "") {
             </div>
             <form action="registry" method="post" id="registry_form">
                 <div class="modal-body">
-                <div class="input-group mb-3">
+                    <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-cubes"></i></span>
                         </div>
-                        
-                    <input type="text" class="form-control" placeholder="Company Name" name="user" id="user" required>
-                </div>
+
+                        <input type="text" class="form-control" placeholder="Company Name" name="user" id="user" required>
+                    </div>
                     <br>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-key"></i></span>
                         </div>
-                        
+
                         <input type="text" class="form-control" placeholder="Key" name="new_key" id="new_key" required>
                     </div>
                 </div>

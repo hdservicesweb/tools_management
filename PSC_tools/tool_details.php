@@ -123,7 +123,8 @@ if (isset($_REQUEST['id'])) {
                     </tr>
                     <tr>
                         <th>Model:</th>
-                        <td><?= $row['model'] ?></td>
+                  
+                        <td><a href="http://192.0.0.125/TOOLS/<?= $row['manufacturer'] ?>/<?= substr($row['manufacturer'], 0, 3) ?> <?= $row['model'] ?>.pdf" target="_blank"><?= $row['model'] ?></a></td>
                         <td></td>
                     </tr>
                     <tr>
@@ -178,7 +179,7 @@ if (isset($_REQUEST['id'])) {
                     <th colspan="3" class="text-center">CALIBRATION INFO</th> 
                     <tr>
                         <td><small><b>CERTIFICATE:</small></td>
-                        <td><small><a href='#' class='nav-link'><?= $row['certif_num'] ?></a> </small></td>
+                        <td><small><a href='http://192.0.0.125/databases/calib_certs/<?= $row['certif_num'] ?>.pdf' class='nav-link' target='_blank'><?= $row['certif_num'] ?></a> </small></td>
                         <td><small><a href='#' class='nav-link' id="<?= $row['psc_id'] ?>" onclick="altercertificate(this.id)"> <i class="fa fa-pencil"></i></a></small></td>
                     </tr>
                     <tr>
