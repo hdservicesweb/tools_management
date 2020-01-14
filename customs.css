@@ -42,6 +42,12 @@
 
 }
 
+.pn_panel {
+    display: inline-block;
+    overflow-y: scroll;
+    max-height:400px;
+   
+}
 
 @keyframes V-IMPORTANT{
     100%{   color: #ff7c25;    }

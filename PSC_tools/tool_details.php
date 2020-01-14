@@ -29,7 +29,7 @@ if (isset($_REQUEST['id'])) {
         $updatenewcertif = mysqli_query($link, $sqlnewnewcertif);
     }
 
-    
+
     $sql = "SELECT * from tools_main_db where psc_id = '$tool'";
     $sqltracking = "SELECT * from tools_process where psc_id = '$tool' order by date desc limit 15";
     $exec = mysqli_query($link, $sql);
@@ -123,7 +123,7 @@ if (isset($_REQUEST['id'])) {
                     </tr>
                     <tr>
                         <th>Model:</th>
-                  
+
                         <td><a href="http://192.0.0.125/TOOLS/<?= $row['manufacturer'] ?>/<?= substr($row['manufacturer'], 0, 3) ?> <?= $row['model'] ?>.pdf" target="_blank"><?= $row['model'] ?></a></td>
                         <td></td>
                     </tr>
@@ -176,7 +176,7 @@ if (isset($_REQUEST['id'])) {
                 </table>
                 <hr>
                 <table class="table table-secondary table-striped table-sm table-condensed text-center">
-                    <th colspan="3" class="text-center">CALIBRATION INFO</th> 
+                    <th colspan="3" class="text-center">CALIBRATION INFO</th>
                     <tr>
                         <td><small><b>CERTIFICATE:</small></td>
                         <td><small><a href='http://192.0.0.125/databases/calib_certs/<?= $row['certif_num'] ?>.pdf' class='nav-link' target='_blank'><?= $row['certif_num'] ?></a> </small></td>
@@ -184,7 +184,7 @@ if (isset($_REQUEST['id'])) {
                     </tr>
                     <tr>
                         <td><small><b>CALIBRATED:</small></td>
-                        <td colspan="2"><small><?= date("Y-m-d",strtotime($row['reg_date'])) ?></small></td>
+                        <td colspan="2"><small><?= date("Y-m-d", strtotime($row['reg_date'])) ?></small></td>
                     </tr>
                     <tr>
                         <td><small><b>CALIB. PERIOD:</small></td>
@@ -194,20 +194,18 @@ if (isset($_REQUEST['id'])) {
                     <tr>
                         <td><small><b>NEXT CALIB. </small></td>
                         <td colspan="2"><small><?php
-                                    //                        date('d/m/y H:i:s',$t);
+                                                $nextcaldate = date("Y-m-d", strtotime($row['reg_date'] . "+ " . $row['common'] . " month"));
+                                                $datetoday =  date("Y-m-d");
+                                                $daysleftsql = "SELECT TIMESTAMPDIFF(DAY, '$datetoday', '$nextcaldate') AS daysleft";
+                                                $execdaysleft = mysqli_query($link, $daysleftsql);
+                                                $daysleft = mysqli_fetch_array($execdaysleft);
+                                                if ($daysleft['daysleft'] <= 30) {
+                                                    echo "<div class='bg-danger text-white V-URGENT'>" . $nextcaldate . " | " . $daysleft['daysleft'] . " Days</div>";
+                                                } else {
+                                                    echo $nextcaldate . " | " . $daysleft['daysleft'] . " Days";
+                                                }
 
-                                    $nextcaldate = date("Y-m-d", strtotime($row['reg_date'] . "+ ".$row['common']." month"));
-                                    $datetoday =  date("Y-m-d");
-                                    $daysleftsql = "SELECT TIMESTAMPDIFF(DAY, '$datetoday', '$nextcaldate') AS daysleft";
-                                    $execdaysleft = mysqli_query($link, $daysleftsql);
-                                    $daysleft = mysqli_fetch_array($execdaysleft);
-                                    if ($daysleft['daysleft'] <= 30) {
-                                        echo "<div class='bg-danger text-white V-URGENT'>" . $nextcaldate . " | " . $daysleft['daysleft'] . " Days</div>";
-                                    } else {
-                                        echo $nextcaldate . " | " . $daysleft['daysleft'] . " Days";
-                                    }
-
-                                    ?> </td>
+                                                ?> </td>
                     </tr>
                 </table>
 
@@ -287,7 +285,7 @@ if (isset($_REQUEST['id'])) {
 
             </div>
             <div class="card-footer d-flex justify-content-between align-items-center">
-
+                <a href="#" class="btn btn-secondary btn-sm pull-left" id="<?= $model ?>" onclick="addlist(this.id)" data-toggle='modal' data-target='#addlist_pn'><i class="fa fa-upload"></i></a>
                 <h6>Commonly used PNs: </h6>
                 <a href="#" class="btn btn-dark btn-sm pull-right" id="<?= $row['psc_id'] ?>" onclick="addcommon(this.id)"><i class="fa fa-plus"></i></a>
 
@@ -296,20 +294,36 @@ if (isset($_REQUEST['id'])) {
 
 
             <div class="card-footer">
+                <div class="col-12 pn_panel">
 
-                <table class="table table-light table-sm table-striped">
 
-                    <?php
-                    $sqlforcommon = "SELECT * from common_tb where tool_pn = '$model'";
-                    $execforcommon = mysqli_query($link, $sqlforcommon);
-                    while ($commonpn = mysqli_fetch_array($execforcommon)) {
-                        echo "<tr>";
-                        echo "<td><li><a href='https://www.digikey.com/products/en?keywords=" . $commonpn['component_pn'] . "' target='_blank'>" . $commonpn['component_pn'] . "</li></a></td>";
-                        echo "<td><a href='#' id='" . $commonpn['id'] . "' onclick='delete_common(this.id)'><i class='fa fa-times' style='color:red'></i></a></td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </table>
+                    <table class="table table-responsive table-light table-sm table-striped">
+
+                        <?php
+                        $sqlforcommon = "SELECT * from common_tb where tool_pn = '$model'";
+                        $execforcommon = mysqli_query($link, $sqlforcommon);
+                        while ($commonpn = mysqli_fetch_array($execforcommon)) {
+                            if ($commonpn['import_verif'] == '0') {
+                                $caracter = "<small><i class='fa fa-dot-circle-o'></i></small>";
+                            } else {
+                                $caracter = "<small><i class='fa fa-check-square-o'></i></small>";
+                            }
+                            if ($commonpn['img'] != "") {
+
+                                $imagen = "<a href='" . $commonpn['img'] . "' data-lightbox='image-1' data-title='" . $commonpn['component_pn'] . "' ><i class='fa fa-file-image-o' aria-hidden='true'></i></a>";
+                            } else {
+                                $imagen = "";
+                            }
+                            echo "<tr>";
+                            echo "<td><small> $caracter </small>| <a href='https://www.digikey.com/products/en?keywords=" . $commonpn['component_pn'] . "' target='_blank'><small>" . $commonpn['component_pn'] . "</small></a></td>";
+                            echo "<td><small>" . substr($commonpn['manufacturer'], 0, 7) . "</small></td>";
+                            echo "<td>" . $imagen . "</td>";
+                            echo "<td><a href='#' id='" . $commonpn['id'] . "' onclick='delete_common(this.id)'><i class='fa fa-times' style='color:red'></i></a></td>";
+                            echo "</tr>";
+                        }
+                        ?>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -372,6 +386,33 @@ if (isset($_REQUEST['id'])) {
         </div>
     </div>
 </div>
+<div class="modal fade" id="addlist_pn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Loading PN LIST</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="loadlist_pn.php" method="post" target="_blank" enctype="multipart/form-data">
+                <div class="modal-body">
+                    TOOL MODEL: <?= $model; ?>
+                    <br>
+                    <input type="text" name="tool" value="<?= $model; ?>" readonly hidden>
+                    <input type="text" value="save_list" name="command" readonly hidden>
+                    <br>
+                    File:
+                    <input type="file" name="pn_list">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger" autofocus>UPLOAD</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script>
     function alterstock(id) {
@@ -381,6 +422,7 @@ if (isset($_REQUEST['id'])) {
             window.location.href = "tool_details.php?id=" + id + "&newstock=" + stock;
         }
     }
+
     function altercertificate(id) {
         id = id;
         certif = prompt(" New CALIBRATION CERTIFICATE for " + id + " .");
@@ -396,7 +438,7 @@ if (isset($_REQUEST['id'])) {
             window.location.href = "tool_details.php?id=" + id + "&newperiod=" + certif;
         }
     }
-    
+
     function update_modal(id) {
         pcs_id = id;
         if (pcs_id == "getting") {
