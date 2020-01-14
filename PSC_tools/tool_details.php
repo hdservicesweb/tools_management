@@ -4,6 +4,13 @@ $link = Conectarse();
 if (isset($_REQUEST['id'])) {
     $tool = $_REQUEST['id'];
 
+    if ((isset($_REQUEST['newimagelink']))&&(isset($_REQUEST['component']))){
+        $sqlnewimgw = "UPDATE common_tb set img = '".$_REQUEST['newimagelink']."' where id = '".$_REQUEST['component']."'";
+        //echo $sqlnewstock;
+        $updatestock = mysqli_query($link, $sqlnewimgw);
+    }
+
+
     if ((isset($_REQUEST['newstock'])) && ($_REQUEST['newstock'] != 'null')) {
         $newstock = $_REQUEST['newstock'];
         $sqlnewstock = "UPDATE tools_main_db set stock = '$newstock' where psc_id = '$tool'";
@@ -312,7 +319,7 @@ if (isset($_REQUEST['id'])) {
 
                                 $imagen = "<a href='" . $commonpn['img'] . "' data-lightbox='image-1' data-title='" . $commonpn['component_pn'] . "' ><i class='fa fa-file-image-o' aria-hidden='true'></i></a>";
                             } else {
-                                $imagen = "";
+                                $imagen = "<a href='#' id='". $commonpn['id'] ."' onclick='addimage(this.id)' >...</a>";
                             }
                             echo "<tr>";
                             echo "<td><small> $caracter </small>| <a href='https://www.digikey.com/products/en?keywords=" . $commonpn['component_pn'] . "' target='_blank'><small>" . $commonpn['component_pn'] . "</small></a></td>";
@@ -468,6 +475,17 @@ if (isset($_REQUEST['id'])) {
         if ((newpartnumer != null) && (newpartnumer != "")) {
             window.location.href = "tool_details.php?id=" + id + "&newcommonpn=" + newpartnumer;
         }
+
+    }
+    function addimage(id) {
+        id_pn = id;
+        var tool_id = '<?= $tool ?>';
+        var model = document.getElementById("modeltool").value;
+        var newimageurl = prompt("Enter the URL of the linked Imager. ");
+        if ((newimageurl != null) && (newimageurl != "")) {
+            window.location.href = "tool_details.php?id=" + tool_id + "&newimagelink=" + newimageurl+"&component="+id_pn;
+        }
+        
     }
 
     function return_modal(id) {

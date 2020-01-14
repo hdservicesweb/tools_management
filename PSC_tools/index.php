@@ -413,7 +413,7 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
         $records = 'Found: ' . mysqli_num_rows($result) . ' Records.';
     } else {
 
-        $records = "No matches.";
+        $records = "TOOLS No matches.";
     }
 ?>
     <div class='container-fluid'>
@@ -474,7 +474,7 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
                     // $calibrationnow = "<small>".$nextcaldate."</small>";
 
                     //printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<h6>" . $row["psc_id"] . "</h6>", "<p>" . $row["manufacturer"] . "</p>", "<p><a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["model"] . "</a></p>", "<h6>" . $row["description"] . "</h6>", "<h6>" . $row["last_use"] . "</h6>", "<small><h6>" . $stock_user . "</h6></small>", "<h6>" . $setstatus . "</h6>", "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' width='50px' $onerrorprint /></a>", $button_get);
-                    printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "' >" . $row["psc_id"] . "</a>", "<a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" .$row["manufacturer"] . "  <i class='fa fa-cog float-right'></i> </a>  ", "<a href='index?srch=". $row["model"] ."' target='_self'>". $row["model"] ." </a><a href='#' class='float-right' id='" . $row['psc_id'] . "' onclick='addcommon(this.id)'><small><i class='fa fa-plus'></i></small></a> | &nbsp;<a href='http://192.0.0.125/TOOLS/".$row['manufacturer']."/".substr($row['manufacturer'], 0, 3)." ".$row['model'].".pdf' target='_blank' class='float-center' id='" . $row['psc_id'] . "' ><small><i class='fa fa-file-text-o'></i></small></a> ", $row["description"], $calibrationnow, $row["last_use"], "<small>" . $stock_user . "</small>", $setstatus, "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' class='img-thumbnail' width='50px' $onerrorprint /></a>", $button_get);
+                    printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "' >" . $row["psc_id"] . "</a>", "<a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["manufacturer"] . "  <i class='fa fa-cog float-right'></i> </a>  ", "<a href='index?srch=" . $row["model"] . "' target='_self'>" . $row["model"] . " </a><a href='#' class='float-right' id='" . $row['psc_id'] . "' onclick='addcommon(this.id)'><small><i class='fa fa-plus'></i></small></a> | &nbsp;<a href='http://192.0.0.125/TOOLS/" . $row['manufacturer'] . "/" . substr($row['manufacturer'], 0, 3) . " " . $row['model'] . ".pdf' target='_blank' class='float-center' id='" . $row['psc_id'] . "' ><small><i class='fa fa-file-text-o'></i></small></a> ", $row["description"], $calibrationnow, $row["last_use"], "<small>" . $stock_user . "</small>", $setstatus, "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' class='img-thumbnail' width='50px' $onerrorprint /></a>", $button_get);
                 }
 
                 ?>
@@ -487,9 +487,32 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
             if (mysqli_num_rows($result2) > 0) {
                 // Se recoge el número de resultados
                 echo  'Found: ' . mysqli_num_rows($result2) . ' more Records on commonly used partnumber. <br>';
+                echo "<div class='row'> ";
                 while ($rowcommon = mysqli_fetch_array($result2)) {
-                    echo "<a href='main_tools.php?srch=" . $rowcommon['tool_pn'] . "'>" . $rowcommon['component_pn'] . "</a>  |  ";
+                echo "<div style='padding:10px; '> ";
+                    echo "<div class='card ' style='width: 15rem; height:5rem;'> ";
+                        echo '<div class="row no-gutters">';
+                    if (($rowcommon['img'] != NULL) || ($rowcommon['img'] != "")) {
+                        echo " <div class='col-sm-4'>
+                                <a href='" . $rowcommon['img'] . "' data-lightbox='image-1' data-title='" . $row["model"] . "'> <img src='" . $rowcommon['img'] . "' class='card-img' onerror=this.onerror=null;this.src='tools_imgs/no_image.png'> </a>
+                            </div>";
+                    } else {
+                        echo " <div class='col-sm-4'>
+                                <img src='tools_imgs/no_image.png' class='card-img' onerror=this.onerror=null;this.src='tools_imgs/no_image.png' >
+                            </div>";
+                    }
+                            echo ' <div class="col-sm-8">';
+                                echo "<div class='card-body'> ";
+                                    echo "<small>PN: <b><a href='https://www.digikey.com/products/en?keywords=" . $rowcommon['component_pn'] . "' target='_blank'>" . $rowcommon['component_pn'] . "</a></b></small>";
+                                    echo "<br>";
+                                    echo "<small>Tool: <b><a href='index.php?srch=" . $rowcommon['tool_pn'] . "'>" . $rowcommon['tool_pn'] . "</a></b></small>";
+                                echo "</div> ";
+                            echo "</div> ";
+                        echo "</div> ";
+                    echo "</div> ";
+                echo "</div> ";
                 }
+                echo "</div> ";
             }
             ?>
         </div>
