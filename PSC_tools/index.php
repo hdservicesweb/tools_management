@@ -148,7 +148,9 @@ if ($search == "") {
                     </div>
                 </div>
             </div>
-            <div class="col-4">
+
+
+            <div class="col-md-4">
                 <div class="card card-dark bg-light">
                     <div class="card-header bg-danger text-white">
                         <strong>
@@ -346,7 +348,7 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
                                     $daysleftsql = "SELECT TIMESTAMPDIFF(DAY, '$datetoday', '$nextcaldate') AS daysleft";
                                     $execdaysleft = mysqli_query($link, $daysleftsql);
                                     $daysleft = mysqli_fetch_array($execdaysleft);
-                                    if ($daysleft['daysleft'] <= 30) {
+                                    if ($daysleft['daysleft'] < 15) {
                                         $nextcalibration = "<small><small>" . $nextcaldate . " | <label class='V-URGENT'>" . $daysleft['daysleft'] . " Days</label></small></small>";
                                     } else {
                                         $nextcalibration =  "<small><small>" . $nextcaldate . " | " . $daysleft['daysleft'] . " Days </small></small>";
@@ -392,7 +394,7 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
         OR trimmed LIKE '%" . $search . "%'
         OR common LIKE '%" . $search . "%'
         
-        ORDER BY id_tool";
+        ORDER BY model";
     //  }
 
     $records = 'Found: 0 Records.';
@@ -436,25 +438,30 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
             <table class="table table-sm table-default table-bordered">
                 <?php
                 if ($row = mysqli_num_rows($result) > 0) {
-                    printf("<tr  class='text-center' style='font-size:12px'><th>&nbsp;%s</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th></tr>", "PSC ID", "BRAND", "MODEL", "DESCRIPTION", "NEXT CALIBRATION", "LAST USED DATE", "STORAGE / USER", "STATUS", "IMG", "USE / RETURN");
+                    echo ' <div class="row" >';
+                    //         printf("<tr  class='text-center' style='font-size:12px'><th>&nbsp;%s</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th></tr>", "PSC ID", "BRAND", "MODEL", "DESCRIPTION", "NEXT CALIBRATION", "LAST USED DATE", "STORAGE / USER", "STATUS", "IMG", "USE / RETURN");
                 }
                 while ($row = mysqli_fetch_array($result)) {
                     $onerrorprint = "onerror=this.onerror=null;this.src='tools_imgs/no_image.png';";
                     if ($row['available'] == '1') {
                         $stock_user = $row["stock"];
                         $classavailable = "bg-success";
-                        $setstatus = "<img src='components/available.png' width='50px' title='" . $row["stock"] . "'/>";
+                        //$setstatus = "<img src='components/available.png' width='50px' title='" . $row["stock"] . "'/>";
+                        $setstatus = "border-success";
+                        
                         $button_get = "<a href='#' id='" . $row['psc_id'] . "' class='btn btn-success btn-sm' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
                     } elseif ($row['available'] == '-1') {
                         $stock_user = "DAMAGED";
                         $classavailable = "bg-warning";
-                        $setstatus = "<img src='components/damaged.png' width='10px' alt='DAMAGED'/>";
-                        $button_get = "<a href='#' id='" . $row['psc_id'] . "' class='btn btn-success btn-sm' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
+                        $setstatus = "border-warning";
+                        //$setstatus = "<img src='components/damaged.png' width='10px' alt='DAMAGED'/>";
+                        $button_get = "<a href='#' id='" . $row['psc_id'] . "' class='btn btn-warning btn-sm text-white' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
                     } else {
                         $classavailable = "bg-danger";
                         $stock_user = "[" . $row["stock"] . "] - " . $row["user_know"];
-                        $setstatus = "<img src='components/notavailable.png' width='50px' title='" . $row["user_know"] . "'/>";
-                        $button_get = "<a href='#' id='" . $row['psc_id'] . "' class='btn btn-success btn-sm' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
+                        $setstatus = "border-danger";
+//                        $setstatus = "<img src='components/notavailable.png' width='50px' title='" . $row["user_know"] . "'/>";
+                        $button_get = "<a href='#' id='" . $row['psc_id'] . "' class='btn btn-secondary btn-sm ' data-toggle='modal' data-target='#get_tool' onclick='update_modal(this.id)'><i class='fa fa-arrow-left' style='font-size:15px'></i></a>";
                         $button_get .= "&nbsp;<a href='#' id='" . $row['psc_id'] . "' class='btn btn-danger btn-sm float-right' data-toggle='modal' data-target='#return_tool' onclick='return_modal(this.id)'><i class='fa fa-arrow-right' style='font-size:15px'></i></a>";
                     }
                     $nextcaldate = date("Y-m-d", strtotime($row['reg_date'] . "+ " . $row['common'] . " month"));
@@ -462,55 +469,116 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
                     $daysleftsql = "SELECT TIMESTAMPDIFF(DAY, '$datetoday', '$nextcaldate') AS daysleft";
                     $execdaysleft = mysqli_query($link, $daysleftsql);
                     $daysleft = mysqli_fetch_array($execdaysleft);
-                    if ($daysleft['daysleft'] <= 30) {
+                    if ($daysleft['daysleft'] <= 15) {
                         if ($daysleft['daysleft'] <= 0) {
-                            $calibrationnow = $nextcaldate . " | <label class='bg-light text-dark V-URGENT'>" . $daysleft['daysleft'] . " Days <i class='fa fa-close text-danger'></i></label>";
+                            $calibrationnow = " | <label class='bg-light text-dark V-URGENT'>" . $daysleft['daysleft'] . " Days <i class='fa fa-close text-danger'></i></label>";
+                            //$calibrationnow = $nextcaldate . " | <label class='bg-light text-dark V-URGENT'>" . $daysleft['daysleft'] . " Days <i class='fa fa-close text-danger'></i></label>";
                         } else {
-                            $calibrationnow = $nextcaldate . " | <label class='bg-light text-dark V-URGENT'>" . $daysleft['daysleft'] . " Days <i class='fa fa-warning text-warning'></i></label>";
+                            $calibrationnow = " | <label class='bg-light text-dark V-URGENT'>" . $daysleft['daysleft'] . " Days <i class='fa fa-warning text-warning'></i></label>";
+//                            $calibrationnow = $nextcaldate . " | <label class='bg-light text-dark V-URGENT'>" . $daysleft['daysleft'] . " Days <i class='fa fa-warning text-warning'></i></label>";
                         }
                     } else {
-                        $calibrationnow = $nextcaldate . " | " . $daysleft['daysleft'] . " Days <i class='fa fa-check text-success'></i>";
+                        $calibrationnow =  " | " . $daysleft['daysleft'] . " Days <i class='fa fa-check text-success'></i>";
+                        //$calibrationnow = $nextcaldate . " | " . $daysleft['daysleft'] . " Days <i class='fa fa-check text-success'></i>";
                     }
-                    // $calibrationnow = "<small>".$nextcaldate."</small>";
 
-                    //printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<h6>" . $row["psc_id"] . "</h6>", "<p>" . $row["manufacturer"] . "</p>", "<p><a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["model"] . "</a></p>", "<h6>" . $row["description"] . "</h6>", "<h6>" . $row["last_use"] . "</h6>", "<small><h6>" . $stock_user . "</h6></small>", "<h6>" . $setstatus . "</h6>", "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' width='50px' $onerrorprint /></a>", $button_get);
-                    printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "' >" . $row["psc_id"] . "</a>", "<a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["manufacturer"] . "  <i class='fa fa-cog float-right'></i> </a>  ", "<a href='index?srch=" . $row["model"] . "' target='_self'>" . $row["model"] . " </a><a href='#' class='float-right' id='" . $row['psc_id'] . "' onclick='addcommon(this.id)'><small><i class='fa fa-plus'></i></small></a> | &nbsp;<a href='http://192.0.0.125/TOOLS/" . $row['manufacturer'] . "/" . substr($row['manufacturer'], 0, 3) . " " . $row['model'] . ".pdf' target='_blank' class='float-center' id='" . $row['psc_id'] . "' ><small><i class='fa fa-file-text-o'></i></small></a> ", $row["description"], $calibrationnow, $row["last_use"], "<small>" . $stock_user . "</small>", $setstatus, "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' class='img-thumbnail' width='50px' $onerrorprint /></a>", $button_get);
+echo '     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2" style="padding:10px;">';
+echo '         <div class="card '.$setstatus.' ">';
+echo "             <div class='card-header ".$classavailable."'>";
+echo "                 <center><small><a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank' class='text-white'>" . $row["manufacturer"] . " </a> - <a href='index?srch=" . $row["model"] . "' target='_self' class='text-white'>" . $row["model"] . " </a></small></center>";
+echo '             </div>';
+echo '             <div class="col-xs-12 col-sm-12"><br>';
+echo "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' class='card-img' style='max-height: 150px' $onerrorprint /></a>";
+
+echo '             </div>';
+echo '             <div class="card-body">';
+echo "                 <center><small><b><a href='tool_details.php?id=" . $row['psc_id'] . "' >" . $row["psc_id"] . "</a></b></small><a href='#' class='float-right' id='" . $row['psc_id'] . "' onclick='addcommon(this.id)'><small><i class='fa fa-plus'></i></small></a></center>";
+echo '                 <small>';
+echo "                     NEXT CAL. DATE: $nextcaldate </small><br>";
+echo "                 <small> REMAINING DAYS: $calibrationnow </i>";
+echo '                 </small><br>';
+echo '                 <small>LAST USE: '.$row["last_use"].'</small><br>';
+echo '                 <small>STORAGE | USER: <b>'.$stock_user .'</b></small>';
+echo '                 <div class="col-12">';
+echo $button_get;
+echo '                 </div>';
+
+echo '             </div>';
+echo '         </div>';
+echo '     </div>';
+
+                    
+                    //         printf("<tr><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='tool_details.php?id=" . $row['psc_id'] . "' >" . $row["psc_id"] . "</a>", "<a href='https://octopart.com/search?q=" . $row["model"] . "' target='_blank'>" . $row["manufacturer"] . "  <i class='fa fa-cog float-right'></i> </a>  ", "<a href='index?srch=" . $row["model"] . "' target='_self'>" . $row["model"] . " </a><a href='#' class='float-right' id='" . $row['psc_id'] . "' onclick='addcommon(this.id)'><small><i class='fa fa-plus'></i></small></a> | &nbsp;<a href='http://192.0.0.125/TOOLS/" . $row['manufacturer'] . "/" . substr($row['manufacturer'], 0, 3) . " " . $row['model'] . ".pdf' target='_blank' class='float-center' id='" . $row['psc_id'] . "' ><small><i class='fa fa-file-text-o'></i></small></a> ", $row["description"], $calibrationnow, $row["last_use"], "<small>" . $stock_user . "</small>", $setstatus, "<a href='tools_imgs/" . $row["img"] . "' data-lightbox='image-1' data-title='" . $row["model"] . "' ><img src='tools_imgs/" . $row["img"] . "' class='img-thumbnail' width='50px' $onerrorprint /></a>", $button_get);
                 }
-
+                echo ' </div>';
                 ?>
             </table>
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+
+           
+           
+           
+           
+           
+
         </div>
 
-        <div class="">
+        <div class="container-fluid">
             <?php
             $result2 = mysqli_query($link, $sqlextend) or die("Something wrong with DB please verify.");
             if (mysqli_num_rows($result2) > 0) {
                 // Se recoge el número de resultados
                 echo  'Found: ' . mysqli_num_rows($result2) . ' more Records on commonly used partnumber. <br>';
+
                 echo "<div class='row'> ";
                 while ($rowcommon = mysqli_fetch_array($result2)) {
-                echo "<div style='padding:10px; '> ";
-                    echo "<div class='card ' style='width: 15rem; height:5rem;'> ";
-                        echo '<div class="row no-gutters">';
+                    echo "<div class='col-sm-2' style='padding:5px'> ";
+                    echo "<div class='card ' > ";
+                    echo '<div class="row no-gutters">';
                     if (($rowcommon['img'] != NULL) || ($rowcommon['img'] != "")) {
-                        echo " <div class='col-sm-4'>
+                        echo " <div class='col-xs-12 col-sm-4'>
                                 <a href='" . $rowcommon['img'] . "' data-lightbox='image-1' data-title='" . $row["model"] . "'> <img src='" . $rowcommon['img'] . "' class='card-img' onerror=this.onerror=null;this.src='tools_imgs/no_image.png'> </a>
                             </div>";
                     } else {
-                        echo " <div class='col-sm-4'>
+                        echo " <div class='col-xs-12 col-sm-4'>
                                 <img src='tools_imgs/no_image.png' class='card-img' onerror=this.onerror=null;this.src='tools_imgs/no_image.png' >
                             </div>";
                     }
-                            echo ' <div class="col-sm-8">';
-                                echo "<div class='card-body'> ";
-                                    echo "<small>PN: <b><a href='https://www.digikey.com/products/en?keywords=" . $rowcommon['component_pn'] . "' target='_blank'>" . $rowcommon['component_pn'] . "</a></b></small>";
-                                    echo "<br>";
-                                    echo "<small>Tool: <b><a href='index.php?srch=" . $rowcommon['tool_pn'] . "'>" . $rowcommon['tool_pn'] . "</a></b></small>";
-                                echo "</div> ";
-                            echo "</div> ";
-                        echo "</div> ";
+                    echo ' <div class="col-xs-12 col-sm-8">';
+                    echo "<div class='card-body'> ";
+                    echo "<small>PN: <b><a href='https://www.digikey.com/products/en?keywords=" . $rowcommon['component_pn'] . "' target='_blank'>" . $rowcommon['component_pn'] . "</a></b></small>";
+                    echo "<br>";
+                    if ($rowcommon['import_verif'] == '1') {
+                        echo "<i><small>Tool: <b><a href='index.php?srch=" . $rowcommon['tool_pn'] . "'>" . $rowcommon['tool_pn'] . "</a></b></small></i>";
+                    } else {
+                        echo "<small>Tool: <b><a href='index.php?srch=" . $rowcommon['tool_pn'] . "'>" . $rowcommon['tool_pn'] . "</a></b></small>";
+                    }
+
                     echo "</div> ";
-                echo "</div> ";
+                    echo "</div> ";
+                    echo "</div> ";
+                    echo "</div> ";
+                    echo "</div> ";
                 }
                 echo "</div> ";
             }
