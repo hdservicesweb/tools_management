@@ -21,15 +21,15 @@ The software shows you the tools found with your search criteria as well as the 
 
 
 
- ##Involved Technologies 
+## Involved Technologies 
 
-### HTML
-### PHP (native)
-### JavaScript
-### AJAX
-### MySQL
-### CSS 
-### BOOTSTRAP
+ + HTML
+ + PHP (native)
+ + JavaScript
+ + AJAX
+ + MySQL
+ + CSS 
+ + BOOTSTRAP
 
 
 
