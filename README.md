@@ -20,15 +20,16 @@ The software shows you the tools found with your search criteria as well as the 
 4. Enter your name or employee number. at that time the status of the tool changes to in use until the return of the tool is made.
 
 
-** Involved Technologies **
 
-*HTML
-*PHP (native)
-*JavaScript
-*AJAX
-*MySQL
-*CSS 
-*BOOTSTRAP
+ ##Involved Technologies 
+
+### HTML
+### PHP (native)
+### JavaScript
+### AJAX
+### MySQL
+### CSS 
+### BOOTSTRAP
 
 
 
