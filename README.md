@@ -37,7 +37,7 @@ The software shows you the tools found with your search criteria as well as the 
 ![alt text](https://github.com/hdservicesweb/tools_management/blob/master/raw_image/home.png?raw=true)
 
 ![alt text](https://github.com/hdservicesweb/tools_management/blob/master/raw_image/details.PNG?raw=true)
-![alt text](https://github.com/hdservicesweb/tools_management/blob/master/raw_image/results.PNG?raw=true)
+![alt text](https://github.com/hdservicesweb/tools_management/blob/master/raw_image/Results.PNG?raw=true)
 ![alt text](https://github.com/hdservicesweb/tools_management/blob/master/raw_image/Search.PNG?raw=true)
 
 
