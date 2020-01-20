@@ -19,10 +19,22 @@ The software shows you the tools found with your search criteria as well as the 
 3. the employee selects the required tool
 4. Enter your name or employee number. at that time the status of the tool changes to in use until the return of the tool is made.
 
+** Involved Technologies **
+*HTML
+*PHP (native)
+*JavaScript
+*AJAX
+*MySQL
+*CSS 
+*BOOTSTRAP
+
+
+
+
 ![alt text](https://github.com/hdservicesweb/tools_management/blob/master/raw_image/home.png?raw=true)
 
 ![alt text](https://github.com/hdservicesweb/tools_management/blob/master/raw_image/details.PNG?raw=true)
-
+![alt text](https://github.com/hdservicesweb/tools_management/blob/master/raw_image/results.PNG?raw=true)
 ![alt text](https://github.com/hdservicesweb/tools_management/blob/master/raw_image/Search.PNG?raw=true)
 
 
