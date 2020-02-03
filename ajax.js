@@ -4,6 +4,7 @@
 3
 */   
 var seconds = 2; 
+
 // el tiempo en que se refresca   
 var divid = "contenido"; 
 // el div que quieres actualizar!   
@@ -50,6 +51,7 @@ function refreshdiv(){
    // Empieza la función de refrescar
 
    window.onload = function(){
+    
        refreshdiv(); 
        // corremos inmediatamente la funcion
    }

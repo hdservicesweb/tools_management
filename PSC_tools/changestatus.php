@@ -205,7 +205,7 @@ if ($process == '1') {
     var pagina = "index"
 
     function redireccionar() {
-        location.href = pagina
+        location.href = pagina+"?srch=<?= $row['model'] ?>"
     }
     setTimeout("redireccionar()", 1500);
 </script>

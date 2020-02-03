@@ -161,7 +161,7 @@ $mysqli->close();
 
           </div>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown ">
           <a class="nav-link dropdown-toggle" href="index" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-truck fa-sm"></i> WO Tracking
           </a>
@@ -180,7 +180,7 @@ $mysqli->close();
       </ul>
       <form action="<?= $form_action; ?>" class="form-inline my-2 my-lg-0" id="searchform">
 
-        <input class="form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="srch" id="srch" value="" autofocus autocomplete="off">
+        <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="srch" id="srch" value="" autofocus autocomplete="off">
         <!-- <input type="checkbox" name="common" id="common_main" hidden> -->
         <button class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit"> <i class="fa fa-search"> </i> <?= $search_icon; ?></button>
       </form>
