@@ -117,7 +117,7 @@ if (isset($_REQUEST['id'])) {
                 <center></center>
             </div>
             <div class="card-body">
-                <table class="table table-sm table-default table-striped">
+                <table class="table table-sm table-default table-striped small">
                     <tr>
                         <th>Storage / Qty:</th>
                         <td><i class='fa fa-inbox' aria-hidden='true'></i> &nbsp;<?= $row['stock'] ?> | <?= $row['qty'] ?></td>
@@ -140,9 +140,14 @@ if (isset($_REQUEST['id'])) {
                         <td></td>
                     </tr>
 
-                </table>
-
-                <p class="card-text"><?= $row['notes'] ?></p>
+                <tr>
+                   
+                    <td colspan="3">
+                         <i class="fa fa-plus"></i> &nbsp;Note:
+                <p class="card-text"><?= $row['notes'] ?></p></table>
+                    </td>
+                </tr>
+   
             </div>
         </div>
         &nbsp;&nbsp;&nbsp;<br>
@@ -170,7 +175,12 @@ if (isset($_REQUEST['id'])) {
                 ?>
 
                 <br>
-                <table class="table table-striped table-sm table-condensed table-bordered text-center">
+                <table class="table table-striped table-sm table-condensed table-bordered text-center small">
+                <tr>
+                        <td>Acquired:</td>
+                        <td><?= substr($row['purchase_date'],0,10) ?></td>
+                    </tr>
+
                     <tr>
                         <td>Used:</td>
                         <td><?= $row['used_qty'] ?> Times</td>

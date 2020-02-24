@@ -15,6 +15,7 @@ if ((isset($_REQUEST['finish'])) && ($_REQUEST['finish'] == "Save")) {
         move_uploaded_file($_FILES['IMAGEN']['tmp_name'], $uploads_dir . $_FILES['IMAGEN']['name']);
         echo "SAVED";
     } else {
+        echo $sqlsave;
         echo "<b>NO SAVED</b>";
         echo "<br> Please verify information.";
     }
@@ -22,81 +23,132 @@ if ((isset($_REQUEST['finish'])) && ($_REQUEST['finish'] == "Save")) {
     // echo "NO FLAG";
 }
 ?>
-<div class="container">
-    <div class="card">
-        <div class="card-header bg-success text-white">
-            <b> NEW TOOL FORM</b>
-        </div>
-        <div class="card-body">
-            <form action="new_tool.php" class="needs-validation" id="form_new" method="post" onsubmit="event.preventDefault(); returnea();" enctype="multipart/form-data">
-                <input type="text" name="finish" value="Save" readonly hidden />
-                <div class="form-row">
-                    <div class="col">
-                        <label for="PSC_ID">PSC ID: </label>
-                        <input type="text" class="form-control" name="PSC_ID" value="PSC-" required>
-                    </div>
-                    <div class="col">
-                        <label for="PSC_ID">MANUFACTURER: </label>
-                        <input type="text" class="form-control" name="MANUF" required>
-                    </div>
-                    <div class="col">
-                        <label for="PSC_ID">MODEL: </label>
-                        <input type="text" class="form-control" name="MODEL" required>
-                    </div>
-                </div>
-                <br>
-                <div class="form-row">
-                    <div class="col-6">
-                        <div class="row">
-                            <div class="col-7">
-                                <label for="PSC_ID">CERTIFICATE NUMBER: </label>
-                                <input type="text" class="form-control" name="CERTIF" required>
+<div class="container-fluid">
+    <div class="col-sm-12 col-md-6">
+
+
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <b> NEW TOOL FORM</b>
+            </div>
+            <div class="card-body">
+                <form action="new_tool.php" class="needs-validation" id="form_new" method="post" onsubmit="event.preventDefault(); returnea();" enctype="multipart/form-data">
+                    <input type="text" name="finish" value="Save" readonly hidden />
+                    <div class="form-row">
+                        <div class="col-4">
+                            <label class="small" for="validationServer03">PSC ID:</label>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">PSC ID.</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="PSC_ID" value="PSC-" required>
                             </div>
-                            <div class="col-5">
-                                <label for="PSC_ID">CALIBRATION PERIOD: </label>
-                                <input type="text" class="form-control" name="common" required>
+                        </div>
+
+                        <div class="col-4">
+                            <label class="small" for="validationServer03">MANUFACTURER:</label>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">BRAND:</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="MANUF" required>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="small" for="validationServer03">MODEL:</label>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">MODEL:</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="MODEL" required>
                             </div>
                         </div>
 
                     </div>
-                    <div class="col">
-                        <label for="PSC_ID">DESCRIPTION: </label>
-                        <input type="text" class="form-control" name="DESCR" required>
-                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-3">
+                                    <label class="small" for="validationServer03">CERTIFICATE NUMBER:</label>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">CERTF #:</span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="CERTIF" required>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <label class="small" for="validationServer03">CAL. PERIOD:</label>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">CP:</span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="common" required>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <label class="small" for="validationServer03">DESCRIPTION:</label>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">DESC:</span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="DESCR" required>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <label class="small" for="validationServer03">NOTES:</label>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">NOTE:</span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="NOTES" required>
+                                    </div>
+                                </div>
+                            </div>
 
-                </div>
-                <br>
-                <div class="form-row">
-                    <div class="col">
-                        <label for="PSC_ID">NOTES: </label>
-                        <textarea id="" cols="10" rows="5" class="form-control" name="NOTES" required></textarea>
-                    </div>
-                    <div class="col">
-                        <label for="PSC_ID">IMAGE: </label>
-                        <input type="file" class="form-control" name="IMAGEN" required>
+                        </div>
                         <br>
                         <div class="form-row">
-                            <div class="col">
-                                <label for="PSC_ID">
-                                    <h6>AUTHORIZATION: </h6>
-                                </label>
-                                <input type="password" id="password" name="password" class="form-control" required>
 
-                            </div>
                             <div class="col">
+                                <div class="col-12">
+                                    <label class="small" for="validationServer03">IMAGE:</label>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">IMG:</span>
+                                        </div>
+                                        <input type="file" class=" files" name="IMAGEN" required>
+
+                                        <!-- <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="NOTES" required> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="small text-center">AUTHORIZATION</span>
+
+                                    </div>
+                                    <input type="password" id="password" name="password" aria-label="Small" aria-describedby="inputGroup-sizing-sm" class="form-control input-small" required>
+
+                                </div>
+                            </div>
+                            <br>
+                            <div class="col-12">
                                 <label for="PSC_ID"><br> </label><br>
                                 <button type="submit" class="btn btn-success"> Save </button>
                                 <a class="btn btn-secondary" href="new_tool.php"> Cancel </a>
                             </div>
+
+
+
                         </div>
 
-
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-
 </div>
 <script>
     function returnea() {
@@ -112,5 +164,5 @@ if ((isset($_REQUEST['finish'])) && ($_REQUEST['finish'] == "Save")) {
     }
 </script>
 <?php
-                        include('../footer.php');
+include('../footer.php');
 ?>

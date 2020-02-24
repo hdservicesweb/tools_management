@@ -3,7 +3,7 @@
 * Parametros mandatorios
 3
 */   
-var seconds = 2; 
+var seconds = 5; 
 
 // el tiempo en que se refresca   
 var divid = "contenido"; 

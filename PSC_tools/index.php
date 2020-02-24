@@ -309,14 +309,14 @@ if ($search == "") {
                 $sqllasttools = "SELECT *, ADDDATE(reg_date,INTERVAL 365 DAY) as nextdate, 
                 TIMESTAMPDIFF(DAY, curdate(), ADDDATE(reg_date,INTERVAL 365 DAY)) AS daysleft 
             FROM `tools_main_db` 
-            -- where ADDDATE(reg_date,INTERVAL 365 DAY) <= curdate()  
+            where available <> -1
             ORDER BY `tools_main_db`.`reg_date` ASC";
                 $wodata = mysqli_query($link, $sqllasttools) or die("Something wrong with DB please verify.");
 
                 $sqllasttoolsforcount = "SELECT *, ADDDATE(reg_date,INTERVAL 365 DAY) as nextdate, 
 TIMESTAMPDIFF(DAY, curdate(), ADDDATE(reg_date,INTERVAL 365 DAY)) AS daysleft 
 FROM `tools_main_db` 
-where ADDDATE(reg_date,INTERVAL 365 DAY) <= curdate()  
+where ADDDATE(reg_date,INTERVAL 365 DAY) <= curdate() and available <> -1 
 ORDER BY `tools_main_db`.`reg_date` ASC";
                 $wodata2 = mysqli_query($link, $sqllasttoolsforcount) or die("Something wrong with DB please verify.");
                 $duesdates_qty = mysqli_num_rows($wodata2);
