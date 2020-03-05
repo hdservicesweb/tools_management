@@ -2445,6 +2445,7 @@ class TCPDF_STATIC {
 		'FR_POT'                 => array(  878.740,  1133.858), // = (  310 x 400  ) mm  = ( 12.20 x 15.75 ) in
 		'TESLALABEL'			 => array(    432.0, 288.0),// TESLA label 4 x 6 in
 		'PSC_WO'					 => array(    324.0, 180.0), //PSC labels WO (4.5 x 2.5) in
+		'PSC_CARTA'			 => array(    432.0, 288.0),// TESLA label 4 x 6 in
 	);
 
 

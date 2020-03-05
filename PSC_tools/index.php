@@ -473,9 +473,9 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
                 echo "<small>PN: <b><a href='https://www.digikey.com/products/en?keywords=" . $rowcommon['component_pn'] . "' target='_blank'>" . $rowcommon['component_pn'] . "</a></b></small>";
                 echo "<br>";
                 if ($rowcommon['import_verif'] == '1') {
-                    echo "<i><small>Tool: <b><a href='index.php?srch=" . $rowcommon['tool_pn'] . "'>" . $rowcommon['tool_pn'] . "</a></b></small></i>";
+                    echo "<i><small>Tool: <b><a href='index.php?srch=" . $rowcommon['tool_pn'] . "'>" . $rowcommon['tool_pn'] . "</a></b></small>&nbsp; <a href='tool_req.php?pn_tool[]=" . $rowcommon['component_pn'] . "&tool_tool[]=" . $rowcommon['tool_pn'] . "&crip_tool[]='><i class='fa fa-file-pdf-o'></i></a></i>";
                 } else {
-                    echo "<small>Tool: <b><a href='index.php?srch=" . $rowcommon['tool_pn'] . "'>" . $rowcommon['tool_pn'] . "</a></b></small>";
+                    echo "<small>Tool: <b><a href='index.php?srch=" . $rowcommon['tool_pn'] . "'>" . $rowcommon['tool_pn'] . "</a></b></small>&nbsp;<a href='tool_req.php?pn_tool[]=" . $rowcommon['component_pn'] . "&tool_tool[]=" . $rowcommon['tool_pn'] . "&crip_tool[]='><i class='fa fa-file-pdf-o'></i></a>";
                 }
 
                 echo "</div> ";

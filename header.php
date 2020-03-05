@@ -144,6 +144,7 @@ $mysqli->close();
             <a class="dropdown-item" href="../PSC_tools/new_tool">New</a>
             <a class="dropdown-item" href="../PSC_tools/show_me">Show</a>
             <a class="dropdown-item" href="../PSC_tools/tools">Catalog</a>
+            <a class="dropdown-item" href="../PSC_tools/tool_req">Tooling Requirement</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="../PSC_tools/statistics.php">Statistics</a>
             <a class="dropdown-item" href="../PSC_tools/request_t.php">Request Tool</a>
