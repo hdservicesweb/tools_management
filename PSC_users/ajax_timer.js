@@ -51,7 +51,7 @@ function refreshdiv(){
    // Empieza la función de refrescar
 
    window.onload = function(){
-
+    startTime(),
        refreshdiv(); 
        // corremos inmediatamente la funcion
    }
