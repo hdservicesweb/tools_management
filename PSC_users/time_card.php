@@ -60,6 +60,7 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
     //SI NO HAY VARIABLES QUE PROCESAR
     //echo date('l', strtotime($todayis));
     // echo date ('l',strtotime('09-03-20'));
+
 }
 ?>
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
@@ -126,7 +127,11 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
 </script>
 </head>
 
-<body onload="startTime()">
+<!-- <body onload="startTime()"> -->
+
+<body>
+
+
     <?php
     // echo $toprint;
     if ($toprint == 1) {
@@ -153,11 +158,146 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
 
         <br>
         <div class="row">
-            <div class="col-4" style="">
+
+            <div class="col-4">
                 <div class="card">
                     <div class="card-header">
-                        
+                        Settings <a href="#" class="btn btn-sm float-right"><i class="fa fa-sliders" aria-hidden="true"></i></a>
                     </div>
+                    <form action="time_card_update.php" method="POST" target="_blank">
+                        <div class="card-body">
+                            <hr>
+                            <p align="center">MAIN SETTINGS</p>
+
+                            <div class="row">
+                                <?php
+
+                                $sqlforsettings = "SELECT * from settings where registry = 'time_cards_settings'";
+                                $excesqlforsettings = mysqli_query($link, $sqlforsettings);
+
+                                while ($valuefiels = mysqli_fetch_array($excesqlforsettings)) {
+                                    switch ($valuefiels['functions']) {
+                                        case 'checkin':
+                                            $checkin_value = $valuefiels['value'];
+                                            break;
+                                        case 'checkout':
+                                            $checkin_out = $valuefiels['value'];
+                                            break;
+                                        case 'avoid_function':
+                                            $avoid_function = $valuefiels['value'];
+                                            break;
+                                        case 'minutes_restriction':
+                                            $minutes_restriction = $valuefiels['value'];
+                                            break;
+
+                                            case 'lunchtime':
+                                                $lunchtime = $valuefiels['value'];
+                                                break;
+                                        default:
+                                            # code...
+                                            break;
+                                    }
+                                }
+
+                                ?>
+                                <div class="col-sm-3">Check IN :
+                                    <div class="input-group mb-3">
+
+                                        <input type="text" class="form-control" name="CheckInTime" readonly value="<?= $checkin_value ?>">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2"><i class="fa fa-pencil icon"></i></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">Check OUT :
+                                    <div class="input-group mb-3">
+
+                                        <input type="text" class="form-control" name="CheckOutTime" readonly value="<?= $checkin_out ?>">
+
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2"><i class="fa fa-pencil icon"></i></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 text-center">Avoid CheckIN
+                                    <div class="row text-center">
+                                        <div class="col-12 text-center">
+                                            <div class="input-group mb-3 text-center">
+                                                <p align="center" class="text-center">
+                                                    <?php
+                                                    if ($avoid_function == '1') {
+                                                    ?> <a href="#" class="btn btn-success"><i class="fa fa-square-o" aria-hidden="true"></i>
+
+                                                        <?php
+                                                    } else {
+                                                        ?> <a href="#" class="btn btn-danger"><i class="fa fa-square-o" aria-hidden="true"></i>
+
+                                                            <?php
+                                                        }
+                                                            ?>
+                                                            </a>
+                                                </p>
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-3">Avoid Limit :
+                                    <div class="input-group mb-3">
+
+                                        <input type="text" class="form-control" name="CheckOutTime" readonly value="<?=$minutes_restriction?>">
+
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2"><i class="fa fa-pencil icon"></i></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <p align="center">TOLERANCE TIME</p>
+                            <div class="row">
+                                <div class="col-sm-4">Check IN Time:
+                                    <div class="input-group mb-3">
+
+                                        <input type="text" class="form-control" name="CheckInTime" readonly>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2"><i class="fa fa-pencil icon"></i></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">Check OUT Time:
+                                    <div class="input-group mb-3">
+
+                                        <input type="text" class="form-control" name="CheckOutTime" readonly>
+
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2"><i class="fa fa-pencil icon"></i></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">Lunch time (minutes)
+                                    <div class="input-group mb-3">
+
+                                        <input type="text" class="form-control" name="CheckOutTime" readonly value ="<?= $lunchtime ?>">
+
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2"><i class="fa fa-pencil icon"></i></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -166,41 +306,41 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
             <div class="col-md-3">
                 <div class="row">
                     <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            Periods:
-                            <div class="float-right">
-                                <a href="#" class="btn btn-sm btn-default"><i class="fa fa-plus"></i></a>
+                        <div class="card">
+                            <div class="card-header">
+                                Periods:
+                                <div class="float-right">
+                                    <a href="#" class="btn btn-sm btn-default"><i class="fa fa-plus"></i></a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <select name="select_period" id="select_period" class="form-control form-control-xs" onchange="updatedates(this.value)">
+                                    <?php
+                                    $sql_per = "SELECT id, date_format(start_date,'%m/%d/%Y') as date1,date_format(end_date,'%m/%d/%Y') as date2 from time_card_periods order by id desc limit 5";
+                                    $sql_per_exec = mysqli_query($link, $sql_per);
+                                    $empty_id = $periods;
+                                    while ($quickselect = mysqli_fetch_array($sql_per_exec)) {
+                                        if ($empty_id == "") {
+                                            $empty_id = $quickselect['id'];
+                                        }
+                                        if ($quickselect['date2'] == null) {
+                                            $date2 = "??" . " Today(" . date('m/d/Y') . ")";
+                                            $start_date2 = date('m/d/Y');
+                                        } else {
+                                            $date2 = $quickselect['date2'];
+                                        }
+                                        if ($periods == $quickselect['id']) {
+                                            $select_start = "selected";
+                                        } else {
+                                            $select_start = "";
+                                        }
+                                        echo "<option value='" . $quickselect['id'] . "' $select_start>" . $quickselect['date1'] . " - " . $date2 . "</option>";
+                                    }
+                                    ?>
+                                </select>
+
                             </div>
                         </div>
-                        <div class="card-body">
-                            <select name="select_period" id="select_period" class="form-control form-control-xs" onchange="updatedates(this.value)">
-                                <?php
-                                $sql_per = "SELECT id, date_format(start_date,'%m/%d/%Y') as date1,date_format(end_date,'%m/%d/%Y') as date2 from time_card_periods order by id desc limit 5";
-                                $sql_per_exec = mysqli_query($link, $sql_per);
-                                $empty_id = $periods;
-                                while ($quickselect = mysqli_fetch_array($sql_per_exec)) {
-                                    if ($empty_id == "") {
-                                        $empty_id = $quickselect['id'];
-                                    }
-                                    if ($quickselect['date2'] == null) {
-                                        $date2 = "??" . " Today(" . date('m/d/Y') . ")";
-                                        $start_date2 = date('m/d/Y');
-                                    } else {
-                                        $date2 = $quickselect['date2'];
-                                    }
-                                    if ($periods == $quickselect['id']) {
-                                        $select_start = "selected";
-                                    } else {
-                                        $select_start = "";
-                                    }
-                                    echo "<option value='" . $quickselect['id'] . "' $select_start>" . $quickselect['date1'] . " - " . $date2 . "</option>";
-                                }
-                                ?>
-                            </select>
-
-                        </div>
-                    </div>
                     </div>
                 </div><br>
                 <div class="row">

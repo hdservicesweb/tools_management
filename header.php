@@ -159,8 +159,11 @@ $mysqli->close();
             <a class="dropdown-item" href="../PSC_users/new_user">New</a>
             <a class="dropdown-item" href="../PSC_users/onhold">On Hold</a>
             <a class="dropdown-item" href="../PSC_users/show_users">View all</a>
+            <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="../PSC_users/timer" target="_blank">Time Clock</a>
             <a class="dropdown-item" href="../PSC_users/time_card">Time Card</a>
+            
+            <a class="dropdown-item" href="../PSC_users/view_today">View Today</a>
           </div>
         </li>
         <li class="nav-item dropdown ">

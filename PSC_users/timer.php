@@ -238,19 +238,21 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
+        <div class="col-sm-1"></div>
+            <div class="col-sm-11">
                 <h1 style="font-size: 200px">
-                    <div id="txt" class="text-center" style="font-family: digital_clock"></div>
+                    <div id="txt" class="text-left" style="font-family: digital_clock"></div>
                 </h1>
             </div>
         </div>
-
+    </div>
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-md-6"> </div>
-            <div class="col-sm-12 col-md-6 float-center">
+           
+            <div class="col-sm-6">
                 <input type="text" name="employee_auto" id="employee_auto" value="" class="form-control" onkeypress="return runScript(event,this.value)" style="height: 200px;font-size: 100px;" required>
             </div>
-            <div class="col-sm-12 col-md-12" style="position:fixed ;z-index:-1">
+            <div class="col-sm-6 float-right" style="position:relative; z-index:-1; top:5px">
                 <div id="contenido">
                     <div class="container-fluid" name="timediv" id="timediv">
 
@@ -262,8 +264,8 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
         <div class="row">
 
 
-            <div class="col-md-6"></div>
-            <div class="col-md-3">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-3">
                 <a href='#' id='clockin' class='text-white' data-toggle='modal' data-target='#clockset' onclick='update_modal(this.id)' style="text-decoration:none;">
                     <div class="card bg-success text-white" style="height: 220px">
                         <div class="card-body text-center">
@@ -274,7 +276,7 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
                     </div>
                 </a>
             </div>
-            <div class="col-md-3">
+            <div class="col-sm-3">
                 <a href='#' id='clockout' class='text-white' data-toggle='modal' data-target='#clockset' onclick='update_modal(this.id)' style="text-decoration:none;">
                     <div class="card bg-danger text-white" style="height: 220px">
                         <div class="card-body text-center">

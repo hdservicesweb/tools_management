@@ -39,7 +39,6 @@ include("layout_timecard.php");
 if (isset($_REQUEST['periods'])) {
     $periods = $_REQUEST['periods'];
     $sqlselectdate = "SELECT start_date, IFNULL ((SELECT end_date from time_card_periods where id = '$periods' limit 1) ,CURRENT_DATE()) as new_end_date from time_card_periods where id = '$periods'";
-    // echo $sqlselectdate;
     $exeget_dates = mysqli_query($link, $sqlselectdate);
     $date_global = mysqli_fetch_array($exeget_dates);
     $date1 = $date_global[0];
@@ -89,7 +88,6 @@ $info_pos = 58;
 $pdf->SetFont('helvetica', '', 10);
 //PROCEDIMIENTO PARA SABER LA FECHA Y EL DIA INICIAL QUE PERMITA HACER ENCAJAR EN LA TABLA DE LOS DIAS
 $sqlget_values = "SELECT date from `time_card_records` where date between '$date1' and '$date2' and employee_id = '$employee_id' group by date";
-// echo $sqlget_values;
 $exesqlget_values = mysqli_query($link, $sqlget_values);
 //SELECCIONAMOS LA PRIMERA FECHA DE REGISTRO EN LA BASE DE DATOS QUE SE ENCUENTRA ENTRE LAS FECHA INDICADAS POR EL PERIODO.
 $date_inicial = mysqli_fetch_array($exesqlget_values);
@@ -97,14 +95,12 @@ $date_inicial = mysqli_fetch_array($exesqlget_values);
 $real_start_date = $date_inicial['date'];
 $new_start_date = $date1;
 //CONTADOR DE DIAS RESTADOS HASTA LLLEGAR AL DOMINGO PROXIMO HACIA ATRAS
-$days_R = 1;
+$days = 0;
 //SI LA FECHA NO ES IGUAL A DOMINGO, RESTAMOS UN DIA A LA FECHA PARA REALIZAR LA MISMA COMPARACION HASTA ENCONTRAR EL DOMINGO MAS PROXIMO
 while (date('l', strtotime($new_start_date)) != "Sunday") {
-    
-    // echo $new_start_date;
-    $new_start_date = date("Y-m-d", strtotime($new_start_date . "- $days_R days"));
-    // echo $new_start_date;
-  
+
+    $new_start_date = date("Y-m-d", strtotime($new_start_date . "- $days days"));
+    $days++;
 }
 //\\\\\ echo "<br>".$new_start_date;
 $tab_day = 58;
@@ -151,7 +147,7 @@ for ($i = 0; $i < 3; $i++) {
         if ((date("Y-m-d", strtotime($new_start_date . "+ $days days")) >= $date1) && (date("Y-m-d", strtotime($new_start_date . "+ $days days")) <= $date2) && ($m != 0) && ($m != 6)) {
 
 
-            $pdf->MultiCell($pdf->getPageWidth(), 12, date('m/d/Y', strtotime($partial_date)), 0, 'L', 0, 0, 39, $tab_day, 12);
+            $pdf->MultiCell($pdf->getPageWidth(), 12, date('m/d/y', strtotime($partial_date)), 0, 'L', 0, 0, 39, $tab_day, 12);
         } else {
             $pdf->MultiCell($pdf->getPageWidth(), 12, "-", 0, 'L', 0, 0, 39, $tab_day, 12);
         }
