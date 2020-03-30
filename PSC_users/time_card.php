@@ -152,67 +152,84 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
     <div class="container-fluid">
 
         <br>
-        <div class="row"><div class="col-md-2">
-                <a href='#' id='clockin' class='text-white' data-toggle='modal' data-target='#clockset' onclick='update_modal(this.id)' style="text-decoration:none;">
-                    <div class="card bg-success text-white" style="height: 220px">
-                        <div class="card-body text-center">
-                            <h1><b>CLOCK IN</b> </h1>
-                            <br>
-                            <i class="fa fa-clock-o" style="font-size: 80px"></i>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-2">
-                <a href='#' id='clockout' class='text-white' data-toggle='modal' data-target='#clockset' onclick='update_modal(this.id)' style="text-decoration:none;">
-                    <div class="card bg-danger text-white" style="height: 220px">
-                        <div class="card-body text-center">
-                            <h2><b>CLOCK OUT</b> </h2>
-                            <br>
-                            <i class="fa fa-clock-o" style="font-size: 80px"></i>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3">
+        <div class="row">
+            <div class="col-4" style="">
                 <div class="card">
                     <div class="card-header">
-                        Periods:
-                        <div class="float-right">
-                            <a href="#" class="btn btn-sm btn-default"><i class="fa fa-plus"></i></a>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <select name="select_period" id="select_period" class="form-control form-control-xs" onchange="updatedates(this.value)">
-                            <?php
-                            $sql_per = "SELECT id, date_format(start_date,'%m/%d/%Y') as date1,date_format(end_date,'%m/%d/%Y') as date2 from time_card_periods order by id desc limit 5";
-                            $sql_per_exec = mysqli_query($link, $sql_per);
-                            $empty_id = $periods;
-                            while ($quickselect = mysqli_fetch_array($sql_per_exec)) {
-                                if ($empty_id == "") {
-                                    $empty_id = $quickselect['id'];
-                                }
-                                if ($quickselect['date2'] == null) {
-                                    $date2 = "??" . " Today(" . date('m/d/Y') . ")";
-                                    $start_date2 = date('m/d/Y');
-                                } else {
-                                    $date2 = $quickselect['date2'];
-                                }
-                                if ($periods == $quickselect['id']) {
-                                    $select_start = "selected";
-                                } else {
-                                    $select_start = "";
-                                }
-                                echo "<option value='" . $quickselect['id'] . "' $select_start>" . $quickselect['date1'] . " - " . $date2 . "</option>";
-                            }
-                            ?>
-                        </select>
-
+                        
                     </div>
                 </div>
             </div>
-            
-            
+
+
+
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            Periods:
+                            <div class="float-right">
+                                <a href="#" class="btn btn-sm btn-default"><i class="fa fa-plus"></i></a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <select name="select_period" id="select_period" class="form-control form-control-xs" onchange="updatedates(this.value)">
+                                <?php
+                                $sql_per = "SELECT id, date_format(start_date,'%m/%d/%Y') as date1,date_format(end_date,'%m/%d/%Y') as date2 from time_card_periods order by id desc limit 5";
+                                $sql_per_exec = mysqli_query($link, $sql_per);
+                                $empty_id = $periods;
+                                while ($quickselect = mysqli_fetch_array($sql_per_exec)) {
+                                    if ($empty_id == "") {
+                                        $empty_id = $quickselect['id'];
+                                    }
+                                    if ($quickselect['date2'] == null) {
+                                        $date2 = "??" . " Today(" . date('m/d/Y') . ")";
+                                        $start_date2 = date('m/d/Y');
+                                    } else {
+                                        $date2 = $quickselect['date2'];
+                                    }
+                                    if ($periods == $quickselect['id']) {
+                                        $select_start = "selected";
+                                    } else {
+                                        $select_start = "";
+                                    }
+                                    echo "<option value='" . $quickselect['id'] . "' $select_start>" . $quickselect['date1'] . " - " . $date2 . "</option>";
+                                }
+                                ?>
+                            </select>
+
+                        </div>
+                    </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href='#' id='clockin' class='text-white' data-toggle='modal' data-target='#clockset' onclick='update_modal(this.id)' style="text-decoration:none;">
+                            <div class="card bg-success text-white" style="height: 160px">
+                                <div class="card-body text-center">
+                                    <h5><b>CLOCK IN</b> </h5>
+                                    <br>
+                                    <i class="fa fa-clock-o" style="font-size: 40px"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href='#' id='clockout' class='text-white' data-toggle='modal' data-target='#clockset' onclick='update_modal(this.id)' style="text-decoration:none;">
+                            <div class="card bg-danger text-white" style="height: 160px">
+                                <div class="card-body text-center">
+                                    <h5><b>CLOCK OUT</b> </h5>
+                                    <br>
+                                    <i class="fa fa-clock-o" style="font-size: 40px"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="col-md-5">
                 <div class="card card-info">
                     <div class="card-header">
@@ -233,7 +250,6 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
             </div>
         </div>
     </div>
-
 
     <!-- Modal for get tool -->
     <div class="modal fade" id="clockset" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
