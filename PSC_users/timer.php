@@ -4,7 +4,7 @@ date_default_timezone_set('America/Los_Angeles');
 $link = Conectarse();
 $todayis = date('m/d/Y');
 $dateforsave = date('Y-m-d');
-$horadeponche = date('h:i:s');
+$horadeponche = date('H:i:s');
 //echo $todayis;
 if (isset($_REQUEST['periods'])) {
     $periods = $_REQUEST['periods'];

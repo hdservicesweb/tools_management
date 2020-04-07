@@ -34,7 +34,7 @@ if ($search == "") {
                 <a href='#' id='returning_wo' class='btn btn-warning btn-sm' data-toggle='modal' data-target='#return_wo' onclick='return_wo(this.id)'>
 
                     <div class="card" style="width: 18rem;">
-                    <div class="card-header bg-warning text-white">
+                        <div class="card-header bg-warning text-white">
                             <center>
                                 <h5 class="card-title"> MOVE BACK</h5>
                             </center>
@@ -45,15 +45,15 @@ if ($search == "") {
                                 <i class="fa fa-arrow-left text-warning" style="font-size:40px"></i>
                             </div>
                             <div class="col-6">
-                            <i class="fa fa-inbox text-warning" style="font-size:40px"></i>
+                                <i class="fa fa-inbox text-warning" style="font-size:40px"></i>
                             </div>
                         </div>
                         <center>
-                            
+
                         </center>
                         <br>
                         <div class="card-body bg-warning text-light">
-                          
+
                         </div>
 
                     </div>
@@ -252,9 +252,9 @@ if ($search == "") {
         </div>
     </div>
     <?php
-                                } else {
+} else {
 
-                                    $sql = "SELECT wo.*,C.name_customer as NC from wo inner join customers C on wo.customer = C.id 
+    $sql = "SELECT wo.*,C.name_customer as NC from wo inner join customers C on wo.customer = C.id 
     where (wo.psc_no like '%" . $search . "%'
          OR wo.picking like '%" . $search . "%'
          OR wo.assy_pn like '%" . $search . "%')
@@ -262,70 +262,70 @@ if ($search == "") {
     order by wo.priorizetotal desc, wo.psc_no asc";
 
 
-                                    $records = 'Found: 0 Records.';
-                                    $texto = "";
+    $records = 'Found: 0 Records.';
+    $texto = "";
 
 
-                                    $result = mysqli_query($link, $sql) or die("Something wrong with DB please verify.");
+    $result = mysqli_query($link, $sql) or die("Something wrong with DB please verify.");
 
-                                    // echo mysqli_num_rows($result);
-                                    if (mysqli_num_rows($result) > 0) {
-                                        // Se recoge el número de resultados
-                                        $records = 'Found: ' . mysqli_num_rows($result) . ' Records';
-                                    } else {
+    // echo mysqli_num_rows($result);
+    if (mysqli_num_rows($result) > 0) {
+        // Se recoge el número de resultados
+        $records = 'Found: ' . mysqli_num_rows($result) . ' Records';
+    } else {
 
-                                        switch ($search) {
+        switch ($search) {
 
-                                            case '11111':
-                                                $searchingfor = "AUTO ASIGNMENT";
-                                                $records = "";
-                                                echo "<form action='movewo.php' method'get' target='_self'>";
+            case '11111':
+                $searchingfor = "AUTO ASIGNMENT";
+                $records = "";
+                echo "<form action='movewo.php' method'get' target='_self'>";
 
-                                                echo "<div class='container'>";
-                                                echo "<center><h1>AUTO ASSIGN PRODUCTION CLOSING WO</h1></center>";
-                                                echo "<center><h3 class='V-URGENT' style='color:red'>THIS WO WILL BE CONSIDERED CLOSED</h3></center>";
-                                                echo "<div class= 'row'>";
-                                                echo "<div class= 'col-6'>";
-                                                echo "<label>ESCAN WO:</label>";
-                                                echo "<input type='text' name='wo' id='wo_a' class='form-control' style='background-color: #def;height:80px;font-size:30px;' autocomplete='off' required />";
-                                                echo "</div>";
+                echo "<div class='container'>";
+                echo "<center><h1>AUTO ASSIGN PRODUCTION CLOSING WO</h1></center>";
+                echo "<center><h3 class='V-URGENT' style='color:red'>THIS WO WILL BE CONSIDERED CLOSED</h3></center>";
+                echo "<div class= 'row'>";
+                echo "<div class= 'col-6'>";
+                echo "<label>ESCAN WO:</label>";
+                echo "<input type='text' name='wo' id='wo_a' class='form-control' style='background-color: #def;height:80px;font-size:30px;' autocomplete='off' required />";
+                echo "</div>";
 
-                                                echo "</div>";
-                                                echo "</div>";
-                                                echo "<input type='text' name='saved' id='saved' value='1' readonly hidden />";
-                                                echo "<input type='text' name='autoprocess' id='autoprocess' value='" . $search . "' readonly hidden />";
-                                                echo "<br><center><button type='submit' class='btn btn-success'> SUBMIT</button></center>";
-                                                echo "</form>";
-                                                echo "<script>       
+                echo "</div>";
+                echo "</div>";
+                echo "<input type='text' name='saved' id='saved' value='1' readonly hidden />";
+                echo "<input type='text' name='autoprocess' id='autoprocess' value='" . $search . "' readonly hidden />";
+                echo "<br><center><button type='submit' class='btn btn-success'> SUBMIT</button></center>";
+                echo "</form>";
+                echo "<script>       
              setTimeout(function() {
                 $('#wo_a').focus();
             }, 500); </script>";
-                                                break;
+                break;
 
-                                            case '55555':
-                                                $searchingfor = "AUTO ASIGNMENT";
-                                                $records = "";
-                                                echo "<form action='movewo.php' method'get' target='_self'>";
+            case '55555':
+                $searchingfor = "AUTO ASIGNMENT";
+                $records = "";
+                echo "<form action='movewo.php' method'get' target='_self'>";
 
-                                                echo "<div class='container'>";
-                                                echo "<center><h1>AUTO ASSIGN PRODUCTION STEP</h1></center>";
-                                                echo "<center><h3>ASIGN EMPLOYEE TO WO</h3></center>";
-                                                echo "<div class= 'row'>";
-                                                echo "<div class= 'col-6'>";
-                                                echo "<label>ESCAN WO:</label>";
-                                                echo "<input type='text' name='wo' id='wo_a' class='form-control' style='background-color: #def;height:80px;font-size:30px;' autocomplete='off' required />";
-                                                echo "</div>";
-                                                echo "<div class= 'col-6'>";
-                                                echo "<label>ESCAN EMPLOYEE:</label>";
-                                                echo "<input type='text' name='employee' id='emp_a' class='form-control'  style='background-color: #def;height:80px;font-size:30px;' autocomplete='off' required />";
-                                                echo "</div>";
-                                                echo "</div>";
-                                                echo "</div>";
-                                                echo "<input type='text' name='saved' id='saved' value='1' readonly hidden />";
-                                                echo "<input type='text' name='autoprocess' id='autoprocess' value='" . $search . "' readonly hidden />";
-                                                echo "<br><center><button type='submit' class='btn btn-success'> SUBMIT</button></center>";
-                                                echo "</form>";
-                                                echo "<br><hr>";
+                echo "<div class='container'>";
+                echo "<center><h1>AUTO ASSIGN PRODUCTION STEP</h1></center>";
+                echo "<center><h3>ASIGN EMPLOYEE TO WO</h3></center>";
+                echo "<div class= 'row'>";
+                echo "<div class= 'col-6'>";
+                echo "<label>ESCAN WO:</label>";
+                echo "<input type='text' name='wo' id='wo_a' class='form-control' style='background-color: #def;height:80px;font-size:30px;' autocomplete='off' required />";
+                echo "</div>";
+                echo "<div class= 'col-6'>";
+                echo "<label>ESCAN EMPLOYEE:</label>";
+                echo "<input type='text' name='employee' id='emp_a' class='form-control'  style='background-color: #def;height:80px;font-size:30px;' autocomplete='off' required />";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+                echo "<input type='text' name='saved' id='saved' value='1' readonly hidden />";
+                echo "<input type='text' name='autoprocess' id='autoprocess' value='" . $search . "' readonly hidden />";
+                echo "<br><center><button type='submit' class='btn btn-success'> SUBMIT</button></center>";
+                echo "</form>";
+                echo "<br><hr>";
     ?>
 
                 <div class="container">
@@ -336,42 +336,42 @@ if ($search == "") {
                             <div name="lastmovements" id="lastmovements">
                                 <table class="table table-striped table-bordered table-hover table-condensed table-sm" width="100%">
                                     <?php
-                                                $sqlquery = "SELECT * from wo where position = '5' order  by wo.last_movement desc, wo.due_date asc limit 5";
-                                                $wodata = mysqli_query($link, $sqlquery) or die("Something wrong with DB please verify.");
-                                                if ($row = mysqli_num_rows($wodata) > 0) {
-                                                    printf("<tr><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th></tr>", "PSC No", "<i class='fa fa-flag'></i>", "<i class='fa fa-clock-o'></i>", "Qty", "<i class='fa fa-inbox'></i>");
-                                                };
+                                    $sqlquery = "SELECT * from wo where position = '5' order  by wo.last_movement desc, wo.due_date asc limit 5";
+                                    $wodata = mysqli_query($link, $sqlquery) or die("Something wrong with DB please verify.");
+                                    if ($row = mysqli_num_rows($wodata) > 0) {
+                                        printf("<tr><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th></tr>", "PSC No", "<i class='fa fa-flag'></i>", "<i class='fa fa-clock-o'></i>", "Qty", "<i class='fa fa-inbox'></i>");
+                                    };
 
-                                                while ($row = mysqli_fetch_array($wodata)) {
-                                                    //ASIGNA EL ESTATUS ON HOLD O CORRIENDO
-                                                    if ($row['status'] == 1) {
-                                                        $newstatus = "RUNNING";
-                                                        $onholdclass = "text-muted";
-                                                        $onholdicon = "<i class='fa fa-check bg-success text-white'></i>";
-                                                        $buttonrelease = "";
-                                                        $classlink = "text-white";
-                                                    } else {
-                                                        $classlink = "text-muted";
-                                                        $newstatus = "ON HOLD";
-                                                        $onholdclass = " bg-warning text-white";
-                                                        $onholdicon = "<i class='fa fa-clock-o bg-warning text-white'></i>";
-                                                        $buttonrelease = "<a href='#'  onclick='changestatus(" . $row['id'] . ")' id='changestatus0'><i class='fa fa-clock-o'></i></a>";
-                                                    }
-
-
-
-                                                    if ($row['position'] == '5') {
-                                                        $onholdclass = "text-muted";
-                                                        $classlink = "text-muted";
-                                                    } else {
-                                                        $classlink = "text-muted";
-                                                    }
+                                    while ($row = mysqli_fetch_array($wodata)) {
+                                        //ASIGNA EL ESTATUS ON HOLD O CORRIENDO
+                                        if ($row['status'] == 1) {
+                                            $newstatus = "RUNNING";
+                                            $onholdclass = "text-muted";
+                                            $onholdicon = "<i class='fa fa-check bg-success text-white'></i>";
+                                            $buttonrelease = "";
+                                            $classlink = "text-white";
+                                        } else {
+                                            $classlink = "text-muted";
+                                            $newstatus = "ON HOLD";
+                                            $onholdclass = " bg-warning text-white";
+                                            $onholdicon = "<i class='fa fa-clock-o bg-warning text-white'></i>";
+                                            $buttonrelease = "<a href='#'  onclick='changestatus(" . $row['id'] . ")' id='changestatus0'><i class='fa fa-clock-o'></i></a>";
+                                        }
 
 
 
-                                                    // echo $staricon;
-                                                    printf("<tr class='$onholdclass'><td >&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='edit_wo?wo=" . $row["id"] . "' class='$classlink'>" .  $row["psc_no"] . "</a>",  $row["picking"],  $row["last_movement"],  $row["qty"], $row["last_employee"]);
-                                                };
+                                        if ($row['position'] == '5') {
+                                            $onholdclass = "text-muted";
+                                            $classlink = "text-muted";
+                                        } else {
+                                            $classlink = "text-muted";
+                                        }
+
+
+
+                                        // echo $staricon;
+                                        printf("<tr class='$onholdclass'><td >&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td></tr>", "<a href='edit_wo?wo=" . $row["id"] . "' class='$classlink'>" .  $row["psc_no"] . "</a>",  $row["picking"],  $row["last_movement"],  $row["qty"], $row["last_employee"]);
+                                    };
 
                                     ?>
                                 </table>
@@ -379,71 +379,71 @@ if ($search == "") {
 
                 </div>
             <?php
-                                                echo "<script>       
+                echo "<script>       
              setTimeout(function() {
                 $('#wo_a').focus();
             }, 500); </script>";
-                                                break;
-                                            case '77777':
-                                                $records = "";
-                                                echo "<form action='movewo.php' method'get' target='_self'>";
+                break;
+            case '77777':
+                $records = "";
+                echo "<form action='movewo.php' method'get' target='_self'>";
 
-                                                echo "<div class='container'>";
-                                                echo "<center><h1>AUTO ASSIGN QC STEP 7</h1></center>";
-                                                echo "<center><h3>ASIGN WO TO QUALITY CONTROL</h3></center>";
-                                                echo "<div class= 'row'>";
-                                                echo "<div class= 'col-6'>";
-                                                echo "<label>ESCAN WO:</label>";
-                                                echo "<input type='text' name='wo' id='wo_a' class='form-control' style='background-color: #def;height:80px;font-size:30px;' autocomplete='off' required />";
-                                                echo "</div>";
-                                                echo "<div class= 'col-6' hidden>";
-                                                echo "<label>ESCAN EMPLOYEE:</label>";
-                                                echo "<input type='text' name='employee' id='emp_a' class='form-control'  style='background-color: #def;height:80px;font-size:30px;' value='PRODUCTION' autocomplete='off' required />";
-                                                echo "</div>";
-                                                echo "</div>";
-                                                echo "</div>";
-                                                echo "<input type='text' name='saved' id='saved' value='1' readonly hidden />";
-                                                echo "<input type='text' name='autoprocess' id='autoprocess' value='" . $search . "' readonly hidden />";
-                                                echo "<br><center><button type='submit' class='btn btn-success'> SUBMIT</button></center>";
-                                                echo "</form>";
-                                                echo "<script>       
+                echo "<div class='container'>";
+                echo "<center><h1>AUTO ASSIGN QC STEP 7</h1></center>";
+                echo "<center><h3>ASIGN WO TO QUALITY CONTROL</h3></center>";
+                echo "<div class= 'row'>";
+                echo "<div class= 'col-6'>";
+                echo "<label>ESCAN WO:</label>";
+                echo "<input type='text' name='wo' id='wo_a' class='form-control' style='background-color: #def;height:80px;font-size:30px;' autocomplete='off' required />";
+                echo "</div>";
+                echo "<div class= 'col-6' hidden>";
+                echo "<label>ESCAN EMPLOYEE:</label>";
+                echo "<input type='text' name='employee' id='emp_a' class='form-control'  style='background-color: #def;height:80px;font-size:30px;' value='PRODUCTION' autocomplete='off' required />";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+                echo "<input type='text' name='saved' id='saved' value='1' readonly hidden />";
+                echo "<input type='text' name='autoprocess' id='autoprocess' value='" . $search . "' readonly hidden />";
+                echo "<br><center><button type='submit' class='btn btn-success'> SUBMIT</button></center>";
+                echo "</form>";
+                echo "<script>       
                  setTimeout(function() {
                     $('#wo_a').focus();
                 }, 500); </script>";
-                                                break;
-                                            case '99999':
-                                                $records = "";
-                                                echo "<form action='movewo.php' method'get' target='_self'>";
+                break;
+            case '99999':
+                $records = "";
+                echo "<form action='movewo.php' method'get' target='_self'>";
 
-                                                echo "<div class='container'>";
-                                                echo "<center><h1>AUTO ASSIGN WO TO STEP 9</h1></center>";
-                                                echo "<center><h3>ASIGN WO TO SHIPPED STATUS</h3></center>";
-                                                echo "<div class= 'row'>";
-                                                echo "<div class= 'col-6'>";
-                                                echo "<label>ESCAN WO:</label>";
-                                                echo "<input type='text' name='wo' id='wo_a' class='form-control' style='background-color: #def;height:80px;font-size:30px;' autocomplete='off' required />";
-                                                echo "</div>";
-                                                echo "<div class= 'col-6' hidden>";
-                                                echo "<label>ESCAN EMPLOYEE:</label>";
-                                                echo "<input type='text' name='employee' id='emp_a' class='form-control'  style='background-color: #def;height:80px;font-size:30px;' value='PRODUCTION' autocomplete='off' required />";
-                                                echo "</div>";
-                                                echo "</div>";
-                                                echo "</div>";
-                                                echo "<input type='text' name='saved' id='saved' value='1' readonly hidden />";
-                                                echo "<input type='text' name='autoprocess' id='autoprocess' value='" . $search . "' readonly hidden />";
-                                                echo "<br><center><button type='submit' class='btn btn-success'> SUBMIT</button></center>";
-                                                echo "</form>";
-                                                echo "<script>       
+                echo "<div class='container'>";
+                echo "<center><h1>AUTO ASSIGN WO TO STEP 9</h1></center>";
+                echo "<center><h3>ASIGN WO TO SHIPPED STATUS</h3></center>";
+                echo "<div class= 'row'>";
+                echo "<div class= 'col-6'>";
+                echo "<label>ESCAN WO:</label>";
+                echo "<input type='text' name='wo' id='wo_a' class='form-control' style='background-color: #def;height:80px;font-size:30px;' autocomplete='off' required />";
+                echo "</div>";
+                echo "<div class= 'col-6' hidden>";
+                echo "<label>ESCAN EMPLOYEE:</label>";
+                echo "<input type='text' name='employee' id='emp_a' class='form-control'  style='background-color: #def;height:80px;font-size:30px;' value='PRODUCTION' autocomplete='off' required />";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+                echo "<input type='text' name='saved' id='saved' value='1' readonly hidden />";
+                echo "<input type='text' name='autoprocess' id='autoprocess' value='" . $search . "' readonly hidden />";
+                echo "<br><center><button type='submit' class='btn btn-success'> SUBMIT</button></center>";
+                echo "</form>";
+                echo "<script>       
                  setTimeout(function() {
                     $('#wo_a').focus();
                 }, 500); </script>";
-                                                break;
-                                            default:
-                                                $records = "No IN-PROCESS WOs Found.<br>";
-                                                $records .= "<hr>";
-                                                $records .= "SEARCH ON COMPLETED ORDERS (Press Enter.)";
-                                                $records .= "<input type='text' class='form-control form-control-sm col-3' name='wo' id='search' value='$search' required><br>";
-                                                $records .= "<div class='col-md-12 col-md-offset-3' id='result'>
+                break;
+            default:
+                $records = "No IN-PROCESS WOs Found.<br>";
+                $records .= "<hr>";
+                $records .= "SEARCH ON COMPLETED ORDERS (Press Enter.)";
+                $records .= "<input type='text' class='form-control form-control-sm col-3' name='wo' id='search' value='$search' required><br>";
+                $records .= "<div class='col-md-12 col-md-offset-3' id='result'>
 </div>";
             ?>
 
@@ -452,9 +452,9 @@ if ($search == "") {
                 <script type="text/javascript" src="js/index.js"></script>
 
     <?php
-                                                break;
-                                        }
-                                    }
+                break;
+        }
+    }
     ?>
     <div class='container-fluid'>
 
@@ -470,161 +470,161 @@ if ($search == "") {
         <table class="table table-sm table-striped table-bordered table-hover" width="100%" style='font-size:13px;text-align:left'>
 
             <?php
-                                                            $wodata = mysqli_query($link, $sql) or die("Something wrong with DB please verify.");
-                                                            if ($row = mysqli_num_rows($wodata) > 0) {
-                                                                printf("<tr style='text-align:center'><th>&nbsp;%s</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th></tr>", "<i class='fa fa-hashtag' ></i>", "<i class='fa fa-flag-checkered'></i>", "P / N", "<i class='fa fa-cube'></i>", "WO GENERATED | <i class='fa fa-print'></i>", "DUE DATE | <i class='fa fa-calendar-plus-o'></i>", "<i class='fa fa-line-chart'></i>", "LAST TRANSFER | <i class='fa fa-calendar'></i>", "<i class='fa fa-inbox'></i>", "<i class='fa fa-star'></i>", "<i class='fa fa-eye'></i>");
-                                                            }
-                                                            while ($row = mysqli_fetch_array($wodata)) {
-                                                                $starqty = substr($row["priorizetotal"], -1);
-                                                                $colorstars = "";
-                                                                $staricon = "";
-                                                                $position = $row['position'];
+            $wodata = mysqli_query($link, $sql) or die("Something wrong with DB please verify.");
+            if ($row = mysqli_num_rows($wodata) > 0) {
+                printf("<tr style='text-align:center'><th>&nbsp;%s</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th><th>&nbsp;%s&nbsp;</th></tr>", "<i class='fa fa-hashtag' ></i>", "<i class='fa fa-flag-checkered'></i>", "P / N", "<i class='fa fa-cube'></i>", "WO GENERATED | <i class='fa fa-print'></i>", "DUE DATE | <i class='fa fa-calendar-plus-o'></i>", "<i class='fa fa-line-chart'></i>", "LAST TRANSFER | <i class='fa fa-calendar'></i>", "<i class='fa fa-inbox'></i>", "<i class='fa fa-star'></i>", "<i class='fa fa-eye'></i>");
+            }
+            while ($row = mysqli_fetch_array($wodata)) {
+                $starqty = substr($row["priorizetotal"], -1);
+                $colorstars = "";
+                $staricon = "";
+                $position = $row['position'];
 
-                                                                $due_date_query = "SELECT DATEDIFF(now(), (select due_date from wo where id = '" . $row['id'] . "' limit 1)) as days";
-                                                                $datedataexe = mysqli_query($link, $due_date_query);
-                                                                $datedata = mysqli_fetch_array($datedataexe);
+                $due_date_query = "SELECT DATEDIFF(now(), (select due_date from wo where id = '" . $row['id'] . "' limit 1)) as days";
+                $datedataexe = mysqli_query($link, $due_date_query);
+                $datedata = mysqli_fetch_array($datedataexe);
 
-                                                                if ($datedata['days'] >= 0) {
-                                                                    $urgenclass = "V-URGENT";
-                                                                    $dayslate = "  DL: [ " . $datedata['days'] . " ] ";
-                                                                } else {
-                                                                    if ($datedata['days'] <= -3) {
-                                                                        $urgenclass = "";
-                                                                    } else {
-                                                                        $urgenclass = "V-IMPORTANT";
-                                                                    }
-                                                                    $dayslate = "";
-                                                                }
+                if ($datedata['days'] >= 0) {
+                    $urgenclass = "V-URGENT";
+                    $dayslate = "  DL: [ " . $datedata['days'] . " ] ";
+                } else {
+                    if ($datedata['days'] <= -3) {
+                        $urgenclass = "";
+                    } else {
+                        $urgenclass = "V-IMPORTANT";
+                    }
+                    $dayslate = "";
+                }
 
-                                                                //ASIGNA EL ESTATUS ON HOLD O CORRIENDO
-                                                                if ($row['status'] == 1) {
-                                                                    $newstatus = "RUNNING";
-                                                                    $onholdclass = "";
-                                                                    $onholdicon = "<a class='btn btn-success btn-sm' href='index?srch=" . $row['psc_no'] . "' onclick='changestatus(" . $row['id'] . ")' id='changestatus1'><i class='fa fa-circle-o bg-success text-white'></i></a>";
-                                                                } else {
-                                                                    $newstatus = "ON HOLD";
-                                                                    $onholdclass = "text-muted";
-                                                                    $onholdicon = "<a class='btn btn-sm btn-warning' href='index?srch=" . $row['psc_no'] . "' onclick='changestatus(" . $row['id'] . ")' id='changestatus0'><i class='fa fa-clock-o bg-warning text-white'></i></a>";
-                                                                }
-
-
-                                                                // swith para escribir la posicion y estado actual de la WO
-                                                                switch ($position) {
-                                                                    case '1':
-                                                                        $NEWPOSITION = "CREATING WO";
-                                                                        break;
-                                                                    case '2':
-                                                                        $positiontext = "APPROVING";
-                                                                        $NEWPOSITION = "A ($position) : " . $positiontext;
-                                                                        break;
-                                                                    case '3':
-                                                                        $positiontext = "KITTING";
-                                                                        $NEWPOSITION = "A ($position) : " . $positiontext;
-                                                                        break;
-                                                                    case '4':
-                                                                        $positiontext = "ASSIGNING EMPLOYEE";
-                                                                        $NEWPOSITION = "A ($position) : " . $positiontext;
-                                                                        break;
-                                                                    case '5':
-                                                                        $positiontext = "IN PROCCESS";
-                                                                        $NEWPOSITION = "A ($position) : " . $positiontext;
-                                                                        break;
-                                                                    case '6':
-                                                                        $positiontext = "DONE";
-                                                                        $NEWPOSITION = "A ($position) : " . $positiontext;
-                                                                        break;
-                                                                    case '7':
-                                                                        $positiontext = "QUALITY INSPECT.";
-                                                                        $NEWPOSITION = "A ($position) : " . $positiontext;
-                                                                        break;
-                                                                    case '8':
-                                                                        $positiontext = "PACKING";
-                                                                        $NEWPOSITION = "A ($position) : " . $positiontext;
-                                                                        break;
-                                                                    case '9':
-                                                                        $positiontext = "SHIPPED";
-                                                                        $NEWPOSITION = "A ($position) : " . $positiontext;
-                                                                        break;
-                                                                    case '10':
-                                                                        $positiontext = "CLOSED";
-                                                                        $NEWPOSITION = "A ($position) : " . $positiontext;
-                                                                        break;
-                                                                    default:
-                                                                        $NEWPOSITION = "MOVED to: CLOSED + " . $position;
-                                                                        break;
-                                                                }
+                //ASIGNA EL ESTATUS ON HOLD O CORRIENDO
+                if ($row['status'] == 1) {
+                    $newstatus = "RUNNING";
+                    $onholdclass = "";
+                    $onholdicon = "<a class='btn btn-success btn-sm' href='index?srch=" . $row['psc_no'] . "' onclick='changestatus(" . $row['id'] . ")' id='changestatus1'><i class='fa fa-circle-o bg-success text-white'></i></a>";
+                } else {
+                    $newstatus = "ON HOLD";
+                    $onholdclass = "text-muted";
+                    $onholdicon = "<a class='btn btn-sm btn-warning' href='index?srch=" . $row['psc_no'] . "' onclick='changestatus(" . $row['id'] . ")' id='changestatus0'><i class='fa fa-clock-o bg-warning text-white'></i></a>";
+                }
 
 
-                                                                //switch para poner las estrellas de prioridad
-                                                                switch ($starqty) {
-                                                                    case '1':
-                                                                        $colorstars = "green";
-                                                                        for ($i = 1; $i < 6; $i++) {
-                                                                            if ($i <= $starqty) {
-                                                                                $staricon .= "<i class='fa fa-star' aria-hidden='true' style='color:" . $colorstars . "'></i>";
-                                                                            } else {
-                                                                                $staricon .= "<a href='index?srch=$search&upstar=$i&uni_id=" . $row['id'] . "'><i class='fa fa-star-o' aria-hidden='true' ></i></a>";
-                                                                            }
-                                                                        }
-                                                                        break;
-                                                                    case '2':
-                                                                        $colorstars = "green";
-                                                                        for ($i = 1; $i < 6; $i++) {
-                                                                            if ($i <=    $starqty) {
-                                                                                $staricon .= "<i class='fa fa-star' aria-hidden='true' style='color:" . $colorstars . "'></i>";
-                                                                            } else {
-                                                                                $staricon .= "<a href='index?srch=$search&upstar=$i&uni_id=" . $row['id'] . "'><i class='fa fa-star-o' aria-hidden='true' ></i></a>";
-                                                                            }
-                                                                        }
-                                                                        break;
-                                                                    case '3':
-                                                                        $colorstars = "orange";
-                                                                        for ($i = 1; $i < 6; $i++) {
-                                                                            if ($i <= $starqty) {
-                                                                                $staricon .= "<i class='fa fa-star' aria-hidden='true' style='color:" . $colorstars . "'></i>";
-                                                                            } else {
-                                                                                $staricon .= "<a href='index?srch=$search&upstar=$i&uni_id=" . $row['id'] . "'><i class='fa fa-star-o' aria-hidden='true' ></i></a>";
-                                                                            }
-                                                                        }
-                                                                        break;
-                                                                    case '4':
-                                                                        $colorstars = "orange";
-                                                                        for ($i = 1; $i < 6; $i++) {
-                                                                            if ($i <= $starqty) {
-                                                                                $staricon .= "<i class='fa fa-star' aria-hidden='true' style='color:" . $colorstars . "'></i>";
-                                                                            } else {
-                                                                                $staricon .= "<a href='index?srch=$search&upstar=$i&uni_id=" . $row['id'] . "'><i class='fa fa-star-o' aria-hidden='true' ></i></a>";
-                                                                            }
-                                                                        }
-                                                                        break;
-                                                                    case '5':
-                                                                        $colorstars = "red";
-                                                                        for ($i = 1; $i < 6; $i++) {
-                                                                            if ($i <= $starqty) {
-                                                                                $staricon .= "<i class='fa fa-star' aria-hidden='true' style='color:" . $colorstars . "'></i>";
-                                                                            } else {
-                                                                                $staricon .= "<a href='index?srch=$search'><i class='fa fa-star-o' aria-hidden='true' ></i></a>";
-                                                                            }
-                                                                        }
-                                                                        break;
-                                                                    default:
-                                                                        # code...
-                                                                        break;
-                                                                }
+                // swith para escribir la posicion y estado actual de la WO
+                switch ($position) {
+                    case '1':
+                        $NEWPOSITION = "CREATING WO";
+                        break;
+                    case '2':
+                        $positiontext = "APPROVING";
+                        $NEWPOSITION = "A ($position) : " . $positiontext;
+                        break;
+                    case '3':
+                        $positiontext = "KITTING";
+                        $NEWPOSITION = "A ($position) : " . $positiontext;
+                        break;
+                    case '4':
+                        $positiontext = "ASSIGNING EMPLOYEE";
+                        $NEWPOSITION = "A ($position) : " . $positiontext;
+                        break;
+                    case '5':
+                        $positiontext = "IN PROCCESS";
+                        $NEWPOSITION = "A ($position) : " . $positiontext;
+                        break;
+                    case '6':
+                        $positiontext = "DONE";
+                        $NEWPOSITION = "A ($position) : " . $positiontext;
+                        break;
+                    case '7':
+                        $positiontext = "QUALITY INSPECT.";
+                        $NEWPOSITION = "A ($position) : " . $positiontext;
+                        break;
+                    case '8':
+                        $positiontext = "PACKING";
+                        $NEWPOSITION = "A ($position) : " . $positiontext;
+                        break;
+                    case '9':
+                        $positiontext = "SHIPPED";
+                        $NEWPOSITION = "A ($position) : " . $positiontext;
+                        break;
+                    case '10':
+                        $positiontext = "CLOSED";
+                        $NEWPOSITION = "A ($position) : " . $positiontext;
+                        break;
+                    default:
+                        $NEWPOSITION = "MOVED to: CLOSED + " . $position;
+                        break;
+                }
 
-                                                                $bottonforw = "<a href='#' id='forward_wo," . $row['psc_no'] . "," . $position . "," . $row['id'] . "' data-toggle='modal' data-target='#move_wo' onclick='update_wo(this.id)' class='btn btn-success btn-sm text-white' ><i class='fa fa-arrow-right'></i></a>";
-                                                                $bottonback = "<a href='#' id='forward_wo," . $row['psc_no'] . "," . $position . "," . $row['id'] . "' data-toggle='modal' data-target='#return_wo' onclick='return_wo(this.id)' class='btn btn-warning btn-sm text-white'><i class='fa fa-arrow-left'></i></a>";
-                                                                printf("<tr class='$onholdclass'><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='$urgenclass'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td></tr>", "&nbsp;" . $onholdicon . "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href='edit_wo?wo=" . $row["id"] . "'><b>" . $row["psc_no"] . "</b></a>",  $row["picking"],  $row["assy_pn"], "<b style='color:$colorstars'>" .  $row["qty"] . "<b>",  $row["printed"], $row["due_date"] . "  |  " . $dayslate, $NEWPOSITION, $row["last_movement"], $row["last_employee"], $staricon, $bottonback . "&nbsp&nbsp&nbsp" . $bottonforw);
-                                                            }
+
+                //switch para poner las estrellas de prioridad
+                switch ($starqty) {
+                    case '1':
+                        $colorstars = "green";
+                        for ($i = 1; $i < 6; $i++) {
+                            if ($i <= $starqty) {
+                                $staricon .= "<i class='fa fa-star' aria-hidden='true' style='color:" . $colorstars . "'></i>";
+                            } else {
+                                $staricon .= "<a href='index?srch=$search&upstar=$i&uni_id=" . $row['id'] . "'><i class='fa fa-star-o' aria-hidden='true' ></i></a>";
+                            }
+                        }
+                        break;
+                    case '2':
+                        $colorstars = "green";
+                        for ($i = 1; $i < 6; $i++) {
+                            if ($i <=    $starqty) {
+                                $staricon .= "<i class='fa fa-star' aria-hidden='true' style='color:" . $colorstars . "'></i>";
+                            } else {
+                                $staricon .= "<a href='index?srch=$search&upstar=$i&uni_id=" . $row['id'] . "'><i class='fa fa-star-o' aria-hidden='true' ></i></a>";
+                            }
+                        }
+                        break;
+                    case '3':
+                        $colorstars = "orange";
+                        for ($i = 1; $i < 6; $i++) {
+                            if ($i <= $starqty) {
+                                $staricon .= "<i class='fa fa-star' aria-hidden='true' style='color:" . $colorstars . "'></i>";
+                            } else {
+                                $staricon .= "<a href='index?srch=$search&upstar=$i&uni_id=" . $row['id'] . "'><i class='fa fa-star-o' aria-hidden='true' ></i></a>";
+                            }
+                        }
+                        break;
+                    case '4':
+                        $colorstars = "orange";
+                        for ($i = 1; $i < 6; $i++) {
+                            if ($i <= $starqty) {
+                                $staricon .= "<i class='fa fa-star' aria-hidden='true' style='color:" . $colorstars . "'></i>";
+                            } else {
+                                $staricon .= "<a href='index?srch=$search&upstar=$i&uni_id=" . $row['id'] . "'><i class='fa fa-star-o' aria-hidden='true' ></i></a>";
+                            }
+                        }
+                        break;
+                    case '5':
+                        $colorstars = "red";
+                        for ($i = 1; $i < 6; $i++) {
+                            if ($i <= $starqty) {
+                                $staricon .= "<i class='fa fa-star' aria-hidden='true' style='color:" . $colorstars . "'></i>";
+                            } else {
+                                $staricon .= "<a href='index?srch=$search'><i class='fa fa-star-o' aria-hidden='true' ></i></a>";
+                            }
+                        }
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+
+                $bottonforw = "<a href='#' id='forward_wo," . $row['psc_no'] . "," . $position . "," . $row['id'] . "' data-toggle='modal' data-target='#move_wo' onclick='update_wo(this.id)' class='btn btn-success btn-sm text-white' ><i class='fa fa-arrow-right'></i></a>";
+                $bottonback = "<a href='#' id='forward_wo," . $row['psc_no'] . "," . $position . "," . $row['id'] . "' data-toggle='modal' data-target='#return_wo' onclick='return_wo(this.id)' class='btn btn-warning btn-sm text-white'><i class='fa fa-arrow-left'></i></a>";
+                printf("<tr class='$onholdclass'><td>&nbsp;%s</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='$urgenclass'>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td>&nbsp;%s&nbsp;</td><td class='text-center'>&nbsp;%s&nbsp;</td></tr>", "&nbsp;" . $onholdicon . "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <a href='edit_wo?wo=" . $row["id"] . "'><b>" . $row["psc_no"] . "</b></a>",  $row["picking"],  $row["assy_pn"], "<b style='color:$colorstars'>" .  $row["qty"] . "<b>",  $row["printed"], $row["due_date"] . "  |  " . $dayslate, $NEWPOSITION, $row["last_movement"], $row["last_employee"], $staricon, $bottonback . "&nbsp&nbsp&nbsp" . $bottonforw);
+            }
 
             ?>
         </table>
     </div>
 
 <?php
-                                                            mysqli_free_result($result);
-                                                            mysqli_close($link);
-                                                        }
+    mysqli_free_result($result);
+    mysqli_close($link);
+}
 ?>
 <!-- Modal for forward tool -->
 <div class="modal fade" id="move_wo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -705,14 +705,27 @@ if ($search == "") {
 
 
 <script>
+    function cerrarwo(id) {
+        document.getElementById("saved").value = "2";
+        document.getElementById("move_wo_form").submit();
+    }
+
     function update_wo(id) {
         process = id;
         var res = process.split(",");
         if (typeof res[1] != 'undefined') {
             document.getElementById("wo_f").value = res[1];
             document.getElementById("realid").value = res[3];
+            idforclose = res[3];
             var nextstep = Number(res[2]) + 1;
-            document.getElementById("leyenda").innerHTML = "WO will move to : " + nextstep;
+            if (nextstep >= '5') {
+                document.getElementById("leyenda").innerHTML = "WO will move to : " + nextstep + "</br>";
+                document.getElementById("leyenda").innerHTML += "<input type='button' id='" + idforclose + "' class='btn btn-danger btn-sm' value='Close' onclick='cerrarwo(this.id)'></input>";
+
+            } else {
+                document.getElementById("leyenda").innerHTML = "WO will move to : " + nextstep;
+
+            }
         } else {
             document.getElementById("wo_f").value = "";
         }
@@ -791,6 +804,8 @@ if ($search == "") {
 
     }
 
+
+
     function localvalidations_r() {
         var aprobado = 0;
         var wo = document.getElementById("wo_r").value;
@@ -837,7 +852,7 @@ if ($search == "") {
     }
 </script>
 <?php
-                                                        echo "<hr>";
+echo "<hr>";
 
-                                                        include('../footer.php');
+include('../footer.php');
 ?>

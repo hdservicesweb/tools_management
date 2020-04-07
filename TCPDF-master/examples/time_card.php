@@ -97,12 +97,12 @@ $date_inicial = mysqli_fetch_array($exesqlget_values);
 $real_start_date = $date_inicial['date'];
 $new_start_date = $date1;
 //CONTADOR DE DIAS RESTADOS HASTA LLLEGAR AL DOMINGO PROXIMO HACIA ATRAS
-$days_R = 1;
+
 //SI LA FECHA NO ES IGUAL A DOMINGO, RESTAMOS UN DIA A LA FECHA PARA REALIZAR LA MISMA COMPARACION HASTA ENCONTRAR EL DOMINGO MAS PROXIMO
 while (date('l', strtotime($new_start_date)) != "Sunday") {
     
     // echo $new_start_date;
-    $new_start_date = date("Y-m-d", strtotime($new_start_date . "- $days_R days"));
+    $new_start_date = date("Y-m-d", strtotime($new_start_date . "- 1 days"));
     // echo $new_start_date;
   
 }
@@ -131,7 +131,9 @@ for ($i = 0; $i < 3; $i++) {
                 } elseif ($get_values['process'] == 2) {
                     $pdf->MultiCell($pdf->getPageWidth(), 12, $get_values['time'], 0, 'L', 0, 0, 77, $tab_day, 12);
                     $registro_diarios ++;
-                    if (true){
+
+                    $total_hours = true;
+                    if ($total_hours){
                         $pdf->MultiCell($pdf->getPageWidth(), 12, "8", 0, 'L', 0, 0, 167, $tab_day, 12);
                        
                     }
@@ -153,7 +155,7 @@ for ($i = 0; $i < 3; $i++) {
 
             $pdf->MultiCell($pdf->getPageWidth(), 12, date('m/d/Y', strtotime($partial_date)), 0, 'L', 0, 0, 39, $tab_day, 12);
         } else {
-            $pdf->MultiCell($pdf->getPageWidth(), 12, "-", 0, 'L', 0, 0, 39, $tab_day, 12);
+            $pdf->MultiCell($pdf->getPageWidth(), 12, " ", 0, 'L', 0, 0, 39, $tab_day, 12);
         }
         $days++;
         $tab_day = $tab_day + 6;

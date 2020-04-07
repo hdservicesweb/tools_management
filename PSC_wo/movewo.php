@@ -499,7 +499,32 @@ if ((isset($_REQUEST['saved']))) {
             $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>ERROR - VARIABLE WO No. <BR>WAS NOT DETECTED.</h1><br>
             You'll be redirected in:<div id='tiemporestante'></div></CENTER>";
         }
-    } else {
+    } 
+    elseif($_REQUEST['saved'] == 2){
+        echo "TRYING TO CLOSE";
+        if (isset($_REQUEST['realid'])) {
+            $wo = $_REQUEST['wo'];
+            $woid = $_REQUEST['realid'];
+            $timetosee = 2000;
+            if (isset($_REQUEST['employee'])) {
+                $employee = $_REQUEST['employee'];
+            } else {
+                $employee = "PROCESSING";
+            }
+            $varunique = "<CENTER><img src='images/stop.jpeg'  width='150px'><h1>WO: " . $woid . " IS CLOSED</h1>
+            <br>
+            You'll be redirected in:<div id='tiemporestante'></div>
+            <br>";
+            $sqlqueryforwared = "UPDATE wo set status = 0, position = 10 , last_movement = CURRENT_TIMESTAMP, last_employee = '$employee' where id = '$woid'";
+            //echo "<br>". $sqlqueryforwared;
+            //IF QUERY HAS BEEN EXECUTED CORRECTLY WE SEND NOTIFICATION THAN IS SAVED
+            if (mysqli_query($link, $sqlqueryforwared)) {
+
+
+            }
+        }
+    }
+    else {
         echo "NO ACTION DEFINED";
         $timetosee = 5000;
         $varunique = "<CENTER><img src='images/error.jpg'  height='100%'><h1>ERROR - ACTION. <BR>WAS NOT RECEIVED.</h1><br>
