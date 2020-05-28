@@ -6,7 +6,9 @@ $link = Conectarse();
 
 $SQL_lastrecords = "SELECT TM.*,E.name FROM `time_card_records` TM LEFT JOIN employes E on TM.`employee_id` = E.employ_num where date = CURRENT_DATE() ORDER BY TM.date_time DESC";
 $exesqlget_records = mysqli_query($link, $SQL_lastrecords);
-
+$sql_periods = "SELECT id from time_card_periods order by id desc limit 1";
+$exesqlget_period = mysqli_query($link, $sql_periods);
+$last_peiod = mysqli_fetch_array($exesqlget_period);
 echo '<table class="table table-responsive" width="100%">';
 
 while ($last_records = mysqli_fetch_array($exesqlget_records)) {
@@ -33,7 +35,9 @@ while ($last_records = mysqli_fetch_array($exesqlget_records)) {
     echo "<td>";
     echo "<p> <b>".$last_records['name']."</b></p>";
     echo "</td>";
-
+    echo "<td>";
+    echo "<p> <a href='../TCPDF-master/examples/time_card.php?employee_id=".$last_records['employee_id']."&periods=".$last_peiod['id']."' target='_blank'>View TimeCard</a></p>";
+    echo "</td>";
     echo "</tr>";
 }
 echo '</table>';

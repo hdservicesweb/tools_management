@@ -15,6 +15,21 @@ if (isset($_REQUEST['periods'])) {
 if (isset($_REQUEST['employee_id'])) {
     $employee_id = $_REQUEST['employee_id'];
     //echo $employee_id;
+    if (isset($_REQUEST['option_insert'])) {
+        $option_insert = $_REQUEST['option_insert'];
+        $dateandtime = $_REQUEST['manual-time'];
+        $inserteddate = date("Y-m-d", strtotime($dateandtime));
+        $insertedtime = date("H:i:s", strtotime($dateandtime));
+        
+        $SQL = "INSERT INTO `time_card_records` (`id`, `employee_id`, `process`, `time`, `date`, `date_time`, `period`, `e_field_1`, `e_field_2`) VALUES (NULL, '$employee_id', '$option_insert', '$insertedtime', '$inserteddate', CURRENT_TIMESTAMP, '0', '2', NULL);";
+        // echo $SQL;
+        if ($execprocess = mysqli_query($link, $SQL) ){
+            echo "Saved Correctly";
+        }else{
+            echo "error";
+        }
+
+    }
 } else {
     $employee_id = "";
 }
@@ -190,9 +205,9 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
                                             $minutes_restriction = $valuefiels['value'];
                                             break;
 
-                                            case 'lunchtime':
-                                                $lunchtime = $valuefiels['value'];
-                                                break;
+                                        case 'lunchtime':
+                                            $lunchtime = $valuefiels['value'];
+                                            break;
                                         default:
                                             # code...
                                             break;
@@ -251,7 +266,7 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
                                 <div class="col-sm-3">Avoid Limit :
                                     <div class="input-group mb-3">
 
-                                        <input type="text" class="form-control" name="CheckOutTime" readonly value="<?=$minutes_restriction?>">
+                                        <input type="text" class="form-control" name="CheckOutTime" readonly value="<?= $minutes_restriction ?>">
 
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="basic-addon2"><i class="fa fa-pencil icon"></i></span>
@@ -287,7 +302,7 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
                                 <div class="col-sm-4">Lunch time (minutes)
                                     <div class="input-group mb-3">
 
-                                        <input type="text" class="form-control" name="CheckOutTime" readonly value ="<?= $lunchtime ?>">
+                                        <input type="text" class="form-control" name="CheckOutTime" readonly value="<?= $lunchtime ?>">
 
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="basic-addon2"><i class="fa fa-pencil icon"></i></span>
@@ -341,7 +356,46 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
 
                             </div>
                         </div>
+                        <br>
+                        <div class="card">
+                            <div class="card-header">
+                                Insert missing value:
+                                <div class="float-right">
+                                    <!-- <a href="#" class="btn btn-sm btn-default"><i class="fa fa-plus"></i></a> -->
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form action="time_card.php">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            Employee ID:
+                                            <input type="text" name="employee_id" class="form-control form-control-sm" value="<?=$employee_id?>" required>
+                                        </div>
+                                        <div class="col-6">
+                                            <p align="center"><small> IN / OUT </small> <br>
+                                                Input&nbsp;<input type="radio" name="option_insert" id="" value="1">
+                                                &nbsp;|&nbsp; Output&nbsp;<input type="radio" name="option_insert" id="" value="2" default checked>
+                                            </p>
+                                        </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            Date / Time:
+                                            <input type="datetime-local" id="manual-time" name="manual-time" value="<?php echo date("Y-m-d", strtotime($dateforsave . "- 1 days"))  ?>T14:30" min="2019-01-01T00:00" max="<?= $dateforsave ?>T14:30" class="form-control">
+                                            <br>
+                                            <p align="center">
+                                                <input type="submit" name="save" value="Save" class="btn btn-sm btn-success">
+                                                &nbsp;&nbsp;<input type="button" name="cancel" value="Cancel" class="btn btn-sm btn-danger" onclick="javascript:window.location='time_card.php';">
+                                            </p>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            </div>
+                        </div>
                     </div>
+
                 </div><br>
                 <div class="row">
                     <div class="col-md-6">
@@ -377,7 +431,7 @@ if ((isset($_POST['process'])) && (isset($_POST['employee']))) {
 
 
                             Generate Time Card for: &nbsp;
-                            <input type="text" class="input-sm" name="employee_id" placeholder="Scan or Type Employee #" value="<?= $employee_id ?>">
+                            <input type="text" class="input-sm" name="employee_id" placeholder="Scan or Type Employee #" value="<?=$employee_id?>">
                             <input type="text" class="input-sm" name="periods" id="periods" placeholder="" value="<?= $empty_id ?>" readonly hidden>
 
                             <input type="submit" class="btn btn-default btn-sm float-right" value=">>" />

@@ -1,29 +1,29 @@
 <?php
 include('../header.php');
 $link = Conectarse();
+$redirecttable = "index";
 if (isset($_REQUEST['massive'])) {
     $text = trim($_REQUEST['toosl_m']);
-  
+    $redirecttable = "list_changes";
 
     $text2 = explode("\n", $text);
     foreach ($text2 as $line) {
         $eachline = trim($line);
 
         $sqlinfo = "SELECT psc_id,user_know,available from tools_main_db where psc_id = '$eachline'";
-        
+
         $execinfo = mysqli_query($link, $sqlinfo);
         $row = mysqli_fetch_array($execinfo);
-        if((isset($row['psc_id']))&&($row['available'] == '0')){
+        if ((isset($row['psc_id']))) {
             $employee =  $row['user_know'];
 
-        
+
             $sqlquery = "INSERT into tools_process (id,psc_id,date,name,process) values (NULL,'$eachline',CURRENT_TIMESTAMP,'$employee','1')";
-            
+
             $sql = "UPDATE tools_main_db set available = '1', used_qty = used_qty + 1 where psc_id = '$eachline'";
             $exect = mysqli_query($link, $sqlquery);
             $exec = mysqli_query($link, $sql);
         }
-        
     }
 }
 
@@ -40,18 +40,17 @@ if (isset($_REQUEST['psc_id'])) {
     $currentstatus = $row['available'];
 } else {
     $psc_id = "Unidentify";
-    if (isset ($eachline)){
+    if (isset($eachline)) {
         $tool = $eachline;
         $sqlinfo = "SELECT * from tools_main_db where psc_id = '$tool'";
-        
+
         $execinfo = mysqli_query($link, $sqlinfo);
         $row = mysqli_fetch_array($execinfo);
         $stock = $row['stock'];
         $currentstatus = $row['available'];
-    }else{
-      $tool = "";  
+    } else {
+        $tool = "";
     }
-    
 }
 
 if (isset($_REQUEST['employee'])) {
@@ -71,7 +70,7 @@ if (isset($_REQUEST['employee'])) {
     } else {
 
         $employee = $_REQUEST['employee'];
-        if ($employee == "RETURN"){
+        if ($employee == "RETURN") {
             $employee =  $row['user_know'];
         }
     }
@@ -86,7 +85,7 @@ if (isset($_REQUEST['process'])) {
 }
 
 if ($process == '0') {
-    if($currentstatus=='0'){
+    if ($currentstatus == '0') {
         $process = 2;
     }
     $sqlquery = "INSERT into tools_process (id,psc_id,date,name,process) values (NULL,'$psc_id',CURRENT_TIMESTAMP,'$employee','$process')    ";
@@ -202,11 +201,25 @@ if ($process == '1') {
 
 </div>
 <script LANGUAGE="JavaScript">
-    var pagina = "index"
+    var pagina = "<?= $redirecttable ?>"
 
-    function redireccionar() {
-        location.href = pagina+"?srch=<?= $row['model'] ?>"
+    if (pagina == "index") {
+        function redireccionar() {
+
+            location.href = pagina + "?srch=<?= $row['model'] ?>"
+        }
+    } else if (pagina == "list_changes") {
+        function redireccionar() {
+
+            location.href = pagina + "?srch="
+        }
+    } else {
+        function redireccionar() {
+
+            location.href = pagina
+        }
     }
+
     setTimeout("redireccionar()", 1500);
 </script>
 <?php

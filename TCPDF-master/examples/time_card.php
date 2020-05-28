@@ -4,7 +4,18 @@ include('../../conection.php');
 $link = Conectarse();
 $pdf = new TCPDF('P', PDF_UNIT, 'LETTER', true, 'UTF-8', false);
 
+function RestarHoras($hora_entrada,$hora_salida)
+{
 
+
+
+    $f1 = new DateTime($hora_entrada);
+    $f2 = new DateTime($hora_salida);
+    $d = $f2->diff($f1);
+    // $time_total = $d->format('%h.%i');
+    $time_total = $d->format('%h');
+    return $time_total;
+}
 
 
 
@@ -117,31 +128,34 @@ $partial_date = "";
 $days = 0;
 $total_semana = 0;
 $total_global = 0;
-$registro_diarios = 0;
+
 for ($i = 0; $i < 3; $i++) {
     for ($m = 0; $m < 7; $m++) {
         $partial_date = date("Y-m-d", strtotime($new_start_date . "+ $days days"));
         $sqlforgetvalores = "SELECT * from `time_card_records` where date = '$partial_date' and employee_id = '$employee_id'";
         $exe_get_values = mysqli_query($link, $sqlforgetvalores);
+        $registro_diarios = 0;
         while ($get_values = mysqli_fetch_array($exe_get_values)) {
             if ((date("Y-m-d", strtotime($new_start_date . "+ $days days")) >= $date1) && (date("Y-m-d", strtotime($new_start_date . "+ $days days")) <= $date2)){
                 if ($get_values['process'] == 1) {
-                    $pdf->MultiCell($pdf->getPageWidth(), 12, $get_values['time'], 0, 'L', 0, 0, 60, $tab_day, 12);
+                    $hora_entrada= $get_values['time'];
+                    $pdf->MultiCell($pdf->getPageWidth(), 12,$get_values['time'] , 0, 'L', 0, 0, 60, $tab_day, 12);
                    $registro_diarios ++;
                 } elseif ($get_values['process'] == 2) {
-                    $pdf->MultiCell($pdf->getPageWidth(), 12, $get_values['time'], 0, 'L', 0, 0, 77, $tab_day, 12);
+                    $hora_salida = $get_values['time'];
+                    $pdf->MultiCell($pdf->getPageWidth(), 12,$get_values['time'] , 0, 'L', 0, 0, 77, $tab_day, 12);
                     $registro_diarios ++;
-
-                    $total_hours = true;
-                    if ($total_hours){
-                        $pdf->MultiCell($pdf->getPageWidth(), 12, "8", 0, 'L', 0, 0, 167, $tab_day, 12);
-                       
-                    }
+                    
+                    $tiempo_total = RestarHoras($hora_entrada,$hora_salida);
+                    
+                        $pdf->MultiCell($pdf->getPageWidth(), 12, $tiempo_total, 0, 'L', 0, 0, 167, $tab_day, 12);
+                 
                 } else {
                     $pdf->MultiCell($pdf->getPageWidth(), 12, "NO TIME", 0, 'L', 0, 0, 93, $tab_day, 12);
                 }
                 if($registro_diarios == 2){
-                    $total_semana = $total_semana + 8;
+                     $total_semana = $total_semana + 8;
+                    //$total_semana = $total_semana + $tiempo_total;
                     $registro_diarios=0;
                 }
                 
@@ -161,18 +175,24 @@ for ($i = 0; $i < 3; $i++) {
         $tab_day = $tab_day + 6;
         
     }
-    if (true){
+    if ($total_semana != 0){
         $pdf->MultiCell($pdf->getPageWidth(), 12, $total_semana, 0, 'L', 0, 0, 167, $tab_day, 12);
         $total_global = $total_global + $total_semana;
         $total_semana = 0;
+    }else{
+        $pdf->MultiCell($pdf->getPageWidth(), 12, '', 0, 'L', 0, 0, 167, $tab_day, 12);
+
     }
     $tab_day = $tab_day + 23;
 
 }
-if (true){
+if ($total_global != 0){
     $pdf->SetFont('helvetica', 'B', 14);
     $pdf->MultiCell($pdf->getPageWidth(), 12, $total_global, 0, 'L', 0, 1, 167, $tab_day-4, 12);
     $total_global = 0;
+}else{
+    $pdf->MultiCell($pdf->getPageWidth(), 12, '', 0, 'L', 0, 1, 167, $tab_day-4, 12);
+
 }
 
 

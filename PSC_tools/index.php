@@ -129,8 +129,10 @@ if ($search == "") {
                                 <div class="col-6">
                                     <small>
                                         <a href="#" class="text-danger " data-toggle='modal' data-target='#returning_m'>
-                                            <i class="fa fa-chevron-right text-danger"></i>
-                                            <small> Massive &nbsp;<i class="fa fa-chevron-right text-danger"></i></small>
+                                        <small><i class="fa fa-circle-o-notch"></i>
+
+                                             Massive &nbsp;
+                                                </small>
                                         </a>
 
                                     </small>
@@ -138,8 +140,8 @@ if ($search == "") {
                                 <div class="col-6">
                                     <small>
                                         <a href="#" class="text-danger " data-toggle='modal' data-target='#verification'>
-                                            <i class="fa fa-search-plus text-danger"></i>
-                                            <small>In-Use</small>
+                                          <small>  <i class="fa fa-search-plus text-danger"></i>
+                                            In-Use</small>
                                         </a>
 
                                     </small>
@@ -409,7 +411,7 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
     // echo mysqli_num_rows($result);
 
 ?>
-<script src="../ajax.js"></script>
+    <script src="../ajax.js"></script>
     <script>
         var url = "resp_tools.php?srch=<?= $search ?>";
     </script>
@@ -432,6 +434,11 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
                             <a href="https://octopart.com/search?q=<?= $search ?>" id="new" class="btn btn-sm btn-primary " target="_blank"><i class="fa fa-search"></i> Octopart</a>
                         </div>
                         <div class="float-right">
+                            <a href="#" class="btn btn-sm btn-danger" data-toggle='modal' data-target='#returning_m'>
+                                <i class="fa fa-circle-o-notch"></i>
+                                Return&nbsp;
+
+                            </a>
                             &nbsp;<a href="index.php" class="btn btn-sm btn-primary "><i class="fa fa-home"></i> Home</a>&nbsp;
                             &nbsp;<a href="new_tool.php" id="new" class="btn btn-sm btn-success"> <i class="fa fa-plus"></i> ADD TOOL</a>
                         </div>
@@ -565,9 +572,10 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
                 <div class="card">
                     <div class="card-body">
                         <form action="changestatus.php" method="post" target="_self" id="modelmasive">
-                            <textarea rows="10" cols="1" width="100%" name="toosl_m" class="form-control" required></textarea>
+                            <textarea rows="10" cols="1" width="100%" name="toosl_m" onkeypress="countlines(event)" class="form-control" required></textarea>
                             <input type="text" name="massive" value="massive" readonly hidden>
-                            <br>
+
+                            <small>Return: <label for="contador" id="contador">0</label></small>
                             <center><input type="submit" value="Return" class=" btn btn-sm btn-danger"></center>
                         </form>
                     </div>
@@ -667,6 +675,17 @@ ORDER BY `tools_main_db`.`reg_date` ASC";
 </div>
 
 <script>
+    function countlines(e) {
+        var numerodelinea = parseInt(document.getElementById('contador').innerHTML);
+        if (e.keyCode === 13) {
+            
+            var numerodelinea = numerodelinea + 1;
+            document.getElementById('contador').innerHTML = numerodelinea;
+
+        }
+
+    }
+
     function addcommon(id) {
         id = id;
         var model = id;
